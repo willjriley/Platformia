@@ -3,19 +3,19 @@ let keys = { right: false, left: false, space: false };
 let musicStarted = false;
 
 document.addEventListener('keydown', (e) => {
-    if (e.key === '1') {         
+    if (e.key === '1') {
         gameStarted = true;
     }
-    if(gameStarted) {
+    if (gameStarted) {
         if (e.key === 'ArrowRight') keys.right = true;
         if (e.key === 'ArrowLeft') keys.left = true;
-        if (e.key === ' ') keys.space = true;    
-        if (e.key === 'p' || e.key === 'Escape') {        
+        if (e.key === ' ') keys.space = true;
+        if (e.key === 'p' || e.key === 'Escape') {
             if (!gameStarted) {
                 return
-            }       
-            paused = !paused; 
-                    
+            }
+            paused = !paused;
+
             if (currentMusic) {
                 if (paused) {
                     currentMusic.pause(); // Pause music
@@ -29,15 +29,15 @@ document.addEventListener('keydown', (e) => {
             }
         }
         else {
-            if (currentMusic) {            
-                currentMusic.play(); 
+            if (currentMusic) {
+                currentMusic.play();
             }
-        }   
+        }
     }
 });
 
 document.addEventListener('keyup', (e) => {
-    if(gameStarted) {
+    if (gameStarted) {
         if (e.key === 'ArrowRight') keys.right = false;
         if (e.key === 'ArrowLeft') keys.left = false;
         if (e.key === ' ') keys.space = false;
@@ -47,7 +47,7 @@ document.addEventListener('keyup', (e) => {
 // Input handling
 function handleInput() {
     // Apply velocity for movement
-    if (keys.right) { 
+    if (keys.right) {
         player.facing = 'right'
         player.velocityX = player.speed;
     }

@@ -10,7 +10,7 @@ function Platform(x, y, width, height, image, type, script, color) {
     this.color = color;
 }
 
-Platform.prototype.draw = function() {
+Platform.prototype.draw = function () {
     if (this.image) {
         ctx.drawImage(this.image, 0, 0, tileSize, tileSize, this.x - camera.x, this.y, this.width, this.height); // Offset by camera's x
     } else {

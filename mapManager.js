@@ -1,6 +1,6 @@
 let currentMusic = null;
 
-function doPlayMusic(){    
+function doPlayMusic() {
     if (currentMusic) {
         currentMusic.play().catch(error => console.log("Audio play error:", error));
     }
@@ -60,7 +60,7 @@ function parseMap(mapData) {
         for (let x = 0; x < mapData[y].length; x++) {
             const char = mapData[y][x];
             const tileDef = tileDefinitions[char];
-            
+
             if (tileDef && (tileDef.type === "solid" || tileDef.type === "loadMap")) {
                 let image = tileDef.imageObj || null;
                 let color = tileDef.color || null;
@@ -80,16 +80,16 @@ function parseMap(mapData) {
             }
         }
     }
-    
+
     // Second pass: Create enemies and collectibles
     for (let y = 0; y < mapData.length; y++) {
         for (let x = 0; x < mapData[y].length; x++) {
             const char = mapData[y][x];
             const tileDef = tileDefinitions[char];
-            
+
             if (tileDef) {
                 let image = tileDef.imageObj || null;
-                
+
                 if (tileDef.type === "enemy") {
                     let enemyX = x * tileSize;
                     let enemyY = y * tileSize;
@@ -108,11 +108,11 @@ function parseMap(mapData) {
                             break; // Found a matching platform; no need to search further
                         }
                     }
-                    
+
                     // Create the enemy with the found platform (or null if not found)
-                    let enemy = new Enemy(enemyX, enemyY, image, platformBelow);                    
+                    let enemy = new Enemy(enemyX, enemyY, image, platformBelow);
                     enemies.push(enemy);
-                    
+
                 } else if (tileDef.type === "collectible") {
                     collectibles.push(new Collectible(x * tileSize, y * tileSize, image));
                 }
