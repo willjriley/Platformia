@@ -25,10 +25,10 @@ let gameLoopId = null; // Store the current game loop
 
 //Gradients
 let gradients = {
-    sunset: {top: "#FF5733", middle: "#FFC300", bottom: "#C70039"},    
-    coolNeon:  {top: "#00C9FF", middle: "#92FE9D", bottom: "#FF00FF"},
-    deepOcean:  {top: "#001F3F", middle: "#0074D9", bottom: "#7FDBFF"},
-    darkPurple:  {top: "#00023D", middle: "#42113E", bottom: "#170742"}
+    sunset: { top: "#FF5733", middle: "#FFC300", bottom: "#C70039" },
+    coolNeon: { top: "#00C9FF", middle: "#92FE9D", bottom: "#FF00FF" },
+    deepOcean: { top: "#001F3F", middle: "#0074D9", bottom: "#7FDBFF" },
+    darkPurple: { top: "#00023D", middle: "#42113E", bottom: "#170742" }
 }
 
 // Initialize game
@@ -64,11 +64,11 @@ function checkCollisions() {
     for (let platform of platforms) {
         let collidesHorizontally = player.x + player.width > platform.x && player.x < platform.x + platform.width;
         let collidesVertically = player.y + player.height > platform.y && player.y < platform.y + platform.height;
-        
+
         // Check if player is on a loadMap tile
-        if (collidesHorizontally && collidesVertically) {    
-    
-            if (platform.type === "loadMap") {                
+        if (collidesHorizontally && collidesVertically) {
+
+            if (platform.type === "loadMap") {
                 if (platform.script && window[platform.script]) {
                     loadMapData(window[platform.script]);
                     return;
@@ -94,7 +94,7 @@ function checkCollisions() {
         // Re-check isLoadMap here for platforms that might have been missed
         if (collidesHorizontally && collidesVertically) {
             // TODO - loadMap tiles currently not working when collisions is from the top but do appear to work from all other directions
-            if (platform.type === "loadMap") {                
+            if (platform.type === "loadMap") {
                 if (platform.script && window[platform.script]) {
                     loadMapData(window[platform.script]);
                     return;
@@ -135,12 +135,12 @@ function checkCollisions() {
             player.y < collectible.y + collectible.height
         ) {
             let collectibleSound = new Audio("./assets/sounds/coin-dropped-81172.mp3");
-            collectibleSound.play();            
+            collectibleSound.play();
             score += 5; // Increase score by 5            
             return false; // Remove the collected item
         }
         return true; // Keep uncollected items
-    });    
+    });
 
     // Check for enemy collisions
     enemies.forEach(enemy => {
@@ -152,7 +152,7 @@ function checkCollisions() {
         ) {
             loseLife(); // Call function when player touches an enemy
         }
-    });    
+    });
     // If the player isn't standing on a platform, mark as jumping
     if (!isOnPlatform) {
         player.isJumping = true;
@@ -171,12 +171,12 @@ function loseLife() {
         musicStarted = false;
         gameStarted = false;
         lives = 3;
-        loadMapData(map0);        
+        loadMapData(map0);
     } else {
         // set player respawn position
         // maybe add player respawn point to map data
         player.x = 50;
-        player.y = height - 60;        
+        player.y = height - 60;
         player.velocityX = 0;
         player.velocityY = 0;
     }
@@ -184,11 +184,13 @@ function loseLife() {
 
 // Handle scrolling
 function handleScrolling() {
+    const edgeDistance = 200; // Increase this value to increase the distance from the edge
+
     // Move camera when player reaches edges of screen
-    if (player.x > camera.x + camera.width - 100) {
-        camera.x = Math.floor(player.x - camera.width + 100);
-    } else if (player.x < camera.x + 100) {
-        camera.x = Math.floor(player.x - 100);
+    if (player.x > camera.x + camera.width - edgeDistance) {
+        camera.x = Math.floor(player.x - camera.width + edgeDistance);
+    } else if (player.x < camera.x + edgeDistance) {
+        camera.x = Math.floor(player.x - edgeDistance);
     }
 
     // Ensure the camera stays within the bounds of the map
@@ -202,46 +204,46 @@ function handleScrolling() {
 }
 
 // Update the game
-function updateGame() {        
+function updateGame() {
 
     if (!gameStarted) {
         let gradient = ctx.createLinearGradient(0, 0, 0, height); // Vertical gradient
-        gradient.addColorStop(0, gradients.deepOcean.top);  
-        gradient.addColorStop(0.5, gradients.deepOcean.middle); 
-        gradient.addColorStop(1, gradients.deepOcean.bottom);  
+        gradient.addColorStop(0, gradients.deepOcean.top);
+        gradient.addColorStop(0.5, gradients.deepOcean.middle);
+        gradient.addColorStop(1, gradients.deepOcean.bottom);
 
         ctx.fillStyle = gradient;
 
         ctx.fillRect(0, 0, width, height); // Fill the whole canvas with the background color            
         ctx.font = "bold 30px 'Courier New', monospace";
-        ctx.fillStyle = "BLACK";      
+        ctx.fillStyle = "BLACK";
         ctx.fillText(" * PLATFORMIA  *", width / 2 - 160, height / 2 - 128);
-        ctx.fillStyle = "RED";        
+        ctx.fillStyle = "RED";
         ctx.fillText(" GAME OVER ", width / 2 - 120, height / 2 - 64);
-        ctx.fillStyle = "white";  
-        ctx.fillText("PRESS 1 TO START", width / 2 - 160, height / 2);       
+        ctx.fillStyle = "white";
+        ctx.fillText("PRESS 1 TO START", width / 2 - 160, height / 2);
         requestAnimationFrame(updateGame); // Keep checking
-        return; 
-    }    
+        return;
+    }
     //ctx.fillStyle = '#000000'; // Example: Sky blue color, change to whatever you prefer
     let gradient = ctx.createLinearGradient(0, 0, 0, height); // Vertical gradient
-    gradient.addColorStop(0, gradients.darkPurple.top);  
-    gradient.addColorStop(0.5, gradients.darkPurple.middle); 
-    gradient.addColorStop(1, gradients.darkPurple.bottom);  
+    gradient.addColorStop(0, gradients.darkPurple.top);
+    gradient.addColorStop(0.5, gradients.darkPurple.middle);
+    gradient.addColorStop(1, gradients.darkPurple.bottom);
 
     ctx.fillStyle = gradient;
 
     ctx.fillRect(0, 0, width, height); // Fill the whole canvas with the background color    
     ctx.fillStyle = "white";
     ctx.font = "bold 30px 'Courier New', monospace";
-    ctx.fillText("SCORE: " + score, 60, 50);    
-    ctx.fillText("LIVES: " + lives, 550, 50); 
+    ctx.fillText("SCORE: " + score, 60, 50);
+    ctx.fillText("LIVES: " + lives, 550, 50);
 
     if (paused) {
         ctx.fillText(" PAUSED ", width / 2 - 80, height / 2);
         requestAnimationFrame(updateGame); // Keep checking
-        return; 
-    }    
+        return;
+    }
 
     if (gameLoopId) {
         cancelAnimationFrame(gameLoopId); // Prevent multiple loops
