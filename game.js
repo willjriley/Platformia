@@ -9,6 +9,11 @@ const tileSize = 32;
 let mapData = [];
 let tileDefinitions = {};
 let mapBackgroundColor = "#000000";
+let useGradient = false;
+let gradientTop = null;
+let gradientMiddle = null;
+let gradientBottom = null;
+
 
 // Game objects
 let platforms = [];
@@ -22,14 +27,6 @@ let lives = 3;
 let paused = false;
 let gameStarted = false;
 let gameLoopId = null; // Store the current game loop
-
-//Gradients
-let gradients = {
-    sunset: { top: "#FF5733", middle: "#FFC300", bottom: "#C70039" },
-    coolNeon: { top: "#00C9FF", middle: "#92FE9D", bottom: "#FF00FF" },
-    deepOcean: { top: "#001F3F", middle: "#0074D9", bottom: "#7FDBFF" },
-    darkPurple: { top: "#00023D", middle: "#42113E", bottom: "#170742" }
-}
 
 // Initialize game
 function initGame() {
@@ -207,9 +204,9 @@ function updateGame() {
 
     if (!gameStarted) {
         let gradient = ctx.createLinearGradient(0, 0, 0, height); // Vertical gradient
-        gradient.addColorStop(0, gradients.deepOcean.top);
-        gradient.addColorStop(0.5, gradients.deepOcean.middle);
-        gradient.addColorStop(1, gradients.deepOcean.bottom);
+        gradient.addColorStop(0, "#001F3F");
+        gradient.addColorStop(0.5, "#0074D9");
+        gradient.addColorStop(1, "#7FDBFF");
 
         ctx.fillStyle = gradient;
 
@@ -225,12 +222,15 @@ function updateGame() {
         return;
     }
     //ctx.fillStyle = '#000000'; // Example: Sky blue color, change to whatever you prefer
-    let gradient = ctx.createLinearGradient(0, 0, 0, height); // Vertical gradient
-    gradient.addColorStop(0, gradients.darkPurple.top);
-    gradient.addColorStop(0.5, gradients.darkPurple.middle);
-    gradient.addColorStop(1, gradients.darkPurple.bottom);
 
-    ctx.fillStyle = gradient;
+    if (useGradient) {
+        let gradient = ctx.createLinearGradient(0, 0, 0, height); // Vertical gradient
+        gradient.addColorStop(0, gradientTop);
+        gradient.addColorStop(0.5, gradientMiddle);
+        gradient.addColorStop(1, gradientBottom);
+
+        ctx.fillStyle = gradient;
+    }
 
     ctx.fillRect(0, 0, width, height); // Fill the whole canvas with the background color    
     ctx.fillStyle = "white";

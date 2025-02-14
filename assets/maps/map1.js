@@ -2,6 +2,9 @@ const map1 = {
   "name": "Level 1",
   "playerStartingPosition": { x: 50, y: 60 },
   "mapBackgroundColor": "#87CEEB",
+  "gradientTop": "#001F3F",
+  "gradientMiddle": "#0074D9",
+  "gradientBottom": "#7FDBFF",
   "music": "./assets/music/2019-01-02_-_8_Bit_Menu_-_David_Renda_-_FesliyanStudios.com.mp3",
   "mapData": [
     "!                                                                                     #",

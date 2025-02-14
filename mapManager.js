@@ -10,7 +10,15 @@ function loadMapData(map) {
     // Reset map-related variables    
     mapData = map.mapData;
     tileDefinitions = map.tileDefinitions;
+
     mapBackgroundColor = map.mapBackgroundColor || "#000000";
+
+    gradientTop = map.gradientTop || "";
+    gradientMiddle = map.gradientMiddle || "";
+    gradientBottom = map.gradientBottom || "";
+
+    // Set useGradient to true if all three gradient values are present, otherwise false
+    useGradient = gradientTop && gradientMiddle && gradientBottom ? true : false;
 
     // Stop previous music if playing
     if (currentMusic) {
