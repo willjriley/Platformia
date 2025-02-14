@@ -161,24 +161,23 @@ function checkCollisions() {
 
 function loseLife() {
     lives--; // Reduce lives by 1
+    player.isJumping = false;
+    player.velocityX = 0;
+    player.velocityY = 0;
 
     let deathSound = new Audio("./assets/sounds/8-bit-wrong-2-84407.mp3");
     deathSound.play();
 
     if (lives <= 0) {
-        //currentMusic.pause(); // Pause music
-        score = 0;
-        musicStarted = false;
-        gameStarted = false;
-        lives = 3;
-        loadMapData(map0);
+
+        location.reload(); // Reload the page
+        return;
+
     } else {
         // set player respawn position
         // maybe add player respawn point to map data
         player.x = 50;
         player.y = height - 60;
-        player.velocityX = 0;
-        player.velocityY = 0;
     }
 }
 
