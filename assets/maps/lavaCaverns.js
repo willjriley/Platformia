@@ -1,7 +1,7 @@
 const lavaCaverns = {
     "name": "Lava Caverns",
-    "playerStartingPosition": {x: 50, y: 200},
-    "mapBackgroundColor": "#330000",
+    "playerStartingPosition": { x: 50, y: 200 },
+    "mapBackgroundColor": "#000000",
     "mapData": [
         "####################################################################################",
         "#                                                                          #########",
@@ -9,7 +9,7 @@ const lavaCaverns = {
         "#                                                                          #########",
         "#                                                                          #########",
         "#                                                                          #########",
-        "#                                                                          #########",                
+        "#                                                                          #########",
         "#                                                                          #########",
         "#                                                                       0  #########",
         "#                                           # # ## #################################",
@@ -27,7 +27,7 @@ const lavaCaverns = {
         "#": { "type": "solid", "color": "#4B0082", "image": "./assets/dirt.png" },
         "@": { "type": "enemy", "color": "red", "image": "./assets/enemy1.png" },
         "$": { "type": "collectible", "color": "yellow", "image": "./assets/coin.png" },
-        "0": { "type": "loadMap", "script": "map1" }        
+        "0": { "type": "loadMap", "script": "map1" }
     }
 };
 window.lavaCaverns = lavaCaverns;

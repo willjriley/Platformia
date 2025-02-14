@@ -3,8 +3,8 @@
 
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=.0">
-    <title>Plateform Game</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Platform Game</title>
     <style>
         body {
             margin: 0;
@@ -19,10 +19,33 @@
             border: 2px solid black;
             cursor: none;
         }
+
+        .map-buttons {
+            position: absolute;
+            right: 20px;
+            top: 20px;
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+        }
+
+        .map-buttons button {
+            padding: 10px;
+            font-size: 16px;
+            cursor: pointer;
+        }
     </style>
 </head>
 
 <body>
+    <div class="map-buttons">
+        <button onclick="loadMap('map0')">Welcome</button>
+        <button onclick="loadMap('map1')">Level 1</button>
+        <button onclick="loadMap('map2')">Level 2</button>
+        <button onclick="loadMap('map3')">Level 3</button>
+        <button onclick="loadMap('lavaCaverns')">Lava Caverns</button>
+        <!-- Add more buttons as needed -->
+    </div>
     <canvas id="gameCanvas" width="800" height="400"></canvas>
     <script src="player.js"></script>
     <script src="enemy.js"></script>
@@ -36,8 +59,16 @@
     <script src="assets/maps/map2.js"></script>
     <script src="assets/maps/map3.js"></script>
     <script src="assets/maps/lavaCaverns.js"></script>
-
     <script src="game.js"></script>
+
+    <!-- Add more map scripts as needed -->
+    <script>
+        function loadMap(mapName) {
+            if (window[mapName]) {
+                loadMapData(window[mapName]);
+            }
+        }
+    </script>
 </body>
 
 </html>

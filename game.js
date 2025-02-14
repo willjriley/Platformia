@@ -221,7 +221,6 @@ function updateGame() {
         requestAnimationFrame(updateGame); // Keep checking
         return;
     }
-    //ctx.fillStyle = '#000000'; // Example: Sky blue color, change to whatever you prefer
 
     if (useGradient) {
         let gradient = ctx.createLinearGradient(0, 0, 0, height); // Vertical gradient
@@ -230,6 +229,9 @@ function updateGame() {
         gradient.addColorStop(1, gradientBottom);
 
         ctx.fillStyle = gradient;
+    }
+    else {
+        ctx.fillStyle = mapBackgroundColor;
     }
 
     ctx.fillRect(0, 0, width, height); // Fill the whole canvas with the background color    
