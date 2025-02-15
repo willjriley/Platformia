@@ -23,8 +23,8 @@ const map1 = {
         "!  #  #####     ###                          ##########                               #",
         "!       $                      ###########################                            #",
         "!        $    #       #########!!!!!!!!!!!!!!!!!!!!!!###########                      #",
-        "!                    ##!!!!!!!!!!!!!!!!!!!!!!!!!!!!!################                  0",
-        "!        ####    @  ########!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!##########              0",
+        "!                    ##!!!!!!!!!!!!!!!!!!!!!!!!!!!!!################                 0~",
+        "!        ####    @  ########!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!##########             ~~",
         "#######################################################################################"
     ],
     "tileDefinitions": {
@@ -32,8 +32,9 @@ const map1 = {
         "!": { "type": "solid", "color": "darkgray", "image": "./assets/dirt2.png" },
         "@": { "type": "enemy", "color": "red", "image": "./assets/enemy1.png" },
         "$": { "type": "collectible", "color": "yellow", "image": "./assets/coin.png" },
-        "0": { "type": "loadMap", "script": "map2", "color": "purple" },
-        "P": { "type": "passable", "color": "lightgray" }
+        "P": { "type": "passable", "color": "lightgray" },
+        "0": { "type": "loadMap", "script": "map2", "color": "darkblue", "width": 64, "height": 64, "image": "./assets/door.png" },
+        "~": { "type": "filler", "note:": "filler for the map editor, i do nothing but show the occupied space for the door" }
     }
 };
 

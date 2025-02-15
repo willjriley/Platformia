@@ -24,12 +24,12 @@ const map0 = {
         "                                                                                                                              ",
         "                                  $$                                                                                          ",
         "                                $$$$$$                                                                                        ",
-        "y                       @  $$$$$$$$$$$$$$$ @                                                                                  ",
-        "r                    #############################                                                                          ##",
-        "r            #########!!!!!!!!!!!!!!!!!!!!!!###########                                                                     ##",
-        "r            ###ggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggg                                               00",
-        "r    @    ###gghh##h##gghh##hhhhhhhhhhhhh##gghh##hhhhhhhhhhhhhhhhhh##gghh##h##gg                                            00",
-        "##############################################################################################################################"
+        "y                        @ $$$$$$$$$$$$$$$ @                                                                               0~ ",
+        "r                    #############################                                                                         ~~ ",
+        "r            #########!!!!!!!!!!!!!!!!!!!!!!###########                                                                    rry",
+        "r            ###ggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggg                                         #######r",
+        "r         @###gghh##h##gghh##hhhhhhhhhhhhh##gghh##hhhhhhhhhhhhhhhhhh##gghh##h##gg                               ###########yyr",
+        "######################################################################################################################r#y###yy"
     ],
     "tileDefinitions": {
         "p": { "type": "passable", "color": "#FFFFFF" },
@@ -51,8 +51,9 @@ const map0 = {
         "h": { "type": "solid", "color": "#11260A" },
         "@": { "type": "enemy", "color": "red", "image": "./assets/enemy1.png" },
         "^": { "type": "enemy", "color": "red", "image": "./assets/enemy2.png" },
-        "$": { "type": "collectible", "color": "yellow", "image": "./assets/coin.png" },
-        "0": { "type": "loadMap", "script": "map1" }
+        "$": { "type": "collectible", "color": "yellow", "width": 64, "height": 64, "image": "./assets/coin.png" },
+        "0": { "type": "loadMap", "script": "map1", "width": 64, "height": 64, "image": "./assets/door.png" },
+        "~": { "type": "filler", "note:": "filler for the map editor, i do nothing but show the occupied space for the door" }
     }
 };
 
