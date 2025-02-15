@@ -133,7 +133,7 @@ function checkCollisions() {
         ) {
             let collectibleSound = new Audio("./assets/sounds/coin-dropped-81172.mp3");
             collectibleSound.play();
-            score += 5; // Increase score by 5            
+            score += 5; // Increase score by 5
             return false; // Remove the collected item
         }
         return true; // Keep uncollected items
@@ -210,7 +210,7 @@ function updateGame() {
 
         ctx.fillStyle = gradient;
 
-        ctx.fillRect(0, 0, width, height); // Fill the whole canvas with the background color            
+        ctx.fillRect(0, 0, width, height); // Fill the whole canvas with the background color
         ctx.font = "bold 30px 'Courier New', monospace";
         ctx.fillStyle = "BLACK";
         ctx.fillText(" * PLATFORMIA  *", width / 2 - 160, height / 2 - 128);
@@ -234,7 +234,7 @@ function updateGame() {
         ctx.fillStyle = mapBackgroundColor;
     }
 
-    ctx.fillRect(0, 0, width, height); // Fill the whole canvas with the background color    
+    ctx.fillRect(0, 0, width, height); // Fill the whole canvas with the background color
     ctx.fillStyle = "white";
     ctx.font = "bold 30px 'Courier New', monospace";
     ctx.fillText("SCORE: " + score, 60, 50);

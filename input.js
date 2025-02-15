@@ -27,7 +27,7 @@ document.addEventListener('keydown', (e) => {
             }
             // Toggle pause
             if (!paused && !gameLoopId) {
-                updateGame(); // Resume game loop only if not already running            
+                updateGame(); // Resume game loop only if not already running
             }
         }
         else {
