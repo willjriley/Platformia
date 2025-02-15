@@ -28,6 +28,8 @@ let lives = 3;
 let paused = false;
 let gameStarted = false;
 let gameLoopId = null; // Store the current game loop
+let respawning = false; // Add a flag to indicate respawning
+let gamePaused = false; // Add a flag to indicate game pause
 
 //helper
 function getPlatformAt(x, y) {
@@ -139,7 +141,7 @@ function checkCollisions() {
         ) {
             let collectibleSound = new Audio("./assets/sounds/coin-dropped-81172.mp3");
             collectibleSound.play();
-            score += 5; // Increase score by 5            
+            score += 5; // Increase score by 5
             return false; // Remove the collected item
         }
         return true; // Keep uncollected items
@@ -162,7 +164,16 @@ function checkCollisions() {
         player.isJumping = true;
     }
 }
+
+function displayYouDiedMessage() {
+    ctx.fillStyle = "red";
+    ctx.font = "bold 50px 'Courier New', monospace";
+    ctx.fillText("YOU DIED", width / 2 - 150, height / 2);
+}
+
 function loseLife() {
+    if (respawning) return; // Prevent multiple calls during respawn
+
     lives--; // Reduce lives by 1
     player.isJumping = false;
     player.velocityX = 0;
@@ -172,15 +183,23 @@ function loseLife() {
     deathSound.play();
 
     if (lives <= 0) {
-
         location.reload(); // Reload the page
         return;
-
     } else {
-        // set player respawn position
-        // maybe add player respawn point to map data
-        player.x = 50;
-        player.y = height - 60;
+        respawning = true; // Set respawning flag
+        gamePaused = true; // Pause the game
+
+        // Display "You Died" message
+        displayYouDiedMessage();
+
+        // Add a short delay before respawning
+        setTimeout(() => {
+            // set player respawn position
+            player.x = 50;
+            player.y = height - 60;
+            respawning = false; // Reset respawning flag
+            gamePaused = false; // Resume the game
+        }, 1000); // 1 second delay
     }
 }
 
@@ -216,7 +235,7 @@ function updateGame() {
 
         ctx.fillStyle = gradient;
 
-        ctx.fillRect(0, 0, width, height); // Fill the whole canvas with the background color            
+        ctx.fillRect(0, 0, width, height); // Fill the whole canvas with the background color
         ctx.font = "bold 30px 'Courier New', monospace";
         ctx.fillStyle = "BLACK";
         ctx.fillText(" * PLATFORMIA  *", width / 2 - 160, height / 2 - 128);
@@ -224,6 +243,15 @@ function updateGame() {
         ctx.fillText(" GAME OVER ", width / 2 - 120, height / 2 - 64);
         ctx.fillStyle = "white";
         ctx.fillText("PRESS 1 TO START", width / 2 - 160, height / 2);
+        requestAnimationFrame(updateGame); // Keep checking
+        return;
+    }
+
+    if (gamePaused) {
+        // Display "You Died" message if lives were lost
+        if (lives < 3 && respawning) {
+            displayYouDiedMessage();
+        }
         requestAnimationFrame(updateGame); // Keep checking
         return;
     }
@@ -240,7 +268,7 @@ function updateGame() {
         ctx.fillStyle = mapBackgroundColor;
     }
 
-    ctx.fillRect(0, 0, width, height); // Fill the whole canvas with the background color    
+    ctx.fillRect(0, 0, width, height); // Fill the whole canvas with the background color
     ctx.fillStyle = "white";
     ctx.font = "bold 30px 'Courier New', monospace";
     ctx.fillText("SCORE: " + score, 60, 50);
@@ -280,6 +308,11 @@ function updateGame() {
 
     // Check collisions with platforms
     checkCollisions();
+
+    // Display "You Died" message if lives were lost
+    if (lives < 3 && respawning) {
+        displayYouDiedMessage();
+    }
 }
 
 // Initialize game

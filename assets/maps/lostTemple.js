@@ -1,6 +1,6 @@
 const lostTemple = {
     "name": "Lost Temple",
-    "playerStartingPosition": {x: 50, y: 280},
+    "playerStartingPosition": { x: 50, y: 280 },
     "mapBackgroundColor": "#2E2B26",
     "mapData": [
         "TTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTT",
