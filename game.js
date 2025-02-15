@@ -108,7 +108,10 @@ function checkCollisions() {
 
             // Check if the player is standing on a bounce tile  
             if (platform.type === "bounce") {
-                player.bounce(platform.force, 'vertical'); // Apply bounce force upwards                    
+                player.bounce(platform.force, 'vertical'); // Apply bounce force upwards 
+
+                let bounceSound = new Audio("./assets/sounds/springy-bounce-86214.mp3");
+                bounceSound.play();
             }
 
             // Check if the player is standing on a loadMap tile and pressing the down key
