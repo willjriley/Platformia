@@ -5,6 +5,7 @@ const map2 = {
   "gradientMiddle": "#FFC300",
   "gradientBottom": "#C70039",
   "mapBackgroundColor": "#87CEEB",
+  "music": "./assets/music/2019-12-11_-_Retro_Platforming_-_David_Fesliyan.mp3",
   "mapData": [
     "!                                                                                      ",
     "!                                                                                      ",
