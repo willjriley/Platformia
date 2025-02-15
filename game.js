@@ -283,11 +283,8 @@ function updateGame() {
         ctx.fillStyle = mapBackgroundColor;
     }
 
-    ctx.fillRect(0, 0, width, height); // Fill the whole canvas with the background color
+    ctx.fillRect(0, 0, width, height);
     ctx.fillStyle = "white";
-    ctx.font = "bold 30px 'Courier New', monospace";
-    ctx.fillText("SCORE: " + score, 60, 50);
-    ctx.fillText("LIVES: " + lives, 550, 50);
 
     if (paused) {
         ctx.fillText(" PAUSED ", width / 2 - 80, height / 2);
@@ -308,6 +305,12 @@ function updateGame() {
 
     // Draw platforms
     platforms.forEach(platform => platform.draw());
+
+    ctx.fillStyle = "white";
+    ctx.font = "bold 30px 'Courier New', monospace";
+    ctx.fillText("SCORE: " + score, 60, 50);
+    ctx.fillText("LIVES: " + lives, 550, 50);
+
 
     // Draw collectibles
     collectibles.forEach(collectible => collectible.draw());
