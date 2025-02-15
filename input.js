@@ -12,7 +12,7 @@ document.addEventListener('keydown', (e) => {
         if (e.key === 'ArrowDown') keys.down = true;
         if (e.key === 'ArrowUp') keys.up = true;
         if (e.key === ' ') keys.space = true;
-        if (e.key === 'p' || e.key === 'Escape') {
+        if (e.key.toLocaleLowerCase() === 'p' || e.key === 'Escape') {
             if (!gameStarted) {
                 return
             }

@@ -60,3 +60,12 @@ Player.prototype.move = function () {
         this.velocityY = 0;
     }
 };
+
+// Handle bounce effect
+Player.prototype.bounce = function (force, direction) {
+    if (direction === 'vertical') {
+        this.velocityY = -force;
+    } else if (direction === 'horizontal') {
+        this.velocityX = -force;
+    }
+};

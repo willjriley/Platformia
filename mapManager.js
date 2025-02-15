@@ -69,7 +69,7 @@ function parseMap(mapData) {
             const char = mapData[y][x];
             const tileDef = tileDefinitions[char];
 
-            if (tileDef && (tileDef.type === "solid" || tileDef.type === "loadMap")) {
+            if (tileDef && (tileDef.type === "solid" || tileDef.type === "loadMap" || tileDef.type === "bounce")) {
                 let image = tileDef.imageObj || null;
                 let color = tileDef.color || null;
                 // Create a platform tile
@@ -82,7 +82,8 @@ function parseMap(mapData) {
                         image,
                         tileDef.type,
                         tileDef.script || null,
-                        color
+                        color,
+                        tileDef.force || null
                     )
                 );
             }

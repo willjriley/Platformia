@@ -50,10 +50,12 @@ function checkCollisions() {
     let isOnPlatform = false;
     const maxFallSpeed = 10;
     player.velocityY = Math.min(player.velocityY, maxFallSpeed); // Limit falling speed
+
     // First, handle horizontal movement
     for (let platform of platforms) {
         let collidesHorizontally = player.x + player.width > platform.x && player.x < platform.x + platform.width;
         let collidesVertically = player.y + player.height > platform.y && player.y < platform.y + platform.height;
+
 
         // Check if player is on a loadMap tile
         if (collidesHorizontally && collidesVertically) {
@@ -91,7 +93,7 @@ function checkCollisions() {
             }
         }
 
-        // Check if the player is landing on a platform (falling down)
+        // Check if the player is landing on a platform (hitting the top)
         if (
             collidesHorizontally &&
             player.y + player.height <= platform.y + player.velocityY + 1 &&
@@ -102,6 +104,10 @@ function checkCollisions() {
             player.isJumping = false;
             isOnPlatform = true;
 
+            // Check if the player is standing on a bounce tile  
+            if (platform.type === "bounce") {
+                player.bounce(platform.force, 'vertical'); // Apply bounce force upwards                    
+            }
 
             // Check if the player is standing on a loadMap tile and pressing the down key
             if (platform.type === "loadMap" && platform.script && window[platform.script] && keys.down) {
@@ -150,12 +156,12 @@ function checkCollisions() {
             loseLife(); // Call function when player touches an enemy
         }
     });
+
     // If the player isn't standing on a platform, mark as jumping
     if (!isOnPlatform) {
         player.isJumping = true;
     }
 }
-
 function loseLife() {
     lives--; // Reduce lives by 1
     player.isJumping = false;
