@@ -39,11 +39,12 @@
 
 <body>
     <div class="map-buttons">
-        <button onclick="loadMap('map0')">Welcome</button>
-        <button onclick="loadMap('map1')">Level 1</button>
-        <button onclick="loadMap('map2')">Level 2</button>
-        <button onclick="loadMap('map3')">Level 3</button>
-        <button onclick="loadMap('lavaCaverns')">Lava Caverns</button>
+        <button onclick="selectMap('map0', this)">Welcome</button>
+        <button onclick="selectMap('map1', this)">Level 1</button>
+        <button onclick="selectMap('map2', this)">Level 2</button>
+        <button onclick="selectMap('map3', this)">Level 3</button>
+        <button onclick="selectMap('lavaCaverns', this)">Lava Caverns</button>
+        <button onclick="selectMap('coinCave', this)">Coin Cave</button>
         <!-- Add more buttons as needed -->
     </div>
     <canvas id="gameCanvas" width="800" height="400"></canvas>
@@ -59,13 +60,17 @@
     <script src="assets/maps/map2.js"></script>
     <script src="assets/maps/map3.js"></script>
     <script src="assets/maps/lavaCaverns.js"></script>
+    <script src="assets/maps/coinCave.js"></script>
     <script src="game.js"></script>
 
     <!-- Add more map scripts as needed -->
     <script>
-        function loadMap(mapName) {
+        function selectMap(mapName, button) {
+            console.log(`selectMap called with mapName: ${mapName}`);
             if (window[mapName]) {
-                loadMapData(window[mapName]);
+                initGame(window[mapName]);
+                button.blur(); // Remove focus from the button
+                document.getElementById('gameCanvas').focus(); // Set focus to the canvas
             }
         }
     </script>

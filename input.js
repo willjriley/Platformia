@@ -1,5 +1,5 @@
 // Handle input
-let keys = { right: false, left: false, space: false };
+let keys = { right: false, left: false, space: false, down: false, up: false };
 let musicStarted = false;
 
 document.addEventListener('keydown', (e) => {
@@ -9,6 +9,8 @@ document.addEventListener('keydown', (e) => {
     if (gameStarted) {
         if (e.key === 'ArrowRight') keys.right = true;
         if (e.key === 'ArrowLeft') keys.left = true;
+        if (e.key === 'ArrowDown') keys.down = true;
+        if (e.key === 'ArrowUp') keys.up = true;
         if (e.key === ' ') keys.space = true;
         if (e.key === 'p' || e.key === 'Escape') {
             if (!gameStarted) {
@@ -40,6 +42,8 @@ document.addEventListener('keyup', (e) => {
     if (gameStarted) {
         if (e.key === 'ArrowRight') keys.right = false;
         if (e.key === 'ArrowLeft') keys.left = false;
+        if (e.key === 'ArrowDown') keys.down = false;
+        if (e.key === 'ArrowUp') keys.up = false;
         if (e.key === ' ') keys.space = false;
     }
 });

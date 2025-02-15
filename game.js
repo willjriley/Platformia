@@ -6,6 +6,7 @@ const ctx = canvas.getContext('2d');
 const width = canvas.width = 800;
 const height = canvas.height = 600;
 const tileSize = 32;
+
 let mapData = [];
 let tileDefinitions = {};
 let mapBackgroundColor = "#000000";
@@ -27,14 +28,6 @@ let lives = 3;
 let paused = false;
 let gameStarted = false;
 let gameLoopId = null; // Store the current game loop
-
-// Initialize game
-function initGame() {
-    loadTileImages();  // Load tile images first
-    player = new Player();
-    parseMap(mapData);
-    updateGame();
-}
 
 //helper
 function getPlatformAt(x, y) {
@@ -90,7 +83,6 @@ function checkCollisions() {
 
         // Re-check isLoadMap here for platforms that might have been missed
         if (collidesHorizontally && collidesVertically) {
-            // TODO - loadMap tiles currently not working when collisions is from the top but do appear to work from all other directions
             if (platform.type === "loadMap") {
                 if (platform.script && window[platform.script]) {
                     loadMapData(window[platform.script]);
@@ -109,6 +101,14 @@ function checkCollisions() {
             player.velocityY = 0;
             player.isJumping = false;
             isOnPlatform = true;
+
+
+            // Check if the player is standing on a loadMap tile and pressing the down key
+            if (platform.type === "loadMap" && platform.script && window[platform.script] && keys.down) {
+                loadMapData(window[platform.script]);
+                return;
+            }
+
         }
 
         // Prevent the player from jumping through platforms (hitting the bottom)
@@ -276,6 +276,11 @@ function updateGame() {
     checkCollisions();
 }
 
+// Initialize game
+function initGame(selectedMap) {
+    // Start the game loop
+    loadMapData(selectedMap);
+}
+
 // Start the game
-//initGame();
-loadMapData(map0);
+initGame(map0);
