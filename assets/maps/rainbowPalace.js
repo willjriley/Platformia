@@ -1,6 +1,6 @@
 const rainbowRoad = {
     "name": "Rainbow Psalce",
-    "playerStartingPosition": {x: 50, y: 300},
+    "playerStartingPosition": { x: 50, y: 300 },
     "mapBackgroundColor": "#000033",
     "mapData": [
         "                                                                                  ",
