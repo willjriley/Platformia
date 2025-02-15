@@ -1,21 +1,58 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Plateform Game</title>
+    <title>Platform Game</title>
     <style>
-        body { margin: 0; display: flex; justify-content: center; align-items: center; height: 100vh; background: #0d0d0e; }
-        canvas { border: 2px solid black; }
+        body {
+            margin: 0;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            background: #0d0d0e;
+        }
+
+        canvas {
+            border: 2px solid black;
+            cursor: none;
+        }
+
+        .map-buttons {
+            position: absolute;
+            right: 20px;
+            top: 20px;
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+        }
+
+        .map-buttons button {
+            padding: 10px;
+            font-size: 16px;
+            cursor: pointer;
+        }
     </style>
 </head>
+
 <body>
+    <div class="map-buttons">
+        <button onclick="selectMap('map0', this)">Welcome</button>
+        <button onclick="selectMap('map1', this)">Level 1</button>
+        <button onclick="selectMap('map2', this)">Level 2</button>
+        <button onclick="selectMap('map3', this)">Level 3</button>
+        <button onclick="selectMap('lavaCaverns', this)">Lava Caverns</button>
+        <button onclick="selectMap('coinCave', this)">Coin Cave</button>
+        <!-- Add more buttons as needed -->
+    </div>
     <canvas id="gameCanvas" width="800" height="400"></canvas>
     <script src="player.js"></script>
     <script src="enemy.js"></script>
     <script src="platform.js"></script>
     <script src="collectibles.js"></script>
-    <script src="input.js"></script>    
+    <script src="input.js"></script>
     <script src="mapManager.js"></script>
     <script src="tileImages.js"></script>
     <script src="assets/maps/map0.js"></script>
@@ -23,7 +60,20 @@
     <script src="assets/maps/map2.js"></script>
     <script src="assets/maps/map3.js"></script>
     <script src="assets/maps/lavaCaverns.js"></script>
-    
+    <script src="assets/maps/coinCave.js"></script>
     <script src="game.js"></script>
+
+    <!-- Add more map scripts as needed -->
+    <script>
+        function selectMap(mapName, button) {
+            console.log(`selectMap called with mapName: ${mapName}`);
+            if (window[mapName]) {
+                initGame(window[mapName]);
+                button.blur(); // Remove focus from the button
+                document.getElementById('gameCanvas').focus(); // Set focus to the canvas
+            }
+        }
+    </script>
 </body>
+
 </html>

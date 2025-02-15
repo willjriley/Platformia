@@ -6,9 +6,15 @@ const ctx = canvas.getContext('2d');
 const width = canvas.width = 800;
 const height = canvas.height = 600;
 const tileSize = 32;
+
 let mapData = [];
 let tileDefinitions = {};
 let mapBackgroundColor = "#000000";
+let useGradient = false;
+let gradientTop = null;
+let gradientMiddle = null;
+let gradientBottom = null;
+
 
 // Game objects
 let platforms = [];
@@ -22,22 +28,8 @@ let lives = 3;
 let paused = false;
 let gameStarted = false;
 let gameLoopId = null; // Store the current game loop
-
-//Gradients
-let gradients = {
-    sunset: {top: "#FF5733", middle: "#FFC300", bottom: "#C70039"},    
-    coolNeon:  {top: "#00C9FF", middle: "#92FE9D", bottom: "#FF00FF"},
-    deepOcean:  {top: "#001F3F", middle: "#0074D9", bottom: "#7FDBFF"},
-    darkPurple:  {top: "#00023D", middle: "#42113E", bottom: "#170742"}
-}
-
-// Initialize game
-function initGame() {
-    loadTileImages();  // Load tile images first
-    player = new Player();
-    parseMap(mapData);
-    updateGame();
-}
+let respawning = false; // Add a flag to indicate respawning
+let gamePaused = false; // Add a flag to indicate game pause
 
 //helper
 function getPlatformAt(x, y) {
@@ -60,15 +52,17 @@ function checkCollisions() {
     let isOnPlatform = false;
     const maxFallSpeed = 10;
     player.velocityY = Math.min(player.velocityY, maxFallSpeed); // Limit falling speed
+
     // First, handle horizontal movement
     for (let platform of platforms) {
         let collidesHorizontally = player.x + player.width > platform.x && player.x < platform.x + platform.width;
         let collidesVertically = player.y + player.height > platform.y && player.y < platform.y + platform.height;
-        
+
+
         // Check if player is on a loadMap tile
-        if (collidesHorizontally && collidesVertically) {    
-    
-            if (platform.type === "loadMap") {                
+        if (collidesHorizontally && collidesVertically) {
+
+            if (platform.type === "loadMap") {
                 if (platform.script && window[platform.script]) {
                     loadMapData(window[platform.script]);
                     return;
@@ -93,8 +87,7 @@ function checkCollisions() {
 
         // Re-check isLoadMap here for platforms that might have been missed
         if (collidesHorizontally && collidesVertically) {
-            // TODO - loadMap tiles currently not working when collisions is from the top but do appear to work from all other directions
-            if (platform.type === "loadMap") {                
+            if (platform.type === "loadMap") {
                 if (platform.script && window[platform.script]) {
                     loadMapData(window[platform.script]);
                     return;
@@ -102,7 +95,7 @@ function checkCollisions() {
             }
         }
 
-        // Check if the player is landing on a platform (falling down)
+        // Check if the player is landing on a platform (hitting the top)
         if (
             collidesHorizontally &&
             player.y + player.height <= platform.y + player.velocityY + 1 &&
@@ -112,6 +105,18 @@ function checkCollisions() {
             player.velocityY = 0;
             player.isJumping = false;
             isOnPlatform = true;
+
+            // Check if the player is standing on a bounce tile  
+            if (platform.type === "bounce") {
+                player.bounce(platform.force, 'vertical'); // Apply bounce force upwards                    
+            }
+
+            // Check if the player is standing on a loadMap tile and pressing the down key
+            if (platform.type === "loadMap" && platform.script && window[platform.script] && keys.down) {
+                loadMapData(window[platform.script]);
+                return;
+            }
+
         }
 
         // Prevent the player from jumping through platforms (hitting the bottom)
@@ -135,12 +140,12 @@ function checkCollisions() {
             player.y < collectible.y + collectible.height
         ) {
             let collectibleSound = new Audio("./assets/sounds/coin-dropped-81172.mp3");
-            collectibleSound.play();            
-            score += 5; // Increase score by 5            
+            collectibleSound.play();
+            score += 5; // Increase score by 5
             return false; // Remove the collected item
         }
         return true; // Keep uncollected items
-    });    
+    });
 
     // Check for enemy collisions
     enemies.forEach(enemy => {
@@ -152,43 +157,61 @@ function checkCollisions() {
         ) {
             loseLife(); // Call function when player touches an enemy
         }
-    });    
+    });
+
     // If the player isn't standing on a platform, mark as jumping
     if (!isOnPlatform) {
         player.isJumping = true;
     }
 }
 
+function displayYouDiedMessage() {
+    ctx.fillStyle = "red";
+    ctx.font = "bold 50px 'Courier New', monospace";
+    ctx.fillText("YOU DIED", width / 2 - 150, height / 2);
+}
+
 function loseLife() {
+    if (respawning) return; // Prevent multiple calls during respawn
+
     lives--; // Reduce lives by 1
+    player.isJumping = false;
+    player.velocityX = 0;
+    player.velocityY = 0;
 
     let deathSound = new Audio("./assets/sounds/8-bit-wrong-2-84407.mp3");
     deathSound.play();
 
     if (lives <= 0) {
-        //currentMusic.pause(); // Pause music
-        score = 0;
-        musicStarted = false;
-        gameStarted = false;
-        lives = 3;
-        loadMapData(map0);        
+        location.reload(); // Reload the page
+        return;
     } else {
-        // set player respawn position
-        // maybe add player respawn point to map data
-        player.x = 50;
-        player.y = height - 60;        
-        player.velocityX = 0;
-        player.velocityY = 0;
+        respawning = true; // Set respawning flag
+        gamePaused = true; // Pause the game
+
+        // Display "You Died" message
+        displayYouDiedMessage();
+
+        // Add a short delay before respawning
+        setTimeout(() => {
+            // set player respawn position
+            player.x = 50;
+            player.y = height - 60;
+            respawning = false; // Reset respawning flag
+            gamePaused = false; // Resume the game
+        }, 1000); // 1 second delay
     }
 }
 
 // Handle scrolling
 function handleScrolling() {
+    const edgeDistance = 200; // Increase this value to increase the distance from the edge
+
     // Move camera when player reaches edges of screen
-    if (player.x > camera.x + camera.width - 100) {
-        camera.x = Math.floor(player.x - camera.width + 100);
-    } else if (player.x < camera.x + 100) {
-        camera.x = Math.floor(player.x - 100);
+    if (player.x > camera.x + camera.width - edgeDistance) {
+        camera.x = Math.floor(player.x - camera.width + edgeDistance);
+    } else if (player.x < camera.x + edgeDistance) {
+        camera.x = Math.floor(player.x - edgeDistance);
     }
 
     // Ensure the camera stays within the bounds of the map
@@ -202,46 +225,60 @@ function handleScrolling() {
 }
 
 // Update the game
-function updateGame() {        
+function updateGame() {
 
     if (!gameStarted) {
         let gradient = ctx.createLinearGradient(0, 0, 0, height); // Vertical gradient
-        gradient.addColorStop(0, gradients.deepOcean.top);  
-        gradient.addColorStop(0.5, gradients.deepOcean.middle); 
-        gradient.addColorStop(1, gradients.deepOcean.bottom);  
+        gradient.addColorStop(0, "#001F3F");
+        gradient.addColorStop(0.5, "#0074D9");
+        gradient.addColorStop(1, "#7FDBFF");
 
         ctx.fillStyle = gradient;
 
-        ctx.fillRect(0, 0, width, height); // Fill the whole canvas with the background color            
+        ctx.fillRect(0, 0, width, height); // Fill the whole canvas with the background color
         ctx.font = "bold 30px 'Courier New', monospace";
-        ctx.fillStyle = "BLACK";      
+        ctx.fillStyle = "BLACK";
         ctx.fillText(" * PLATFORMIA  *", width / 2 - 160, height / 2 - 128);
-        ctx.fillStyle = "RED";        
+        ctx.fillStyle = "RED";
         ctx.fillText(" GAME OVER ", width / 2 - 120, height / 2 - 64);
-        ctx.fillStyle = "white";  
-        ctx.fillText("PRESS 1 TO START", width / 2 - 160, height / 2);       
+        ctx.fillStyle = "white";
+        ctx.fillText("PRESS 1 TO START", width / 2 - 160, height / 2);
         requestAnimationFrame(updateGame); // Keep checking
-        return; 
-    }    
-    //ctx.fillStyle = '#000000'; // Example: Sky blue color, change to whatever you prefer
-    let gradient = ctx.createLinearGradient(0, 0, 0, height); // Vertical gradient
-    gradient.addColorStop(0, gradients.darkPurple.top);  
-    gradient.addColorStop(0.5, gradients.darkPurple.middle); 
-    gradient.addColorStop(1, gradients.darkPurple.bottom);  
+        return;
+    }
 
-    ctx.fillStyle = gradient;
+    if (gamePaused) {
+        // Display "You Died" message if lives were lost
+        if (lives < 3 && respawning) {
+            displayYouDiedMessage();
+        }
+        requestAnimationFrame(updateGame); // Keep checking
+        return;
+    }
 
-    ctx.fillRect(0, 0, width, height); // Fill the whole canvas with the background color    
+    if (useGradient) {
+        let gradient = ctx.createLinearGradient(0, 0, 0, height); // Vertical gradient
+        gradient.addColorStop(0, gradientTop);
+        gradient.addColorStop(0.5, gradientMiddle);
+        gradient.addColorStop(1, gradientBottom);
+
+        ctx.fillStyle = gradient;
+    }
+    else {
+        ctx.fillStyle = mapBackgroundColor;
+    }
+
+    ctx.fillRect(0, 0, width, height); // Fill the whole canvas with the background color
     ctx.fillStyle = "white";
     ctx.font = "bold 30px 'Courier New', monospace";
-    ctx.fillText("SCORE: " + score, 60, 50);    
-    ctx.fillText("LIVES: " + lives, 550, 50); 
+    ctx.fillText("SCORE: " + score, 60, 50);
+    ctx.fillText("LIVES: " + lives, 550, 50);
 
     if (paused) {
         ctx.fillText(" PAUSED ", width / 2 - 80, height / 2);
         requestAnimationFrame(updateGame); // Keep checking
-        return; 
-    }    
+        return;
+    }
 
     if (gameLoopId) {
         cancelAnimationFrame(gameLoopId); // Prevent multiple loops
@@ -271,8 +308,18 @@ function updateGame() {
 
     // Check collisions with platforms
     checkCollisions();
+
+    // Display "You Died" message if lives were lost
+    if (lives < 3 && respawning) {
+        displayYouDiedMessage();
+    }
+}
+
+// Initialize game
+function initGame(selectedMap) {
+    // Start the game loop
+    loadMapData(selectedMap);
 }
 
 // Start the game
-//initGame();
-loadMapData(map0);
+initGame(map0);

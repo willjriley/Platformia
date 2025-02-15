@@ -1,7 +1,7 @@
 // Player object
-function Player(x,y) {
-    this.x = x|| 50;
-    this.y = y|| 544;
+function Player(x, y) {
+    this.x = x || 50;
+    this.y = y || 544;
     this.width = 32;
     this.height = 32;
     this.speed = 3;
@@ -15,12 +15,12 @@ function Player(x,y) {
     this.facing = "right"; // default facing direction
 }
 
-Player.prototype.draw = function() {
+Player.prototype.draw = function () {
     ctx.save();
 
     let drawX = this.x - camera.x;
     let drawY = this.y;
-    
+
     // dynamic flip of image
     if (this.facing === "left") {
         ctx.translate(drawX + this.width, drawY);
@@ -34,7 +34,7 @@ Player.prototype.draw = function() {
     ctx.restore();
 };
 
-Player.prototype.move = function() {
+Player.prototype.move = function () {
     if (this.isJumping && this.velocityY < 15) {
         this.velocityY += gravity; // Apply gravity
     }
@@ -58,5 +58,14 @@ Player.prototype.move = function() {
     if (this.y < 0) {
         this.y = 0;
         this.velocityY = 0;
+    }
+};
+
+// Handle bounce effect
+Player.prototype.bounce = function (force, direction) {
+    if (direction === 'vertical') {
+        this.velocityY = -force;
+    } else if (direction === 'horizontal') {
+        this.velocityX = -force;
     }
 };

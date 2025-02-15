@@ -10,7 +10,7 @@ function Enemy(x, y, image, platform) {
     this.speed = .5; // Patrol speed
 }
 
-Enemy.prototype.draw = function() {
+Enemy.prototype.draw = function () {
     if (this.image) {
         ctx.drawImage(this.image, 0, 0, tileSize, tileSize, this.x - camera.x, this.y, this.width, this.height); // Offset by camera's x
     } else {
@@ -19,10 +19,10 @@ Enemy.prototype.draw = function() {
     }
 };
 
-Enemy.prototype.patrol = function() {
+Enemy.prototype.patrol = function () {
     // Determine the next horizontal position based on the current direction
     const nextX = (this.patrolDirection === "right") ? this.x + this.speed : this.x - this.speed;
-    
+
     // Sensor point at the enemy's feet in the direction of movement.
     // If moving right, check the right edge; if left, check the left edge.
     const sensorX = (this.patrolDirection === "right") ? nextX + this.width : nextX;
@@ -30,19 +30,19 @@ Enemy.prototype.patrol = function() {
 
     // Check for a gap: if there is no platform beneath the sensor point, then reverse direction.
     if (!getPlatformAt(sensorX, sensorY)) {
-         this.patrolDirection = (this.patrolDirection === "right") ? "left" : "right";
-         return; // Skip moving this frame.
+        this.patrolDirection = (this.patrolDirection === "right") ? "left" : "right";
+        return; // Skip moving this frame.
     }
-    
+
     // Check for a wall: place a sensor at about the enemy's mid-height in front.
     const wallSensorX = (this.patrolDirection === "right") ? this.x + this.width + this.speed : this.x - this.speed;
     const wallSensorY = this.y + this.height / 2;
     if (getPlatformAt(wallSensorX, wallSensorY)) {
-         // There is an obstacle directly in front.
-         this.patrolDirection = (this.patrolDirection === "right") ? "left" : "right";
-         return;
+        // There is an obstacle directly in front.
+        this.patrolDirection = (this.patrolDirection === "right") ? "left" : "right";
+        return;
     }
-    
+
     // If both sensors are clear, move the enemy.
     this.x = nextX;
 };
