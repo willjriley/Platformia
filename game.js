@@ -179,7 +179,7 @@ function loseLife() {
 
 // Handle scrolling
 function handleScrolling() {
-    const edgeDistance = 200; // Increase this value to increase the distance from the edge
+    const edgeDistance = 300; // Increase this value to increase the distance from the edge
 
     // Move camera when player reaches edges of screen
     if (player.x > camera.x + camera.width - edgeDistance) {
@@ -284,10 +284,10 @@ function updateGame() {
     // Draw collectibles
     collectibles.forEach(collectible => collectible.draw());
 
-    // Draw enemies and let them patrol
+    // Update and draw enemies
     enemies.forEach(enemy => {
-        enemy.patrol(); // Make enemy patrol
-        enemy.draw();
+        enemy.update(player); // Update enemy behavior
+        enemy.draw(); // Draw enemy
     });
 
     // Draw player

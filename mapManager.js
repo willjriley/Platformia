@@ -102,7 +102,6 @@ function parseMap(mapData) {
                 let image = tileDef.imageObj || null;
                 let width = tileDef.width || tileSize;
                 let height = tileDef.height || tileSize;
-                const tolerance = 5;  // Allow a little slack when matching positions
 
                 if (tileDef.type === "enemy") {
                     let enemyX = x * tileSize;
@@ -123,8 +122,11 @@ function parseMap(mapData) {
                         }
                     }
 
+                    // Determine the enemy type based on the tile definition
+                    let enemyType = tileDef.enemyType || 'patrol';
+
                     // Create the enemy with the found platform (or null if not found)
-                    let enemy = new Enemy(enemyX, enemyY, image, platformBelow, width, height);
+                    let enemy = new Enemy(enemyX, enemyY, image, platformBelow, enemyType, width, height);
                     enemies.push(enemy);
 
                 } else if (tileDef.type === "collectible") {
