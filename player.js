@@ -35,28 +35,22 @@ Player.prototype.draw = function () {
 };
 
 Player.prototype.move = function () {
-    if (this.isJumping && this.velocityY < 15) {
-        this.velocityY += gravity; // Apply gravity
+    // Apply gravity with a maximum fall speed
+    if (this.isJumping) {
+        this.velocityY = Math.min(this.velocityY + gravity, 15);
     }
 
-    // Apply horizontal velocity
-    if (this.velocityX !== 0) {
-        this.x += this.velocityX;
-    }
+    // Predict next position
+    let nextX = this.x + this.velocityX;
+    let nextY = this.y + this.velocityY;
 
-    // Apply vertical velocity
-    this.y += this.velocityY;
+    // Apply movement with bounds checking
+    this.x = Math.max(0, Math.min(nextX, mapData[0].length * tileSize - this.width));
+    this.y = Math.max(0, Math.min(nextY, height - this.height));
 
-    // Prevent player from going out of bounds (vertically)
-    if (this.y + this.height >= height) {
-        this.y = height - this.height;
-        this.velocityY = 0;
+    // Reset jumping if we hit the ground
+    if (this.y === height - this.height) {
         this.isJumping = false;
-    }
-
-    // Prevent player from jumping outside the top of the canvas
-    if (this.y < 0) {
-        this.y = 0;
         this.velocityY = 0;
     }
 };

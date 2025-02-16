@@ -30,7 +30,7 @@ function loadMapData(map) {
     if (map.music) {
         currentMusic = new Audio(map.music);
         currentMusic.loop = true;
-        currentMusic.volume = 0.5; // Adjust volume as needed
+        currentMusic.volume = 0.1; // Adjust volume as needed
     }
 
     platforms = [];

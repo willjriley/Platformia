@@ -53,11 +53,35 @@ function checkCollisions() {
     const maxFallSpeed = 10;
     player.velocityY = Math.min(player.velocityY, maxFallSpeed); // Limit falling speed
 
-    // First, handle horizontal movement
+    // First, handle vertical movement
+    for (let platform of platforms) {
+        let collidesHorizontally = player.x + player.width > platform.x &&
+            player.x < platform.x + platform.width;
+        let nextY = player.y + player.velocityY;
+        let willCollideVertically = nextY + player.height > platform.y &&
+            nextY < platform.y + platform.height;
+
+        if (collidesHorizontally && willCollideVertically) {
+            // Hitting platform from below
+            if (player.velocityY < 0 && player.y > platform.y) {
+                player.y = platform.y + platform.height;
+                player.velocityY = 1; // Small downward bounce
+                player.isJumping = true;
+            }
+            // Landing on platform
+            else if (player.velocityY > 0 && player.y < platform.y) {
+                player.y = platform.y - player.height;
+                player.velocityY = 0;
+                player.isJumping = false;
+                isOnPlatform = true;
+            }
+        }
+    }
+
+    // Then handle horizontal movement
     for (let platform of platforms) {
         let collidesHorizontally = player.x + player.width > platform.x && player.x < platform.x + platform.width;
         let collidesVertically = player.y + player.height > platform.y && player.y < platform.y + platform.height;
-
 
         // Check if player is on a loadMap tile
         if (collidesHorizontally && collidesVertically) {
@@ -77,60 +101,6 @@ function checkCollisions() {
                 player.x = platform.x + platform.width + 0.1;
                 player.velocityX = 0;
             }
-        }
-    }
-
-    // Then, handle vertical movement
-    for (let platform of platforms) {
-        let collidesHorizontally = player.x + player.width > platform.x && player.x < platform.x + platform.width;
-        let collidesVertically = player.y + player.height > platform.y && player.y < platform.y + platform.height;
-
-        // Re-check isLoadMap here for platforms that might have been missed
-        if (collidesHorizontally && collidesVertically) {
-            if (platform.type === "loadMap") {
-                if (platform.script && window[platform.script]) {
-                    loadMapData(window[platform.script]);
-                    return;
-                }
-            }
-        }
-
-        // Check if the player is landing on a platform (hitting the top)
-        if (
-            collidesHorizontally &&
-            player.y + player.height <= platform.y + player.velocityY + 1 &&
-            player.y + player.height + player.velocityY >= platform.y
-        ) {
-            player.y = platform.y - player.height;
-            player.velocityY = 0;
-            player.isJumping = false;
-            isOnPlatform = true;
-
-            // Check if the player is standing on a bounce tile  
-            if (platform.type === "bounce") {
-                player.bounce(platform.force, 'vertical'); // Apply bounce force upwards 
-
-                let bounceSound = new Audio("./assets/sounds/springy-bounce-86214.mp3");
-                bounceSound.play();
-            }
-
-            // Check if the player is standing on a loadMap tile and pressing the down key
-            if (platform.type === "loadMap" && platform.script && window[platform.script] && keys.down) {
-                loadMapData(window[platform.script]);
-                return;
-            }
-
-        }
-
-        // Prevent the player from jumping through platforms (hitting the bottom)
-        if (
-            collidesHorizontally &&
-            player.y < platform.y + platform.height &&
-            player.y + player.height > platform.y &&
-            player.velocityY < 0
-        ) {
-            player.y = platform.y + platform.height + 0.1; // Small buffer
-            player.velocityY = 0;
         }
     }
 
@@ -161,7 +131,6 @@ function checkCollisions() {
             loseLife(); // Call function when player touches an enemy
         }
     });
-
     // If the player isn't standing on a platform, mark as jumping
     if (!isOnPlatform) {
         player.isJumping = true;
