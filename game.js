@@ -140,7 +140,9 @@ function checkCollisions() {
 function displayYouDiedMessage() {
     ctx.fillStyle = "red";
     ctx.font = "bold 50px 'Courier New', monospace";
-    ctx.fillText("YOU DIED", width / 2 - 150, height / 2);
+    const text = "YOU DIED";
+    const textWidth = ctx.measureText(text).width;
+    ctx.fillText(text, (width - textWidth) / 2, height / 2);
 }
 
 function loseLife() {
@@ -208,13 +210,23 @@ function updateGame() {
         ctx.fillStyle = gradient;
 
         ctx.fillRect(0, 0, width, height); // Fill the whole canvas with the background color
+
         ctx.font = "bold 30px 'Courier New', monospace";
         ctx.fillStyle = "BLACK";
-        ctx.fillText(" * PLATFORMIA  *", width / 2 - 160, height / 2 - 128);
+        const text1 = "* PLATFORMIA  *";
+        const text1Width = ctx.measureText(text1).width;
+        ctx.fillText(text1, (width - text1Width) / 2, height / 2 - 128);
+
         ctx.fillStyle = "RED";
-        ctx.fillText(" GAME OVER ", width / 2 - 120, height / 2 - 64);
+        const text2 = "GAME OVER";
+        const text2Width = ctx.measureText(text2).width;
+        ctx.fillText(text2, (width - text2Width) / 2, height / 2 - 64);
+
         ctx.fillStyle = "white";
-        ctx.fillText("PRESS 1 TO START", width / 2 - 160, height / 2);
+        const text3 = "PRESS 1 TO START";
+        const text3Width = ctx.measureText(text3).width;
+        ctx.fillText(text3, (width - text3Width) / 2, height / 2 - 2);
+
         requestAnimationFrame(updateGame); // Keep checking
         return;
     }
@@ -240,11 +252,8 @@ function updateGame() {
         ctx.fillStyle = mapBackgroundColor;
     }
 
-    ctx.fillRect(0, 0, width, height); // Fill the whole canvas with the background color
+    ctx.fillRect(0, 0, width, height);
     ctx.fillStyle = "white";
-    ctx.font = "bold 30px 'Courier New', monospace";
-    ctx.fillText("SCORE: " + score, 60, 50);
-    ctx.fillText("LIVES: " + lives, 550, 50);
 
     if (paused) {
         ctx.fillText(" PAUSED ", width / 2 - 80, height / 2);
@@ -265,6 +274,12 @@ function updateGame() {
 
     // Draw platforms
     platforms.forEach(platform => platform.draw());
+
+    ctx.fillStyle = "white";
+    ctx.font = "bold 30px 'Courier New', monospace";
+    ctx.fillText("SCORE: " + score, 60, 50);
+    ctx.fillText("LIVES: " + lives, 550, 50);
+
 
     // Draw collectibles
     collectibles.forEach(collectible => collectible.draw());

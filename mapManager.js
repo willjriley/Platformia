@@ -72,13 +72,15 @@ function parseMap(mapData) {
             if (tileDef && (tileDef.type === "solid" || tileDef.type === "loadMap" || tileDef.type === "bounce")) {
                 let image = tileDef.imageObj || null;
                 let color = tileDef.color || null;
+                let width = tileDef.width || tileSize;
+                let height = tileDef.height || tileSize;
                 // Create a platform tile
                 platforms.push(
                     new Platform(
                         x * tileSize,
                         y * tileSize,
-                        tileSize,
-                        tileSize,
+                        width,
+                        height,
                         image,
                         tileDef.type,
                         tileDef.script || null,
@@ -98,6 +100,9 @@ function parseMap(mapData) {
 
             if (tileDef) {
                 let image = tileDef.imageObj || null;
+                let width = tileDef.width || tileSize;
+                let height = tileDef.height || tileSize;
+                const tolerance = 5;  // Allow a little slack when matching positions
 
                 if (tileDef.type === "enemy") {
                     let enemyX = x * tileSize;
@@ -106,12 +111,12 @@ function parseMap(mapData) {
                     const tolerance = 5;  // Allow a little slack when matching positions
 
                     // Search through the platforms to find one directly below this enemy.
-                    // We check if the enemy's bottom (enemyY + tileSize) is near a platform's top.
+                    // We check if the enemy's bottom (enemyY + height) is near a platform's top.
                     for (let platform of platforms) {
                         if (
-                            enemyX + tileSize > platform.x &&        // Enemy overlaps platform horizontally
+                            enemyX + width > platform.x &&        // Enemy overlaps platform horizontally
                             enemyX < platform.x + platform.width &&    // Enemy overlaps platform horizontally
-                            Math.abs((enemyY + tileSize) - platform.y) <= tolerance // Enemy bottom is within tolerance of platform top
+                            Math.abs((enemyY + height) - platform.y) <= tolerance // Enemy bottom is within tolerance of platform top
                         ) {
                             platformBelow = platform;
                             break; // Found a matching platform; no need to search further
@@ -119,7 +124,7 @@ function parseMap(mapData) {
                     }
 
                     // Create the enemy with the found platform (or null if not found)
-                    let enemy = new Enemy(enemyX, enemyY, image, platformBelow);
+                    let enemy = new Enemy(enemyX, enemyY, image, platformBelow, width, height);
                     enemies.push(enemy);
 
                 } else if (tileDef.type === "collectible") {

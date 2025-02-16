@@ -11,25 +11,25 @@ const map0 = {
     "rows": 19,
     "cols": 126,
     "mapData": [
-        "                                                                                                                              ",
-        "                                        ^                                                                                     ",
-        "           W   W  EEEEE  L      CCCCC  OOOOO  M   M  EEEEE     TTTTT  OOOOO      M   M  Y   Y     GGG   AAAAA  M   M EEEEE    ",
-        "           W   W  E      L      C      O   O  MM MM  E          T    O   O      MM MM   Y Y      G   $  A   A  MM MM  E       ",
-        "           W W W  EEEE   L      C      O   O  M M M  EEEE       T    O   O      M M M    Y       G  GG AAAAA  M M M  EEEE     ",
-        "           W W W  E      L  @   C      O   O  M   M  E          T    O @ O      M   M    Y       G   G A   A  M   M  E   @    ",
-        "            W W   EEEEE  LLLLL  CCCCC  OOOOO  M   M  EEEEE      T    OOOOO      M   M    Y        GGG  A   A  M   M  EEEEE    ",
-        "                                                                                                                              ",
-        "                                                                                                                              ",
-        "                                                                                                                              ",
-        "                                                                                                                              ",
-        "                                  $$                                                                                          ",
-        "                                $$$$$$                                                                                        ",
-        "y                       @  $$$$$$$$$$$$$$$ @                                                                                  ",
-        "r                    #############################                                                                          ##",
-        "r            #########!!!!!!!!!!!!!!!!!!!!!!###########                                                                     ##",
-        "r            ###ggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggg                                               00",
-        "r    @    ###gghh##h##gghh##hhhhhhhhhhhhh##gghh##hhhhhhhhhhhhhhhhhh##gghh##h##gg                                            00",
-        "##############################################################################################################################"
+        "                                                                                                                                   ",
+        "                                               ^                                                                                   ",
+        "     W   W  EEEEE  L      CCCCC  OOOOO  M   M  EEEEE     TTTTT  OOOOO     OOOOO  C   C  WWW       GGG    AAAAA  M   M  EEEEE       ",
+        "     W   W  E      L      C      O   O  MM MM  E          T     O   O     O   O  C   C  W  W     G   $   A   A  MM MM  E           ",
+        "     W W W  EEEE   L      C      O   O  M M M  EEEE       T     O   O     O   O  C   C  WWW      G  GG   AAAAA  M M M  EEEE        ",
+        "     W W W  E      L  @   C      O   O  M   M  E          T     O @ O     O   O  C   C  W  W     G   G   A   A  M   M  E   @       ",
+        "      W W   EEEEE  LLLLL  CCCCC  OOOOO  M   M  EEEEE      T     OOOOO     OOOOO  CCCCC  W   W     GGG    A   A  M   M  EEEEE       ",
+        "                                                                                                                                   ",
+        "                                                                                                                                   ",
+        "                                                                                                                                   ",
+        "                                                                                                                                   ",
+        "                                  $$                                                                                               ",
+        "                                $$$$$$                                                                                             ",
+        "y                        @ $$$$$$$$$$$$$$$ @                                                                              0~       ",
+        "r                    #############################                                                                        ~~       ",
+        "r            #########!!!!!!!!!!!!!!!!!!!!!!###########                                                                   rry      ",
+        "r            ###ggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggg                                         #######r     ",
+        "r         @###gghh##h##gghh##hhhhhhhhhhhhh##gghh##hhhhhhhhhhhhhhhhhh##gghh##h##gg                               ###########yyr     ",
+        "######################################################################################################################r#y###yyrryyr"
     ],
     "tileDefinitions": {
         "p": { "type": "passable", "color": "#FFFFFF" },
@@ -51,8 +51,9 @@ const map0 = {
         "h": { "type": "solid", "color": "#11260A" },
         "@": { "type": "enemy", "color": "red", "image": "./assets/enemy1.png" },
         "^": { "type": "enemy", "color": "red", "image": "./assets/enemy2.png" },
-        "$": { "type": "collectible", "color": "yellow", "image": "./assets/coin.png" },
-        "0": { "type": "loadMap", "script": "map1" }
+        "$": { "type": "collectible", "color": "yellow", "width": 64, "height": 64, "image": "./assets/coin.png" },
+        "0": { "type": "loadMap", "script": "map1", "width": 64, "height": 64, "image": "./assets/door.png" },
+        "~": { "type": "filler", "note:": "filler for the map editor, i do nothing but show the occupied space for the door" }
     }
 };
 

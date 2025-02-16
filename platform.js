@@ -12,10 +12,14 @@ function Platform(x, y, width, height, image, type, script, color, force) {
 }
 
 Platform.prototype.draw = function () {
-    if (this.image) {
-        ctx.drawImage(this.image, 0, 0, tileSize, tileSize, this.x - camera.x, this.y, this.width, this.height);
-    } else {
+    if (this.color) {
+        if (String(this.color).toLowerCase() === "transparent") {
+            return;
+        }
         ctx.fillStyle = this.color;
         ctx.fillRect(this.x - camera.x, this.y, this.width, this.height);
+    }
+    if (this.image) {
+        ctx.drawImage(this.image, 0, 0, tileSize, tileSize, this.x - camera.x, this.y, this.width, this.height);
     }
 };

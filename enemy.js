@@ -1,9 +1,9 @@
 // Enemy object
-function Enemy(x, y, image, platform) {
+function Enemy(x, y, image, platform, width = 32, height = 32) {
     this.x = x;
     this.y = y;
-    this.width = 32;
-    this.height = 32;
+    this.width = width;
+    this.height = height;
     this.image = image || null; // Optional image
     this.platform = platform; // Store the platform on which the enemy is patrolling
     this.patrolDirection = 'right'; // Direction the enemy is patrolling
