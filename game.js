@@ -20,7 +20,7 @@ let gradientBottom = null;
 let platforms = [];
 let collectibles = [];
 let camera = { x: 0, y: 0, width: 800, height: 400 };
-let gravity = 0.5;
+let gravity = 0.25;
 let player;
 let enemies = [];
 let score = 0;

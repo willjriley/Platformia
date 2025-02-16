@@ -46,7 +46,7 @@ function loadMapData(map) {
     // Reset velocity and speed
     player.velocityX = 0;
     player.velocityY = 0;
-    player.speed = 3;
+    player.speed = 2;
 
     // **Reset the camera to match the new player position**
     camera.x = Math.max(0, player.x - camera.width / 2);

@@ -7,7 +7,7 @@ function Player(x, y) {
     this.speed = 3;
     this.velocityX = 0;
     this.velocityY = 0;
-    this.jumpPower = -11;
+    this.jumpPower = -8;
     this.color = 'blue';
     this.isJumping = false;
     this.image = new Image();
