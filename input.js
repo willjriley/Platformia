@@ -7,10 +7,10 @@ document.addEventListener('keydown', (e) => {
         gameStarted = true;
     }
     if (gameStarted) {
-        if (e.key === 'ArrowRight') keys.right = true;
-        if (e.key === 'ArrowLeft') keys.left = true;
-        if (e.key === 'ArrowDown') keys.down = true;
-        if (e.key === 'ArrowUp') keys.up = true;
+        if (e.key === 'ArrowRight' || e.key.toLowerCase() === 'd') keys.right = true;
+        if (e.key === 'ArrowLeft' || e.key.toLowerCase() === 'a') keys.left = true;
+        if (e.key === 'ArrowDown' || e.key === 's') keys.down = true;
+        if (e.key === 'ArrowUp' || e.key.toLowerCase() === 'w') keys.up = true;
         if (e.key === ' ') keys.space = true;
         if (e.key.toLocaleLowerCase() === 'p' || e.key === 'Escape') {
             if (!gameStarted) {
@@ -40,10 +40,10 @@ document.addEventListener('keydown', (e) => {
 
 document.addEventListener('keyup', (e) => {
     if (gameStarted) {
-        if (e.key === 'ArrowRight') keys.right = false;
-        if (e.key === 'ArrowLeft') keys.left = false;
-        if (e.key === 'ArrowDown') keys.down = false;
-        if (e.key === 'ArrowUp') keys.up = false;
+        if (e.key === 'ArrowRight' || e.key.toLowerCase() === 'd') keys.right = false;
+        if (e.key === 'ArrowLeft' || e.key.toLowerCase() === 'a') keys.left = false;
+        if (e.key === 'ArrowDown' || e.key === 's') keys.down = false;
+        if (e.key === 'ArrowUp' || e.key.toLowerCase() === 'w') keys.up = false;
         if (e.key === ' ') keys.space = false;
     }
 });
