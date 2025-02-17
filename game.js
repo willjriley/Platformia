@@ -52,32 +52,6 @@ function checkCollisions() {
     const maxFallSpeed = 10;
     player.velocityY = Math.min(player.velocityY, maxFallSpeed); // Limit falling speed
 
-    // First, handle vertical movement
-    for (let platform of platforms) {
-        let collidesHorizontally = player.x + player.width > platform.x &&
-            player.x < platform.x + platform.width;
-        let nextY = player.y + player.velocityY;
-        let willCollideVertically = nextY + player.height > platform.y &&
-            nextY < platform.y + platform.height;
-
-        if (collidesHorizontally && willCollideVertically) {
-            // Hitting platform from below
-            if (player.velocityY < 0 && player.y > platform.y) {
-                player.y = platform.y + platform.height;
-                player.velocityY = 1; // Small downward bounce
-                player.isJumping = true;
-            }
-            // Landing on platform
-            else if (player.velocityY > 0 && player.y < platform.y) {
-                player.y = platform.y - player.height;
-                player.velocityY = 0;
-                player.isJumping = false;
-                isOnPlatform = true;
-            }
-        }
-    }
-
-    // Then handle horizontal movement
     for (let platform of platforms) {
         if (isColliding(player, platform)) {
             // Check if player is on a loadMap tile
