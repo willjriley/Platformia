@@ -7,7 +7,7 @@ function Enemy(x, y, image, platform, width = 32, height = 32) {
     this.image = image || null; // Optional image
     this.platform = platform; // Store the platform on which the enemy is patrolling
     this.patrolDirection = 'right'; // Direction the enemy is patrolling
-    this.speed = .5; // Patrol speed
+    this.speed = 1; // Patrol speed
 }
 
 Enemy.prototype.draw = function () {

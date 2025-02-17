@@ -4,11 +4,11 @@ function Platform(x, y, width, height, image, type, script, color, force) {
     this.y = y;
     this.width = width;
     this.height = height;
-    this.image = image || null; // Optional image
+    this.image = image || null;
     this.type = type;
     this.script = script || null;
     this.color = color;
-    this.force = force || 1; // Optional force for bounce tiles
+    this.force = force || 1;
 }
 
 Platform.prototype.draw = function () {

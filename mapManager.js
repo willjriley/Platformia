@@ -69,7 +69,7 @@ function parseMap(mapData) {
             const char = mapData[y][x];
             const tileDef = tileDefinitions[char];
 
-            if (tileDef && (tileDef.type === "solid" || tileDef.type === "loadMap" || tileDef.type === "bounce")) {
+            if (tileDef && (tileDef.type === "solid" || tileDef.type === "passable" || tileDef.type === "loadMap" || tileDef.type === "bounce")) {
                 let image = tileDef.imageObj || null;
                 let color = tileDef.color || null;
                 let width = tileDef.width || tileSize;

@@ -47,90 +47,92 @@ function getPlatformAt(x, y) {
     return null;
 }
 
-// Check collisions with platforms
 function checkCollisions() {
     let isOnPlatform = false;
     const maxFallSpeed = 10;
     player.velocityY = Math.min(player.velocityY, maxFallSpeed); // Limit falling speed
 
-    // First, handle horizontal movement
     for (let platform of platforms) {
-        let collidesHorizontally = player.x + player.width > platform.x && player.x < platform.x + platform.width;
-        let collidesVertically = player.y + player.height > platform.y && player.y < platform.y + platform.height;
-
-
-        // Check if player is on a loadMap tile
-        if (collidesHorizontally && collidesVertically) {
-
+        if (isColliding(player, platform)) {
+            // Check if player is on a loadMap tile
             if (platform.type === "loadMap") {
                 if (platform.script && window[platform.script]) {
                     loadMapData(window[platform.script]);
                     return;
                 }
-            }
-
-            // Handle horizontal collisions
-            if (player.velocityX > 0) { // Moving right
-                player.x = platform.x - player.width - 0.1; // Small buffer to prevent sticking
-                player.velocityX = 0;
-            } else if (player.velocityX < 0) { // Moving left
-                player.x = platform.x + platform.width + 0.1;
-                player.velocityX = 0;
-            }
-        }
-    }
-
-    // Then, handle vertical movement
-    for (let platform of platforms) {
-        let collidesHorizontally = player.x + player.width > platform.x && player.x < platform.x + platform.width;
-        let collidesVertically = player.y + player.height > platform.y && player.y < platform.y + platform.height;
-
-        // Re-check isLoadMap here for platforms that might have been missed
-        if (collidesHorizontally && collidesVertically) {
-            if (platform.type === "loadMap") {
-                if (platform.script && window[platform.script]) {
-                    loadMapData(window[platform.script]);
-                    return;
-                }
-            }
-        }
-
-        // Check if the player is landing on a platform (hitting the top)
-        if (
-            collidesHorizontally &&
-            player.y + player.height <= platform.y + player.velocityY + 1 &&
-            player.y + player.height + player.velocityY >= platform.y
-        ) {
-            player.y = platform.y - player.height;
-            player.velocityY = 0;
-            player.isJumping = false;
-            isOnPlatform = true;
-
-            // Check if the player is standing on a bounce tile  
-            if (platform.type === "bounce") {
-                player.bounce(platform.force, 'vertical'); // Apply bounce force upwards 
-
-                let bounceSound = new Audio("./assets/sounds/springy-bounce-86214.mp3");
-                bounceSound.play();
             }
 
             // Check if the player is standing on a loadMap tile and pressing the down key
-            if (platform.type === "loadMap" && platform.script && window[platform.script] && keys.down) {
-                loadMapData(window[platform.script]);
+            // if (platform.type === "loadMap" && platform.script && window[platform.script] && keys.down) {
+            //     loadMapData(window[platform.script]);
+            //     return;
+            // }
+
+            //     console.log("player.y", player.y, "player.x", player.x, "player.width", player.width, "player.height", player.height, "player.velocityY", player.velocityY, "player.velocityX", player.velocityX);
+            //     console.log("platform.y", platform.y, "platform.x", platform.x, "platform.width", platform.width, "platform.height", platform.height);            
+
+            // Check if the player is standing on a bounce tile
+            if (platform.type === "bounce") {
+                player.bounce(platform.force, 'vertical'); // Apply bounce force upwards
+
+                let bounceSound = new Audio("./assets/sounds/springy-bounce-86214.mp3");
+                bounceSound.play();
                 return;
             }
 
-        }
+            // Calculate player boundaries
+            const playerTopBoundary = player.y;
+            const playerBottomBoundary = player.y + player.height;
+            const playerLeftBoundary = player.x;
+            const playerRightBoundary = player.x + player.width;
 
-        // Prevent the player from jumping through platforms (hitting the bottom)
-        if (
-            collidesHorizontally &&
-            player.y < platform.y + platform.height &&
-            player.y + player.height > platform.y &&
-            player.velocityY < 0
-        ) {
-            player.y = platform.y + platform.height + 0.1; // Small buffer
-            player.velocityY = 0;
+            // Calculate platform boundaries
+            const platformTopBoundary = platform.y;
+            const platformBottomBoundary = platform.y + platform.height;
+            const platformLeftBoundary = platform.x;
+            const platformRightBoundary = platform.x + platform.width;
+
+            // Check player tile boundaries
+            const velocityBuffer = .5; // Small buffer to prevent sticking
+
+            // if the player hit top a platform            
+            if ((playerBottomBoundary) <= platformTopBoundary + player.velocityY + velocityBuffer &&
+                (playerBottomBoundary) + player.velocityY > 0) {
+                // keep player on top of platform
+                player.velocityY = 0;
+                player.y = platform.y - player.height;
+
+                player.isJumping = false;
+                isOnPlatform = true;
+
+            } else if (playerTopBoundary < platformBottomBoundary &&
+                playerBottomBoundary > platformTopBoundary &&
+                playerRightBoundary > platformLeftBoundary &&
+                playerLeftBoundary < platformRightBoundary &&
+                player.velocityY < 0 && !isOnPlatform) {
+                // keep player hit bottom platform
+                player.velocityY = 0;
+            }
+
+            // Ensure the player is horizontally overlapping with the platform
+            if (playerRightBoundary > platformLeftBoundary &&
+                playerLeftBoundary < platformRightBoundary &&
+                playerBottomBoundary > platformTopBoundary &&
+                playerTopBoundary < platformBottomBoundary) {
+
+                // Handle right collision
+                if (player.velocityX > 0 && playerRightBoundary <= platformLeftBoundary + player.velocityX + velocityBuffer) {
+                    // Player hit right side of platform.
+                    player.x = platformLeftBoundary - player.width;
+                    player.velocityX = 0;
+
+                    // Handle left collision
+                } else if (player.velocityX < 0 && playerLeftBoundary >= platformRightBoundary + player.velocityX - velocityBuffer) {
+                    // Player hit left side of platform.
+                    player.x = platformRightBoundary + velocityBuffer;
+                    player.velocityX = 0;
+                }
+            }
         }
     }
 
@@ -167,6 +169,20 @@ function checkCollisions() {
         player.isJumping = true;
     }
 }
+
+function isColliding(player, platform) {
+    let collidesHorizontally = (player.x + player.width) > (platform.x) && (player.x) < (platform.x + platform.width);
+    let collidesVertically = (player.y + player.height) > (platform.y) && (player.y) < (platform.y + platform.height);
+    return collidesHorizontally && collidesVertically;
+}
+
+
+// function isColliding(obj1, obj2) {
+//     return obj1.x + obj1.width > obj2.x &&
+//         obj1.x < obj2.x + obj2.width &&
+//         obj1.y + obj1.height > obj2.y &&
+//         obj1.y < obj2.y + obj2.height;
+// }
 
 function displayYouDiedMessage() {
     ctx.fillStyle = "red";
