@@ -9,21 +9,21 @@ const map1 = {
     "mapData": [
         "T                                                                                     T    ",
         "T                                                                                     T    ",
+        "T                                              $$                                     T    ",
+        "T                                  $$$$         $$                                    T    ",
+        "T                            MMMMMMMMMMMM                                             T    ",
         "T                                                                                     T    ",
-        "T                                                                                     T    ",
-        "T                                                                                     T    ",
-        "T                                                                                     T    ",
-        "T                                                                                     T    ",
+        "T                        MMM                                                          T    ",
         "T                                                                                     T    ",
         "T  $        @   $                                                                     T    ",
         "T           ########                                                                  T    ",
-        "T   ####    ## $   #                                                                  T    ",
+        "T   ####    ## $   #   S                                                              T    ",
         "T           ##   $ #   #                                                              T    ",
         "T       @         $#      #                                                           T    ",
-        "T  #  #####     ###                          ##########                               T    ",
-        "T       $                      ###########################                           0~    ",
-        "T        $    #       #########!!!!!!!!!!!!!!!!!!!!!!###########                     ~~    ",
-        "T                    ##!!!!!!!!!!!!!!!!!!!!!!!!!!!!!################                 MM    ",
+        "T  #  #####     ###                         s##########                               T    ",
+        "T       $                      ###########################                            T    ",
+        "T        $    #       #########!!!!!!!!!!!!!!!!!!!!!!###########                     0~    ",
+        "T                    ##!!!!!!!!!!!!!!!!!!!!!!!!!!!!!################                 ~~    ",
         "T        ####    @  ########!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!##########         DDDDMMDDD ",
         "############################################################################################"
     ],
@@ -37,7 +37,10 @@ const map1 = {
         "M": { "type": "solid", "color": "#000000" },
         "D": { "type": "solid", "color": "#1A1A1A" },
         "0": { "type": "loadMap", "script": "map2", "color": "#000000", "width": 64, "height": 64, "image": "./assets/door.png" },
-        "~": { "type": "filler", "note:": "filler for the map editor, i do nothing but show the occupied space for the door" }
+        "~": { "type": "filler", "note:": "filler for the map editor, i do nothing but show the occupied space for the door" },
+        "S": { "type": "bounce", "image": "./assets/spring.png", "force": 10 },
+        "s": { "type": "bounce", "image": "./assets/spring.png", "force": 13 },
+        "M": { "type": "solid", "color": "#4B0082", "image": "./assets/metalBox.png" }
     }
 };
 
