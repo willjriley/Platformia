@@ -53,7 +53,7 @@ function checkCollisions() {
     player.velocityY = Math.min(player.velocityY, maxFallSpeed); // Limit falling speed
 
     for (let platform of platforms) {
-        if (isColliding(player, platform)) {
+        if (String(platform.type).toLocaleLowerCase() != "passable" && isColliding(player, platform)) {
             // Check if player is on a loadMap tile
             if (platform.type === "loadMap") {
                 if (platform.script && window[platform.script]) {
