@@ -69,8 +69,17 @@ Enemy.prototype.hunt = function (player) {
         this.y += Math.sin(angle) * this.speed;
     } else {
         // Return to the starting position
-        const angle = Math.atan2(this.startY - this.y, this.startX - this.x);
-        this.x += Math.cos(angle) * this.speed;
-        this.y += Math.sin(angle) * this.speed;
+        const tolerance = 1; // Tolerance range to avoid jittering
+        const distanceToStart = Math.hypot(this.startX - this.x, this.startY - this.y);
+
+        if (distanceToStart > tolerance) {
+            const angle = Math.atan2(this.startY - this.y, this.startX - this.x);
+            this.x += Math.cos(angle) * this.speed;
+            this.y += Math.sin(angle) * this.speed;
+        } else {
+            // Stop moving if within the tolerance range
+            this.x = this.startX;
+            this.y = this.startY;
+        }
     }
 };
