@@ -1,8 +1,12 @@
-function SpinningRope(x, y, length, color) {
+function SpinningRope(x, y, length, color, image) {
     this.x = x;
     this.y = y;
     this.length = length;
     this.color = color;
+    this.image = image ? new Image() : null;
+    if (this.image) {
+        this.image.src = image;
+    }
     this.angle = 0;
     this.rotationSpeed = 0.05; // Adjust the rotation speed as needed
 }
@@ -14,6 +18,9 @@ SpinningRope.prototype.update = function () {
 SpinningRope.prototype.draw = function (ctx, camera) {
     ctx.save();
     ctx.translate(this.x - camera.x, this.y - camera.y);
+    if (this.image) {
+        ctx.drawImage(this.image, -this.image.width / 2, -this.image.height / 2);
+    }
     ctx.rotate(this.angle);
     ctx.beginPath();
     ctx.moveTo(0, 0);

@@ -133,7 +133,7 @@ function parseMap(mapData) {
                 } else if (tileDef.type === "collectible") {
                     collectibles.push(new Collectible(x * tileSize, y * tileSize, image));
                 } else if (tileDef.type === "spinningRope") {
-                    spinningRopes.push(new SpinningRope(x * tileSize + tileSize / 2, y * tileSize + tileSize / 2, 128, tileDef.color));
+                    spinningRopes.push(new SpinningRope(x * tileSize + tileSize / 2, y * tileSize + tileSize / 2, 128, tileDef.color, tileDef.image));
                 }
             }
         }
