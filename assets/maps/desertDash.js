@@ -18,7 +18,7 @@ const desertDash = {
         "T                                                                                     T",
         "T                                                                                     T",
         "T                                                                                     T",
-        "T                                         lllllllRlllllll                             T",
+        "T                                         lllllllllllllll                             T",
         "T                                                                                     T",
         "T                                      jj                                             T",
         "T                                  kkkkkkkkkkk                                        T",
@@ -27,7 +27,7 @@ const desertDash = {
         "T          cbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbd      nm T",
         "aaaighgoaaaffaaoaaaighgaahaaaighgaifaagaahffaaahaaiaoaighgaaaaaaaoaahffaaaaaaoaaaoaoaaaa"
     ],
-    "tileDefinitions": {
+    "tiles": {
         "a": { "type": "solid", "image": "./assets/desert/ground01.png" },
         "b": { "type": "solid", "image": "./assets/desert/ground02.png" },
         "c": { "type": "solid", "image": "./assets/desert/leftGround02.png" },
@@ -49,9 +49,18 @@ const desertDash = {
         "$": { "type": "collectible", "color": "yellow", "image": "./assets/coin.png" },
         "0": { "type": "loadMap", "script": "map3", "color": "#000000", "width": 64, "height": 64, "image": "./assets/door.png" },
         "~": { "type": "filler", "note:": "filler for the map editor, i do nothing but show the occupied space for the door" },
-        "P": { "type": "passable", "color": "lightgray" },
-        "R": { "type": "spinningRope", "color": "#FF0000", "image": "./assets/desert/yellowDirt.png" }
-    }
+        "P": { "type": "passable", "color": "lightgray" }
+    },
+    "particles": [
+        {
+            "name": "spinningRope 1",
+            "type": "spinningRope",
+            "x": 1586,
+            "y": 368,
+            "length": 128,
+            "color": "#FF0000"
+        }
+    ]
 };
 
 window.desertDash = desertDash;

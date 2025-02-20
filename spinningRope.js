@@ -1,4 +1,4 @@
-function SpinningRope(x, y, length, color, image) {
+function SpinningRope(x, y, length = 128, color, image, spinRate = 0.05) {
     this.x = x;
     this.y = y;
     this.length = length;
@@ -8,7 +8,7 @@ function SpinningRope(x, y, length, color, image) {
         this.image.src = image;
     }
     this.angle = 0;
-    this.rotationSpeed = 0.05; // Adjust the rotation speed as needed
+    this.rotationSpeed = spinRate; // Set the rotation speed based on the spinRate parameter
 }
 
 SpinningRope.prototype.update = function () {

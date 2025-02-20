@@ -27,7 +27,7 @@ const map2 = {
         "T                    #gghh##hhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhh#",
         "#######################################################################################"
     ],
-    "tileDefinitions": {
+    "tiles": {
         "#": { "type": "solid", "color": "gray", "image": "./assets/dirt.png" },
         "!": { "type": "solid", "color": "darkgray", "image": "./assets/dirt2.png" },
         "T": { "type": "solid", "color": "transparent" },

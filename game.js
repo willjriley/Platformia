@@ -8,14 +8,23 @@ const height = canvas.height = 600;
 const tileSize = 32;
 
 let mapData = [];
-let tileDefinitions = {};
+let tiles = {};
 let mapBackgroundColor = "#000000";
 let useGradient = false;
 let gradientTop = null;
 let gradientMiddle = null;
 let gradientBottom = null;
 
+// Add a global variable to store mouse coordinates
+let mouseX = 0;
+let mouseY = 0;
 
+// Add an event listener to update mouse coordinates
+canvas.addEventListener('mousemove', function (event) {
+    const rect = canvas.getBoundingClientRect();
+    mouseX = event.clientX - rect.left + window.scrollX + camera.x;
+    mouseY = event.clientY - rect.top + window.scrollY;
+});
 // Game objects
 let platforms = [];
 let collectibles = [];
@@ -96,7 +105,7 @@ function checkCollisions() {
             // Check player tile boundaries
             const velocityBuffer = .5; // Small buffer to prevent sticking
 
-            // if the player hit top a platform            
+            // the player hits the top of a platform            
             if ((playerBottomBoundary) <= platformTopBoundary + player.velocityY + velocityBuffer &&
                 (playerBottomBoundary) + player.velocityY > 0) {
                 // keep player on top of platform
@@ -111,7 +120,7 @@ function checkCollisions() {
                 playerRightBoundary > platformLeftBoundary &&
                 playerLeftBoundary < platformRightBoundary &&
                 player.velocityY < 0 && !isOnPlatform) {
-                // keep player hit bottom platform
+                // player hits the bottom of a platform
                 player.velocityY = 0;
             }
 
@@ -303,6 +312,10 @@ function updateGame() {
 
     if (paused) {
         ctx.fillText(" PAUSED ", canvas.width / 2 - 80, canvas.height / 2);
+        // Display mouse coordinates
+        ctx.font = "bold 20px 'Courier New', monospace";
+        ctx.fillText(`Mouse X: ${mouseX}, Mouse Y: ${mouseY}`, 10, 30);
+
         requestAnimationFrame(updateGame); // Keep checking
         return;
     }
@@ -344,7 +357,7 @@ function updateGame() {
         }
     });
 
-    // Update and draw particle effect
+    // Update and draw particle emitters
     particleEmitters.forEach(particleEmitter => {
         particleEmitter.update();
         particleEmitter.draw(ctx, camera); // Pass the camera to the draw method

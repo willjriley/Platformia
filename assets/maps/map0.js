@@ -31,7 +31,7 @@ const map0 = {
         "r         @###gghh##h##gghh##hhhhhhhhhhhhh##gghh##hhhhhhhhhhhhhhhhhh##gghh##h##gg                               ###########yyr     ",
         "######################################################################################################################r#y###yyrryyr"
     ],
-    "tileDefinitions": {
+    "tiles": {
         "p": { "type": "passable", "color": "#FFFFFF" },
         "r": { "type": "solid", "color": "#FF0000", "image": "./assets/red_tile.png" },
         "y": { "type": "solid", "color": "#FF0000", "image": "./assets/yellow_tile.png" },
@@ -54,7 +54,17 @@ const map0 = {
         "$": { "type": "collectible", "color": "yellow", "width": 64, "height": 64, "image": "./assets/coin.png" },
         "0": { "type": "loadMap", "script": "map1", "width": 64, "height": 64, "image": "./assets/door.png" },
         "~": { "type": "filler", "note:": "filler for the map editor, i do nothing but show the occupied space for the door" }
-    }
+    },
+    "entities": [
+        { "name": "enemy 1", "type": "enemy", "x": 244, "y": 543, "color": "red", "image": "./assets/enemy1.png", "enemyType": "patrol" },
+        { "name": "enemy 2", "type": "enemy", "x": 756, "y": 415, "color": "red", "image": "./assets/enemy1.png", "enemyType": "patrol" },
+        { "name": "enemy 3", "type": "enemy", "x": 1309, "y": 415, "color": "red", "image": "./assets/enemy1.png", "enemyType": "patrol" },
+        { "name": "enemy 4", "type": "enemy", "x": 1120, "y": 160, "color": "red", "image": "./assets/enemy1.png", "enemyType": "patrol" },
+        { "name": "enemy 5", "type": "enemy", "x": 1596, "y": 160, "color": "red", "image": "./assets/enemy2.png", "enemyType": "hunter" },
+        { "name": "enemy 6", "type": "enemy", "x": 1511, "y": 32, "color": "red", "image": "./assets/enemy2.png", "enemyType": "hunter" }
+    ],
+    "particles": [
+    ]
 };
 
 window.map0 = map0;

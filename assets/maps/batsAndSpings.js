@@ -1,5 +1,5 @@
-const coinCave = {
-    "name": "coinCave",
+const batsAndSpings = {
+    "name": "Bats And Springs Oh My!",
     "playerStartingPosition": { x: 50, y: 40 },
     "mapBackgroundColor": "#000000",
     "gradientTop": "#000000", // Dark teal
@@ -23,18 +23,24 @@ const coinCave = {
         "#             S   $          $   $                                                #",
         "#         ##########       #########      ######       $ $ $ $                    #",
         "#                                                    $ $ $ $ $ $ $                #",
-        "#           $  $       $           $     $       $                                #",
+        "#      $               $                 $       $                                #",
         "###################################################################################"
     ],
-    "tileDefinitions": {
+    "tiles": {
         "#": { "type": "solid", "color": "#4B0082", "image": "./assets/metalBox.png" },
-        "@": { "type": "enemy", "color": "red", "image": "./assets/enemy1.png" },
         "$": { "type": "collectible", "color": "yellow", "image": "./assets/coin.png" },
         "S": { "type": "bounce", "image": "./assets/spring.png", "force": 12 },
         "0": { "type": "loadMap", "script": "map1", "width": 64, "height": 64, "image": "./assets/door.png" },
         "~": { "type": "filler", "note:": "filler for the map editor, i do nothing but show the occupied space for the door" },
         "^": { "type": "enemy", "color": "red", "image": "./assets/bat.png", "enemyType": "hunter" },
         "T": { "type": "solid", "color": "transparent" }
-    }
+    },
+    "entities": [
+        { "name": "bat 1", "type": "enemy", "x": 261, "y": 280, "color": "red", "image": "./assets/bat.png", "enemyType": "hunter" },
+        { "name": "bat 2", "type": "enemy", "x": 641, "y": 280, "color": "red", "image": "./assets/bat.png", "enemyType": "hunter" },
+        { "name": "bat 3", "type": "enemy", "x": 1540, "y": 248, "color": "red", "image": "./assets/bat.png", "enemyType": "hunter" },
+        { "name": "bat 3", "type": "enemy", "x": 2189, "y": 58, "color": "red", "image": "./assets/bat.png", "enemyType": "hunter" },
+    ],
+
 };
-window.coinCave = coinCave
+window.batsAndSpings = batsAndSpings

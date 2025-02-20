@@ -15,22 +15,21 @@ const map1 = {
         "T                                                                                     T    ",
         "T                        MMM                                                          T    ",
         "T                                                                                     T    ",
-        "T  $        @   $                                                                     T    ",
+        "T  $            $                                                                     T    ",
         "T           ########                                                                  T    ",
         "T   ####    ## $   #   S                                                              T    ",
         "T           ##   $ #   #                                                              T    ",
-        "T       @         $#      #                                                           T    ",
+        "T                 $#      #                                                           T    ",
         "T  #  #####     ###                         s##########                               T    ",
         "T       $                      ###########################                            T    ",
         "T        $    #       #########!!!!!!!!!!!!!!!!!!!!!!###########                     0~    ",
         "T                    ##!!!!!!!!!!!!!!!!!!!!!!!!!!!!!################                 ~~    ",
-        "T        ####    @  ########!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!##########         DDDDMMDDD ",
+        "T        ####       ########!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!##########         DDDDMMDDD ",
         "############################################################################################"
     ],
-    "tileDefinitions": {
+    "tiles": {
         "#": { "type": "solid", "color": "gray", "image": "./assets/dirt.png" },
         "!": { "type": "solid", "color": "darkgray", "image": "./assets/dirt2.png" },
-        "@": { "type": "enemy", "color": "red", "image": "./assets/enemy1.png" },
         "$": { "type": "collectible", "color": "yellow", "image": "./assets/coin.png" },
         "P": { "type": "passable", "color": "lightgray" },
         "T": { "type": "solid", "color": "transparent" },
@@ -41,7 +40,15 @@ const map1 = {
         "S": { "type": "bounce", "image": "./assets/spring.png", "force": 10 },
         "s": { "type": "bounce", "image": "./assets/spring.png", "force": 13 },
         "M": { "type": "solid", "color": "#4B0082", "image": "./assets/metalBox.png" }
-    }
+    },
+    "entities": [
+        { "name": "enemy 1", "type": "enemy", "x": 182, "y": 288, "color": "red", "image": "./assets/enemy1.png", "enemyType": "patrol" },
+        { "name": "enemy 2", "type": "enemy", "x": 543, "y": 543, "color": "red", "image": "./assets/enemy1.png", "enemyType": "patrol" },
+        { "name": "enemy 3", "type": "enemy", "x": 1120, "y": 96, "color": "red", "image": "./assets/enemy1.png", "enemyType": "patrol" },
+    ],
+    "particles": [
+    ]
+
 };
 
 

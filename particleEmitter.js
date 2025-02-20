@@ -1,4 +1,4 @@
-function ParticleEmitter(x, y, color1, color2, density, count, image, alignment = 'top') {
+function ParticleEmitter(x, y, color1, color2, density, count, image, alignment = 'top', emissionSpeed = .5) {
     this.x = x;
     this.y = y;
     this.color1 = color1;
@@ -8,6 +8,7 @@ function ParticleEmitter(x, y, color1, color2, density, count, image, alignment 
     this.image = image ? new Image() : null;
     this.imageLoaded = false;
     this.alignment = alignment;
+    this.emissionSpeed = emissionSpeed;
     if (this.image) {
         this.image.src = image;
         this.image.onload = () => {
@@ -33,8 +34,8 @@ ParticleEmitter.prototype.createParticle = function () {
 
 ParticleEmitter.prototype.update = function () {
     this.particles.forEach(particle => {
-        particle.x += particle.velocityX;
-        particle.y += particle.velocityY;
+        particle.x += particle.velocityX * this.emissionSpeed;
+        particle.y += particle.velocityY * this.emissionSpeed;
         particle.life -= 1;
 
         if (particle.life <= 0) {

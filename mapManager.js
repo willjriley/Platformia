@@ -9,7 +9,7 @@ function doPlayMusic() {
 function loadMapData(map) {
     // Reset map-related variables
     mapData = map.mapData;
-    tileDefinitions = map.tileDefinitions;
+    tiles = map.tiles;
 
     mapBackgroundColor = map.mapBackgroundColor || "#000000";
 
@@ -42,6 +42,8 @@ function loadMapData(map) {
 
     loadTileImages();
     parseMap(mapData);
+    parseEntities(map.entities);
+    parseParticles(map.particles);
 
     // Set player starting position and reset velocity
     player = new Player(map.playerStartingPosition.x, map.playerStartingPosition.y);
@@ -64,13 +66,13 @@ function loadMapData(map) {
     gameLoopId = requestAnimationFrame(updateGame);
 }
 
-// Create platforms, enemies, collectibles, and spinning ropes from the map
+// Create platforms, enemies, and collectibles from the map
 function parseMap(mapData) {
     // First pass: Create all platforms
     for (let y = 0; y < mapData.length; y++) {
         for (let x = 0; x < mapData[y].length; x++) {
             const char = mapData[y][x];
-            const tileDef = tileDefinitions[char];
+            const tileDef = tiles[char];
 
             if (tileDef && (tileDef.type === "solid" || tileDef.type === "passable" || tileDef.type === "loadMap" || tileDef.type === "bounce")) {
                 let image = tileDef.imageObj || null;
@@ -95,11 +97,11 @@ function parseMap(mapData) {
         }
     }
 
-    // Second pass: Create enemies, collectibles, and spinning ropes
+    // Second pass: Create enemies and collectibles
     for (let y = 0; y < mapData.length; y++) {
         for (let x = 0; x < mapData[y].length; x++) {
             const char = mapData[y][x];
-            const tileDef = tileDefinitions[char];
+            const tileDef = tiles[char];
 
             if (tileDef) {
                 let image = tileDef.imageObj || null;
@@ -107,40 +109,79 @@ function parseMap(mapData) {
                 let height = tileDef.height || tileSize;
 
                 if (tileDef.type === "enemy") {
-                    let enemyX = x * tileSize;
-                    let enemyY = y * tileSize;
-                    let platformBelow = null;
-                    const tolerance = 5;  // Allow a little slack when matching positions
+                    // let enemyX = x * tileSize;
+                    // let enemyY = y * tileSize;
+                    // let platformBelow = null;
+                    // const tolerance = 5;  // Allow a little slack when matching positions
 
-                    // Search through the platforms to find one directly below this enemy.
-                    // We check if the enemy's bottom (enemyY + height) is near a platform's top.
-                    for (let platform of platforms) {
-                        if (
-                            enemyX + width > platform.x &&        // Enemy overlaps platform horizontally
-                            enemyX < platform.x + platform.width &&    // Enemy overlaps platform horizontally
-                            Math.abs((enemyY + height) - platform.y) <= tolerance // Enemy bottom is within tolerance of platform top
-                        ) {
-                            platformBelow = platform;
-                            break; // Found a matching platform; no need to search further
-                        }
-                    }
+                    // // Patrol logic to determine if the enemy should move left or right and is standing on a platform
+                    // // Search through the platforms to find one directly below this enemy.
+                    // // We check if the enemy's bottom (enemyY + height) is near a platform's top.                    
+                    // for (let platform of platforms) {
+                    //     if (
+                    //         enemyX + width > platform.x &&        // Enemy overlaps platform horizontally
+                    //         enemyX < platform.x + platform.width &&    // Enemy overlaps platform horizontally
+                    //         Math.abs((enemyY + height) - platform.y) <= tolerance // Enemy bottom is within tolerance of platform top
+                    //     ) {
+                    //         platformBelow = platform;
+                    //         break; // Found a matching platform; no need to search further
+                    //     }
+                    // }
 
-                    // Determine the enemy type based on the tile definition
-                    let enemyType = tileDef.enemyType || 'patrol';
+                    // // Determine the enemy type based on the tile definition
+                    // let enemyType = tileDef.enemyType || 'patrol';
 
-                    // Create the enemy with the found platform (or null if not found)
-                    let enemy = new Enemy(enemyX, enemyY, image, platformBelow, enemyType, width, height);
-                    enemies.push(enemy);
+                    // // Create the enemy with the found platform (or null if not found)
+                    // let enemy = new Enemy(enemyX, enemyY, image, platformBelow, enemyType, width, height);
+                    // enemies.push(enemy);
 
                 } else if (tileDef.type === "collectible") {
                     collectibles.push(new Collectible(x * tileSize, y * tileSize, image));
-                } else if (tileDef.type === "spinningRope") {
-                    spinningRopes.push(new SpinningRope(x * tileSize + tileSize / 2, y * tileSize + tileSize / 2, 128, tileDef.color, tileDef.image));
-                }
-                else if (tileDef.type === "particleEmitter") {
-                    particleEmitters.push(new ParticleEmitter(x * tileSize + tileSize / 2, y * tileSize + tileSize / 2, tileDef.color1, tileDef.color2, tileDef.density, tileDef.count, tileDef.image, tileDef.alignment));
                 }
             }
         }
     }
+}
+
+// Parse Entities from the map
+function parseEntities(entities) {
+    if (!Array.isArray(entities)) return; // Ensure entities is an array
+    entities.forEach(entity => {
+        if (entity.type === "spinningRope") {
+            spinningRopes.push(new SpinningRope(entity.x, entity.y, entity.length, entity.color, entity.image, entity.spinRate));
+        } else if (entity.type === "enemy") {
+            let platformBelow = null;
+            const tolerance = 5;  // Allow a little slack when matching positions
+
+            // Search through the platforms to find one directly below this enemy.
+            for (let platform of platforms) {
+                if (
+                    entity.x + entity.width > platform.x &&        // Enemy overlaps platform horizontally
+                    entity.x < platform.x + platform.width &&    // Enemy overlaps platform horizontally
+                    Math.abs((entity.y + entity.height) - platform.y) <= tolerance // Enemy bottom is within tolerance of platform top
+                ) {
+                    platformBelow = platform;
+                    break; // Found a matching platform; no need to search further
+                }
+            }
+
+            // Ensure the image is loaded before creating the enemy
+            const image = new Image();
+            image.src = entity.image;
+            image.onload = () => {
+                // Create the enemy with the found platform (or null if not found)
+                let enemy = new Enemy(entity.x, entity.y, image, platformBelow, entity.enemyType, entity.width, entity.height);
+                enemies.push(enemy);
+            };
+        }
+    });
+}
+// Parse particles from the map
+function parseParticles(particles) {
+    if (!Array.isArray(particles)) return; // Ensure particles is an array
+    particles.forEach(particle => {
+        if (particle.type === "particleEmitter") {
+            particleEmitters.push(new ParticleEmitter(particle.x, particle.y, particle.color1, particle.color2, particle.density, particle.count, particle.image, particle.alignment, particle.emissionSpeed));
+        }
+    });
 }

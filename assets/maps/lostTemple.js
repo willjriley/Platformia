@@ -23,7 +23,7 @@ const lostTemple = {
         "T       ################################################################################################             T",
         "######################################################################################################################"
     ],
-    "tileDefinitions": {
+    "tiles": {
         "T": { "type": "solid", "color": "#8B4513", "image": "./assets/temple_wall.png" },
         "#": { "type": "solid", "color": "#654321", "image": "./assets/stone_tile.png" },
         "$": { "type": "collectible", "color": "gold", "image": "./assets/gem.png" },
