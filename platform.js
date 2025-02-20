@@ -1,5 +1,5 @@
 // Platform object
-function Platform(x, y, width, height, image, type, script, color, force) {
+function Platform(x, y, width, height, image, type, script, color, force, deadly = false) {
     this.x = x;
     this.y = y;
     this.width = width;
@@ -9,6 +9,7 @@ function Platform(x, y, width, height, image, type, script, color, force) {
     this.script = script || null;
     this.color = color;
     this.force = force || 1;
+    this.deadly = deadly;
 }
 
 Platform.prototype.draw = function () {

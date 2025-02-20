@@ -64,6 +64,12 @@ function checkCollisions() {
 
     for (let platform of platforms) {
         if (String(platform.type).toLocaleLowerCase() != "passable" && isColliding(player, platform)) {
+            // Check if the platform is deadly
+            if (platform.deadly) {
+                loseLife(); // Player loses a life if they touch a deadly platform
+                return;
+            }
+
             // Check if player is on a loadMap tile
             if (platform.type === "loadMap") {
                 if (platform.script && window[platform.script]) {

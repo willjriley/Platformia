@@ -28,7 +28,7 @@ const lavaCaverns = {
         "M": { "type": "solid", "color": "#4B0082", "image": "./assets/metalBox.png" },
         "G": { "type": "solid", "color": "#1A1A1A" },
         "B": { "type": "solid", "color": "#000000" },
-        "C": { "type": "solid", "color": "#FF0000" },
+        "C": { "type": "solid", "color": "#FF0000", "deadly": true },
         "$": { "type": "collectible", "color": "yellow", "image": "./assets/coin.png" },
         "S": { "type": "bounce", "image": "./assets/spring.png", "force": 14 },
         "0": { "type": "loadMap", "script": "batsAndSpings", "width": 64, "height": 64, "image": "./assets/door.png" },

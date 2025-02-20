@@ -79,6 +79,7 @@ function parseMap(mapData) {
                 let color = tileDef.color || null;
                 let width = tileDef.width || tileSize;
                 let height = tileDef.height || tileSize;
+                let deadly = tileDef.deadly || false;
                 // Create a platform tile
                 platforms.push(
                     new Platform(
@@ -90,7 +91,8 @@ function parseMap(mapData) {
                         tileDef.type,
                         tileDef.script || null,
                         color,
-                        tileDef.force || null
+                        tileDef.force || null,
+                        deadly
                     )
                 );
             }
