@@ -18,12 +18,12 @@ const desertDash = {
         "T                                                                                     T",
         "T                                                                                     T",
         "T                                                                                     T",
-        "T                                         lllllllllllllll                             T",
+        "T                                         lllllllRlllllll                             T",
         "T                                                                                     T",
         "T                                      jj                                             T",
         "T                                  kkkkkkkkkkk                                        T",
         "T                       ee         k        kk                                     0~ T",
-        "T                    !!!!!!!!!!!!!!!!!!!!!!!!!                                     ~~ T",
+        "T                     !!!!!!!!!!!!!!!!!!!!!!!!!                                    ~~ T",
         "T          cbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbd      nm T",
         "aaaighgoaaaffaaoaaaighgaahaaaighgaifaagaahffaaahaaiaoaighgaaaaaaaoaahffaaaaaaoaaaoaoaaaa"
     ],
@@ -49,7 +49,8 @@ const desertDash = {
         "$": { "type": "collectible", "color": "yellow", "image": "./assets/coin.png" },
         "0": { "type": "loadMap", "script": "map3", "color": "#000000", "width": 64, "height": 64, "image": "./assets/door.png" },
         "~": { "type": "filler", "note:": "filler for the map editor, i do nothing but show the occupied space for the door" },
-        "P": { "type": "passable", "color": "lightgray" }
+        "P": { "type": "passable", "color": "lightgray" },
+        "R": { "type": "spinningRope", "color": "#FF0000" }
     }
 };
 

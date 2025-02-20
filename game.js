@@ -23,6 +23,7 @@ let camera = { x: 0, y: 0, width: 800, height: 400 };
 let gravity = 0.25;
 let player;
 let enemies = [];
+let spinningRopes = [];
 let score = 0;
 let lives = 3;
 let paused = false;
@@ -69,9 +70,9 @@ function checkCollisions() {
             // }
 
             //     console.log("player.y", player.y, "player.x", player.x, "player.width", player.width, "player.height", player.height, "player.velocityY", player.velocityY, "player.velocityX", player.velocityX);
-            //     console.log("platform.y", platform.y, "platform.x", platform.x, "platform.width", platform.width, "platform.height", platform.height);            
-
+            //     console.log("platform.y", platform.y, "platform.x", platform.x, "platform.width", platform.width, "platform.height", platform.height);                        
             // Check if the player is standing on a bounce tile
+
             if (platform.type === "bounce") {
                 player.bounce(platform.force, 'vertical'); // Apply bounce force upwards
 
@@ -163,6 +164,14 @@ function checkCollisions() {
             loseLife(); // Call function when player touches an enemy
         }
     });
+
+    // Check for spinning rope collisions
+    spinningRopes.forEach(rope => {
+        if (rope.checkCollision(player)) {
+            loseLife(); // Player loses a life if they touch the spinning rope
+        }
+    });
+
     // If the player isn't standing on a platform, mark as jumping
     if (!isOnPlatform) {
         player.isJumping = true;
@@ -238,32 +247,31 @@ function handleScrolling() {
 
 // Update the game
 function updateGame() {
-
     if (!gameStarted) {
-        let gradient = ctx.createLinearGradient(0, 0, 0, height); // Vertical gradient
+        let gradient = ctx.createLinearGradient(0, 0, 0, canvas.height); // Vertical gradient
         gradient.addColorStop(0, "#001F3F");
         gradient.addColorStop(0.5, "#0074D9");
         gradient.addColorStop(1, "#7FDBFF");
 
         ctx.fillStyle = gradient;
 
-        ctx.fillRect(0, 0, width, height); // Fill the whole canvas with the background color
+        ctx.fillRect(0, 0, canvas.width, canvas.height); // Fill the whole canvas with the background color
 
         ctx.font = "bold 30px 'Courier New', monospace";
         ctx.fillStyle = "BLACK";
         const text1 = "* PLATFORMIA  *";
         const text1Width = ctx.measureText(text1).width;
-        ctx.fillText(text1, (width - text1Width) / 2, height / 2 - 128);
+        ctx.fillText(text1, (canvas.width - text1Width) / 2, canvas.height / 2 - 128);
 
         ctx.fillStyle = "RED";
         const text2 = "GAME OVER";
         const text2Width = ctx.measureText(text2).width;
-        ctx.fillText(text2, (width - text2Width) / 2, height / 2 - 64);
+        ctx.fillText(text2, (canvas.width - text2Width) / 2, canvas.height / 2 - 64);
 
         ctx.fillStyle = "white";
         const text3 = "PRESS 1 TO START";
         const text3Width = ctx.measureText(text3).width;
-        ctx.fillText(text3, (width - text3Width) / 2, height / 2 - 2);
+        ctx.fillText(text3, (canvas.width - text3Width) / 2, canvas.height / 2 - 2);
 
         requestAnimationFrame(updateGame); // Keep checking
         return;
@@ -279,7 +287,7 @@ function updateGame() {
     }
 
     if (useGradient) {
-        let gradient = ctx.createLinearGradient(0, 0, 0, height); // Vertical gradient
+        let gradient = ctx.createLinearGradient(0, 0, 0, canvas.height); // Vertical gradient
         gradient.addColorStop(0, gradientTop);
         gradient.addColorStop(0.5, gradientMiddle);
         gradient.addColorStop(1, gradientBottom);
@@ -290,11 +298,11 @@ function updateGame() {
         ctx.fillStyle = mapBackgroundColor;
     }
 
-    ctx.fillRect(0, 0, width, height);
+    ctx.fillRect(0, 0, canvas.width, canvas.height);
     ctx.fillStyle = "white";
 
     if (paused) {
-        ctx.fillText(" PAUSED ", width / 2 - 80, height / 2);
+        ctx.fillText(" PAUSED ", canvas.width / 2 - 80, canvas.height / 2);
         requestAnimationFrame(updateGame); // Keep checking
         return;
     }
@@ -318,7 +326,6 @@ function updateGame() {
     ctx.fillText("SCORE: " + score, 60, 50);
     ctx.fillText("LIVES: " + lives, 550, 50);
 
-
     // Draw collectibles
     collectibles.forEach(collectible => collectible.draw());
 
@@ -326,6 +333,15 @@ function updateGame() {
     enemies.forEach(enemy => {
         enemy.update(player); // Update enemy behavior
         enemy.draw(); // Draw enemy
+    });
+
+    // Update and draw spinning ropes
+    spinningRopes.forEach(rope => {
+        rope.update();
+        rope.draw(ctx, camera); // Pass the camera to the draw method
+        if (rope.checkCollision(player)) {
+            loseLife(); // Player loses a life if they touch the spinning rope
+        }
     });
 
     // Draw player

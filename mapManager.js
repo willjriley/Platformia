@@ -36,6 +36,7 @@ function loadMapData(map) {
     platforms = [];
     enemies = [];
     collectibles = [];
+    spinningRopes = []; // Reset spinning ropes
 
     loadTileImages();
     parseMap(mapData);
@@ -61,7 +62,7 @@ function loadMapData(map) {
     gameLoopId = requestAnimationFrame(updateGame);
 }
 
-// Create platforms, enemies, and collectibles from the map
+// Create platforms, enemies, collectibles, and spinning ropes from the map
 function parseMap(mapData) {
     // First pass: Create all platforms
     for (let y = 0; y < mapData.length; y++) {
@@ -92,7 +93,7 @@ function parseMap(mapData) {
         }
     }
 
-    // Second pass: Create enemies and collectibles
+    // Second pass: Create enemies, collectibles, and spinning ropes
     for (let y = 0; y < mapData.length; y++) {
         for (let x = 0; x < mapData[y].length; x++) {
             const char = mapData[y][x];
@@ -131,6 +132,8 @@ function parseMap(mapData) {
 
                 } else if (tileDef.type === "collectible") {
                     collectibles.push(new Collectible(x * tileSize, y * tileSize, image));
+                } else if (tileDef.type === "spinningRope") {
+                    spinningRopes.push(new SpinningRope(x * tileSize + tileSize / 2, y * tileSize + tileSize / 2, 128, tileDef.color));
                 }
             }
         }
