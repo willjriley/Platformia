@@ -33,10 +33,12 @@ function loadMapData(map) {
         currentMusic.volume = 0.1; // Adjust volume as needed
     }
 
+    // Reset platforms, enemies, collectibles, spinning ropes, and particleEmitters
     platforms = [];
     enemies = [];
     collectibles = [];
-    spinningRopes = []; // Reset spinning ropes
+    spinningRopes = [];
+    particleEmitters = [];
 
     loadTileImages();
     parseMap(mapData);
@@ -134,6 +136,9 @@ function parseMap(mapData) {
                     collectibles.push(new Collectible(x * tileSize, y * tileSize, image));
                 } else if (tileDef.type === "spinningRope") {
                     spinningRopes.push(new SpinningRope(x * tileSize + tileSize / 2, y * tileSize + tileSize / 2, 128, tileDef.color, tileDef.image));
+                }
+                else if (tileDef.type === "particleEmitter") {
+                    particleEmitters.push(new ParticleEmitter(x * tileSize + tileSize / 2, y * tileSize + tileSize / 2, tileDef.color1, tileDef.color2, tileDef.density, tileDef.count, tileDef.image, tileDef.alignment));
                 }
             }
         }

@@ -6,13 +6,13 @@ const coinCave = {
     "gradientMiddle": "#003300", // Dark green
     "gradientBottom": "#004d4d", // Almost black    
     "mapData": [
-        "###################################################################################",
+        "#TTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTT",
         "#                                            ##                      ^   0~       #",
         "#                                            ##                          ~~ $     #",
-        "#########################################    ##                          #####    #",
-        "#                                      ##    ##   $                               #",
-        "#                                      ##    #   $ $                              #",
-        "#             $                        ##  $ #  $   $            $$               #",
+        "#                 #######################    ##                          #####    #",
+        "#           #########                  ##    ##   $                               #",
+        "#          #                           ##    #   $ $                              #",
+        "############  $                        ##  $ #  $   $            $$               #",
         "#             $ $                      ##     ###########       #####             #",
         "#      ###   $ $   ###                    $     ^                                 #",
         "#       ^     $     ^                                                          S  #",
@@ -33,7 +33,8 @@ const coinCave = {
         "S": { "type": "bounce", "image": "./assets/spring.png", "force": 12 },
         "0": { "type": "loadMap", "script": "map1", "width": 64, "height": 64, "image": "./assets/door.png" },
         "~": { "type": "filler", "note:": "filler for the map editor, i do nothing but show the occupied space for the door" },
-        "^": { "type": "enemy", "color": "red", "image": "./assets/bat.png", "enemyType": "hunter" }
+        "^": { "type": "enemy", "color": "red", "image": "./assets/bat.png", "enemyType": "hunter" },
+        "T": { "type": "solid", "color": "transparent" }
     }
 };
 window.coinCave = coinCave

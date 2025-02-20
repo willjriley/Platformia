@@ -344,6 +344,12 @@ function updateGame() {
         }
     });
 
+    // Update and draw particle effect
+    particleEmitters.forEach(particleEmitter => {
+        particleEmitter.update();
+        particleEmitter.draw(ctx, camera); // Pass the camera to the draw method
+    });
+
     // Draw player
     player.draw();
 
