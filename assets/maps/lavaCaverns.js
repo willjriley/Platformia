@@ -13,7 +13,7 @@ const lavaCaverns = {
         "#                             #                                         0~ #########                                                       #",
         "#                                                $                      ~~ #########                                                       #",
         "#                   $$                     $#   ##   ###############################                                                       #",
-        "#             $  ########       ######   $#          ###############################                                                       #",
+        "#             $  ###R####       ######   $#          ###############################                                                       #",
         "#      $@                               #            PPPPPPPPPPPPPPPPPPPPPPPPPPPPPPP                                                       #",
         "#   ######    #                  @                   PPPPPPPPPPPPPPPPPPPPPPPPPPPPPPP                                                       #",
         "#                                ######     ##############################################                                                 #",
@@ -35,7 +35,8 @@ const lavaCaverns = {
         "S": { "type": "bounce", "image": "./assets/spring.png", "force": 16 },
         "0": { "type": "loadMap", "script": "map1", "width": 64, "height": 64, "image": "./assets/door.png" },
         "~": { "type": "filler", "note:": "filler for the map editor, i do nothing but show the occupied space for the door" },
-        "P": { "type": "passable", "color": "#4B0082", "image": "./assets/red_tile.png" }
+        "P": { "type": "passable", "color": "#4B0082", "image": "./assets/red_tile.png" },
+        "R": { "type": "spinningRope", "color": "#FF0000" }
     }
 };
 window.lavaCaverns = lavaCaverns;
