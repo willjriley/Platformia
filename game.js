@@ -356,6 +356,12 @@ function updateGame() {
     // Draw collectibles
     collectibles.forEach(collectible => collectible.draw());
 
+    // Update and draw platforms
+    platforms.forEach(platform => {
+        platform.update(player); // Pass the player to the update method
+        platform.draw(ctx, camera); // Pass the camera to the draw method
+    });
+
     // Update and draw enemies
     enemies.forEach(enemy => {
         enemy.update(player); // Update enemy behavior

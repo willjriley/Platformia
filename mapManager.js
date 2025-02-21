@@ -81,6 +81,12 @@ function parseMap(mapData) {
                 let width = tileDef.width || tileSize;
                 let height = tileDef.height || tileSize;
                 let deadly = tileDef.deadly || false;
+                let moveSpeed = tileDef.moveSpeed;
+                let moveDirection = tileDef.moveDirection;
+                let moveRange = tileDef.moveRange;
+                let fallDelay = tileDef.fallDelay;
+                let canFall = tileDef.canFall || false;
+
                 // Create a platform tile
                 platforms.push(
                     new Platform(
@@ -93,7 +99,12 @@ function parseMap(mapData) {
                         tileDef.script || null,
                         color,
                         tileDef.force || null,
-                        deadly
+                        deadly,
+                        moveSpeed,
+                        moveDirection,
+                        moveRange,
+                        fallDelay,
+                        canFall
                     )
                 );
             }
