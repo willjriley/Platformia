@@ -1,6 +1,6 @@
 const map0 = {
     "name": "Welcome",
-    "playerStartingPosition": { x: 50, y: 544 },
+    "playerStartingPosition": { x: 40, y: 480 },
     "repawnPoint": { x: 50, y: 544 },
     "exit": { x: 3768, y: 544 },
     "mapBackgroundColor": "#87CEEB",
@@ -27,8 +27,8 @@ const map0 = {
         "y                        @ $$$$$$$$$$$$$$$ @                                                                              0~       ",
         "r                    #############################                                                                        ~~       ",
         "r            #########!!!!!!!!!!!!!!!!!!!!!!###########                                                                   rry      ",
-        "r            ###ggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggg                                         #######r     ",
-        "r         @###gghh##h##gghh##hhhhhhhhhhhhh##gghh##hhhhhhhhhhhhhhhhhh##gghh##h##gg                               ###########yyr     ",
+        "rr           ###ggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggg                                         #######r     ",
+        "rr        @###gghh##h##gghh##hhhhhhhhhhhhh##gghh##hhhhhhhhhhhhhhhhhh##gghh##h##gg                               ###########yyr     ",
         "######################################################################################################################r#y###yyrryyr"
     ],
     "tiles": {
@@ -64,7 +64,7 @@ const map0 = {
         { "name": "enemy 6", "type": "enemy", "x": 1511, "y": 32, "color": "red", "image": "./assets/enemy2.png", "enemyType": "hunter" }
     ],
     "particles": [
+        { "name": "portal", "type": "portalEmitter", "x": 3936, "y": 730, "color1": "#0000FF", "color2": "#4B0082", "density": 1, "count": 30, "emissionSpeed": .3 }
     ]
 };
-
 window.map0 = map0;

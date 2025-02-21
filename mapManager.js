@@ -211,5 +211,8 @@ function parseParticles(particles) {
         if (particle.type === "magicSpellEmitter") {
             particleEmitters.push(new MagicSpellEmitter(particle.x, particle.y, particle.color1, particle.color2, particle.density, particle.count, particle.emissionSpeed));
         }
+        if (particle.type === "portalEmitter") {
+            particleEmitters.push(new PortalEmitter(particle.x, particle.y, particle.color1, particle.color2, particle.density, particle.count, particle.emissionSpeed));
+        }
     });
 }
