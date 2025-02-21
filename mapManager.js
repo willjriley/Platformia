@@ -199,5 +199,17 @@ function parseParticles(particles) {
         if (particle.type === "particleEmitter") {
             particleEmitters.push(new ParticleEmitter(particle.x, particle.y, particle.color1, particle.color2, particle.density, particle.count, particle.image, particle.alignment, particle.emissionSpeed));
         }
+        if (particle.type === "fireEmitter") {
+            particleEmitters.push(new FireEmitter(particle.x, particle.y, particle.color1, particle.color2, particle.density, particle.count, particle.image, particle.alignment, particle.emissionSpeed));
+        }
+        if (particle.type === "waterfallEmitter") {
+            particleEmitters.push(new WaterfallEmitter(particle.x, particle.y, particle.color1, particle.color2, particle.density, particle.count, particle.emissionSpeed));
+        }
+        if (particle.type === "snowfallEmitter") {
+            particleEmitters.push(new SnowfallEmitter(particle.x, particle.y, particle.color1, particle.color2, particle.density, particle.count, particle.emissionSpeed));
+        }
+        if (particle.type === "magicSpellEmitter") {
+            particleEmitters.push(new MagicSpellEmitter(particle.x, particle.y, particle.color1, particle.color2, particle.density, particle.count, particle.emissionSpeed));
+        }
     });
 }

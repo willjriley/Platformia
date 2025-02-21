@@ -51,11 +51,11 @@ const lavaCaverns = {
         { "name": "spikes 5", "type": "spikes", "x": 1420, "y": 418, "color": "#FF4500", "height": 100, "width": 256, "riseRate": 1, "delay": 4 }
     ],
     "particles": [
-        { "name": "torch 1", "type": "particleEmitter", "x": 200, "y": 300, "color1": "#ff0000", "color2": "#ff9900", "density": 1, "count": 25, "alignment": "top", "image": "./assets/torch.png", "emissionSpeed": .5 },
-        { "name": "torch 2", "type": "particleEmitter", "x": 1140, "y": 330, "color1": "#ff0000", "color2": "#ff9900", "density": 1, "count": 25, "alignment": "top", "image": "./assets/torch.png", "emissionSpeed": .5 },
-        { "name": "torch 3", "type": "particleEmitter", "x": 1580, "y": 170, "color1": "#ff0000", "color2": "#ff9900", "density": 1, "count": 25, "alignment": "top", "image": "./assets/torch.png", "emissionSpeed": .5 },
-        { "name": "torch 4", "type": "particleEmitter", "x": 2080, "y": 170, "color1": "#ff0000", "color2": "#ff9900", "density": 1, "count": 25, "alignment": "top", "image": "./assets/torch.png", "emissionSpeed": .5 },
-        { "name": "lava 1", "type": "particleEmitter", "x": 715, "y": 560, "color1": "#FF0000", "color2": "#FF0000", "density": 2, "count": 200, "alignment": "bottom", "emissionSpeed": 1 }
+        { "name": "torch 1", "type": "fireEmitter", "x": 200, "y": 300, "color1": "#ff0000", "color2": "#ff9900", "density": 1, "count": 25, "alignment": "top", "image": "./assets/torch.png", "emissionSpeed": .5 },
+        { "name": "torch 2", "type": "fireEmitter", "x": 1140, "y": 330, "color1": "#ff0000", "color2": "#ff9900", "density": 1, "count": 25, "alignment": "top", "image": "./assets/torch.png", "emissionSpeed": .5 },
+        { "name": "torch 3", "type": "fireEmitter", "x": 1580, "y": 170, "color1": "#ff0000", "color2": "#ff9900", "density": 1, "count": 25, "alignment": "top", "image": "./assets/torch.png", "emissionSpeed": .5 },
+        { "name": "torch 4", "type": "fireEmitter", "x": 2080, "y": 170, "color1": "#ff0000", "color2": "#ff9900", "density": 1, "count": 25, "alignment": "top", "image": "./assets/torch.png", "emissionSpeed": .5 },
+        { "name": "lava 1", "type": "fireEmitter", "x": 715, "y": 560, "color1": "#FF0000", "color2": "#FF0000", "density": 2, "count": 100, "alignment": "bottom", "emissionSpeed": 1 }
     ]
 };
 window.lavaCaverns = lavaCaverns;

@@ -1,4 +1,4 @@
-function ParticleEmitter(x, y, color1, color2, density, count, image, alignment = 'top', emissionSpeed = .5) {
+function FireEmitter(x, y, color1, color2, density, count, image, alignment = 'top', emissionSpeed = .5) {
     this.x = x;
     this.y = y;
     this.color1 = color1;
@@ -22,17 +22,17 @@ function ParticleEmitter(x, y, color1, color2, density, count, image, alignment 
     }
 }
 
-ParticleEmitter.prototype.createParticle = function () {
+FireEmitter.prototype.createParticle = function () {
     return {
         x: this.x,
         y: this.y,
         velocityX: (Math.random() - 0.5) * this.density,
-        velocityY: -Math.random() * this.density,
-        life: Math.random() * 100
+        velocityY: -Math.random() * this.density * 2, // Make particles rise faster
+        life: Math.random() * 50 + 50 // Shorter life for fire particles
     };
 }
 
-ParticleEmitter.prototype.update = function () {
+FireEmitter.prototype.update = function () {
     this.particles.forEach(particle => {
         particle.x += particle.velocityX * this.emissionSpeed;
         particle.y += particle.velocityY * this.emissionSpeed;
@@ -44,7 +44,7 @@ ParticleEmitter.prototype.update = function () {
     });
 }
 
-ParticleEmitter.prototype.draw = function (ctx, camera) {
+FireEmitter.prototype.draw = function (ctx, camera) {
     ctx.save();
     ctx.translate(this.x - camera.x, this.y - camera.y);
 
@@ -64,7 +64,6 @@ ParticleEmitter.prototype.draw = function (ctx, camera) {
             verticalOffset = this.image.height / 2;
         }
     } else {
-
         if (this.alignment === 'top') {
             verticalOffset = -32 / 2;
         } else if (this.alignment === 'middle') {
@@ -72,18 +71,17 @@ ParticleEmitter.prototype.draw = function (ctx, camera) {
         } else if (this.alignment === 'bottom') {
             verticalOffset = 32 / 2;
         }
-
     }
 
     // Draw the particles
     this.particles.forEach(particle => {
-        const gradient = ctx.createRadialGradient(particle.x - this.x, particle.y - this.y, 0, particle.x - this.x, particle.y - this.y, 2);
-        gradient.addColorStop(0, this.color1); // Start color        
-        gradient.addColorStop(1, this.color2); // End color
+        const gradient = ctx.createRadialGradient(particle.x - this.x, particle.y - this.y, 0, particle.x - this.x, particle.y - this.y, 4);
+        gradient.addColorStop(0, this.color1); // Start color (e.g., red)
+        gradient.addColorStop(1, this.color2); // End color (e.g., yellow)
         ctx.fillStyle = gradient;
         ctx.globalAlpha = particle.life / 100;
         ctx.beginPath();
-        ctx.arc(particle.x - this.x, particle.y - this.y + verticalOffset, 2, 0, Math.PI * 2);
+        ctx.arc(particle.x - this.x, particle.y - this.y + verticalOffset, 4, 0, Math.PI * 2); // Increase particle size to 4
         ctx.fill();
     });
 
