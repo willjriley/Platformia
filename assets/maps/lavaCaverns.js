@@ -27,7 +27,7 @@ const lavaCaverns = {
         "#": { "type": "solid", "color": "#4B0082", "image": "./assets/red_tile.png" },
         "F": { "type": "solid", "color": "#4B0082", "image": "./assets/red_tile.png", "moveSpeed": 5, "fallDelay": .5, "canFall": true },
         "H": { "type": "solid", "color": "#4B0082", "image": "./assets/red_tile.png", "moveDirection": "horizontal", "moveRange": 100, "moveSpeed": 1 },
-        "V": { "type": "solid", "color": "#4B0082", "image": "./assets/red_tile.png", "moveDirection": "vertical", "moveRange": 159, "moveSpeed": .5 },
+        "V": { "type": "solid", "color": "#4B0082", "image": "./assets/red_tile.png", "moveDirection": "vertical", "moveRange": 143, "moveSpeed": .5 },
         "M": { "type": "solid", "color": "#4B0082", "image": "./assets/metalBox.png" },
         "G": { "type": "solid", "color": "#1A1A1A" },
         "B": { "type": "solid", "color": "#000000" },
@@ -39,6 +39,7 @@ const lavaCaverns = {
         "P": { "type": "passable", "color": "#4B0082", "image": "./assets/red_tile.png" }
     },
     "entities": [
+        { "name": "bat 1", "type": "enemy", "x": 721, "y": 44, "color": "red", "image": "./assets/bat.png", "enemyType": "hunter" },
         { "name": "enemy 1", "type": "enemy", "x": 200, "y": 351, "color": "red", "image": "./assets/enemy1.png", "enemyType": "patrol" },
         { "name": "enemy 2", "type": "enemy", "x": 1100, "y": 385, "color": "red", "image": "./assets/enemy1.png", "enemyType": "patrol" },
         { "name": "spinningRope 1", "type": "spinningRope", "x": 657, "y": 332, "length": 128, "color": "#FF0000" },
