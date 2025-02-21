@@ -51,16 +51,10 @@ const desertDash = {
         "~": { "type": "filler", "note:": "filler for the map editor, i do nothing but show the occupied space for the door" },
         "P": { "type": "passable", "color": "lightgray" }
     },
-    "particles": [
-        {
-            "name": "spinningRope 1",
-            "type": "spinningRope",
-            "x": 1586,
-            "y": 368,
-            "length": 128,
-            "color": "#FF0000"
-        }
-    ]
+    "entities": [
+        { "name": "spinningRope 1", "type": "spinningRope", "x": 1586, "y": 368, "length": 128, "color": "#FF0000" }
+    ],
+    "particles": []
 };
 
 window.desertDash = desertDash;
