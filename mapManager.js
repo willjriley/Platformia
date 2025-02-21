@@ -38,6 +38,7 @@ function loadMapData(map) {
     enemies = [];
     collectibles = [];
     spinningRopes = [];
+    spikes = [];
     particleEmitters = [];
 
     loadTileImages();
@@ -151,6 +152,8 @@ function parseEntities(entities) {
     entities.forEach(entity => {
         if (entity.type === "spinningRope") {
             spinningRopes.push(new SpinningRope(entity.x, entity.y, entity.length, entity.color, entity.image, entity.spinRate));
+        } else if (entity.type === "spikes") {
+            spikes.push(new Spikes(entity.x, entity.y, entity.width, entity.height, entity.color, entity.riseRate, entity.delay));
         } else if (entity.type === "enemy") {
             let platformBelow = null;
             const tolerance = 5;  // Allow a little slack when matching positions

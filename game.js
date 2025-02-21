@@ -33,6 +33,7 @@ let gravity = 0.25;
 let player;
 let enemies = [];
 let spinningRopes = [];
+let spikes = [];
 let score = 0;
 let lives = 3;
 let paused = false;
@@ -183,6 +184,13 @@ function checkCollisions() {
     // Check for spinning rope collisions
     spinningRopes.forEach(rope => {
         if (rope.checkCollision(player)) {
+            loseLife(); // Player loses a life if they touch the spinning rope
+        }
+    });
+
+    // Check for spinning rope collisions
+    spikes.forEach(spike => {
+        if (spike.checkCollision(player)) {
             loseLife(); // Player loses a life if they touch the spinning rope
         }
     });
@@ -360,6 +368,15 @@ function updateGame() {
         rope.draw(ctx, camera); // Pass the camera to the draw method
         if (rope.checkCollision(player)) {
             loseLife(); // Player loses a life if they touch the spinning rope
+        }
+    });
+
+    // Update and draw spikes
+    spikes.forEach(spike => {
+        spike.update();
+        spike.draw(ctx, camera); // Pass the camera to the draw method
+        if (spike.checkCollision(player)) {
+            loseLife(); // Player loses a life if they touch the spikes
         }
     });
 

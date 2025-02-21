@@ -39,7 +39,11 @@ const lavaCaverns = {
         { "name": "enemy 1", "type": "enemy", "x": 200, "y": 351, "color": "red", "image": "./assets/enemy1.png", "enemyType": "patrol" },
         { "name": "enemy 2", "type": "enemy", "x": 1100, "y": 385, "color": "red", "image": "./assets/enemy1.png", "enemyType": "patrol" },
         { "name": "spinningRope 1", "type": "spinningRope", "x": 657, "y": 332, "length": 128, "color": "#FF0000" },
-        { "name": "spinningRope 2", "type": "spinningRope", "x": 1554, "y": 304, "length": 128, "color": "#FF0000" }
+        { "name": "spinningRope 2", "type": "spinningRope", "x": 1554, "y": 304, "length": 103, "color": "#FF0000" },
+        { "name": "spikes 1", "type": "spikes", "x": 270, "y": 576, "color": "#FF4500", "height": 16, "width": 32, "riseRate": 1, "delay": 2 },
+        { "name": "spikes 2", "type": "spikes", "x": 680, "y": 576, "color": "#FF4500", "height": 100, "width": 80, "riseRate": 3 },
+        { "name": "spikes 3", "type": "spikes", "x": 1326, "y": 576, "color": "#FF4500", "height": 32, "width": 32, "riseRate": 3, "delay": 2 },
+        { "name": "spikes 4", "type": "spikes", "x": 1420, "y": 418, "color": "#FF4500", "height": 100, "width": 256, "riseRate": 1, "delay": 4 }
     ],
     "particles": [
         { "name": "torch 1", "type": "particleEmitter", "x": 200, "y": 300, "color1": "#ff0000", "color2": "#ff9900", "density": 1, "count": 25, "alignment": "top", "image": "./assets/torch.png", "emissionSpeed": .5 },
