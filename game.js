@@ -34,6 +34,7 @@ let player;
 let enemies = [];
 let spinningRopes = [];
 let spikes = [];
+let bosses = [];
 let score = 0;
 let lives = 3;
 let paused = false;
@@ -376,6 +377,16 @@ function updateGame() {
             loseLife(); // Player loses a life if they touch the spinning rope
         }
     });
+
+    // Update and draw spinning ropes
+    bosses.forEach(boss => {
+        boss.update(ctx, camera, player);
+        boss.draw(ctx, camera); // Pass the camera to the draw method
+        // if (boss.checkCollision(player)) {
+        //     loseLife(); // Player loses a life if they touch the spinning rope
+        // }
+    });
+
 
     // Update and draw spikes
     spikes.forEach(spike => {
