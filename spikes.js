@@ -5,8 +5,8 @@ function Spikes(x, y, width, height, color, riseRate = 0.5, delay = 2) {
     this.height = height;
     this.color = color;
     this.riseRate = riseRate;
-    this.currentHeight = 0;
-    this.extended = false;
+    this.currentHeight = 15;
+    this.extended = true;
     this.delay = delay * 1000; // Convert delay to milliseconds
     this.lastToggleTime = Date.now(); // Track the last time the spikes were toggled
 }

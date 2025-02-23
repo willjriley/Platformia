@@ -8,7 +8,7 @@ function SpinningRope(x, y, length = 128, color, image, spinRate = 0.05) {
         this.image.src = image;
     }
     this.angle = 0;
-    this.rotationSpeed = spinRate; // Set the rotation speed based on the spinRate parameter
+    this.rotationSpeed = typeof spinRate === 'string' ? parseFloat(spinRate) : spinRate;
 }
 
 SpinningRope.prototype.update = function () {

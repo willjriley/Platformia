@@ -140,7 +140,8 @@
             "x": 657,
             "y": 332,
             "length": 128,
-            "color": "#FF0000"
+            "color": "#FF0000",
+            "spinRate": ".03"
         },
         {
             "name": "spinningRope 2",
