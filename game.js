@@ -364,8 +364,8 @@ function updateGame() {
 
     // Update and draw enemies
     enemies.forEach(enemy => {
-        enemy.update(player); // Update enemy behavior
-        enemy.draw(); // Draw enemy
+        enemy.update(player, platforms); // Update enemy behavior
+        enemy.draw(ctx, camera); // Draw enemy
     });
 
     // Update and draw spinning ropes
