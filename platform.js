@@ -12,7 +12,7 @@ function Platform(x, y, width, height, image, type, script, color, force, deadly
     this.deadly = deadly;
 
     // Movement properties
-    this.moveSpeed = moveSpeed;
+    this.moveSpeed = typeof moveSpeed === 'string' ? parseFloat(moveSpeed) : moveSpeed;
     this.moveDirection = moveDirection;
     this.moveRange = moveRange;
     this.startX = x;
@@ -20,7 +20,7 @@ function Platform(x, y, width, height, image, type, script, color, force, deadly
     this.movingForward = true;
 
     // Falling properties
-    this.fallDelay = fallDelay * 1000; // Convert delay to milliseconds
+    this.fallDelay = typeof fallDelay === 'string' ? parseFloat(fallDelay) * 1000 : fallDelay * 1000; // Convert delay to milliseconds
     this.fallStartTime = null;
     this.falling = false;
     this.canFall = canFall; // Indicates if the platform can fall

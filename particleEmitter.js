@@ -8,7 +8,7 @@ function ParticleEmitter(x, y, color1, color2, density, count, image, alignment 
     this.image = image ? new Image() : null;
     this.imageLoaded = false;
     this.alignment = alignment;
-    this.emissionSpeed = emissionSpeed;
+    this.emissionSpeed = typeof emissionSpeed === 'string' ? parseFloat(emissionSpeed) : emissionSpeed;
     if (this.image) {
         this.image.src = image;
         this.image.onload = () => {
@@ -78,7 +78,7 @@ ParticleEmitter.prototype.draw = function (ctx, camera) {
     // Draw the particles
     this.particles.forEach(particle => {
         const gradient = ctx.createRadialGradient(particle.x - this.x, particle.y - this.y, 0, particle.x - this.x, particle.y - this.y, 2);
-        gradient.addColorStop(0, this.color1); // Start color        
+        gradient.addColorStop(0, this.color1); // Start color
         gradient.addColorStop(1, this.color2); // End color
         ctx.fillStyle = gradient;
         ctx.globalAlpha = particle.life / 100;
