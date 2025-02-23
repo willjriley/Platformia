@@ -45,18 +45,56 @@
         <button onclick="selectMap('map3', this)">Level 3</button>
         <button onclick="selectMap('lavaCaverns', this)">Lava Caverns</button>
         <button onclick="selectMap('batsAndSpings', this)">Bats And Spings Oh My!</button>
-        <button onclick="selectMap('desertDash', this)">Desert Dash</button>        
+        <button onclick="selectMap('desertDash', this)">Desert Dash</button>
         <button onclick="selectMap('hallOfEmitters', this)">Hall Of Emitters</button>
-        <button onclick="selectMap('sandBox', this)">Sand Box</button>        
+        <button onclick="selectMap('sandBox', this)">Sand Box</button>
         <!-- Add more buttons as needed -->
     </div>
-    <canvas id="gameCanvas" width="800" height="400"></canvas>    
-    <script src="fireEmitter.js"></script>
-    <script src="portalEmitter.js"></script>    
-    <script src="particleEmitter.js"></script>
-    <script src="waterfallEmitter.js"></script>
-    <script src="snowfallEmitter.js"></script>
-    <script src="magicSpellEmitter.js"></script>
+    <canvas id="gameCanvas" width="800" height="400"></canvas>
+    <script type="module">
+        import FireEmitter from './emitters/FireEmitter.js';
+        import PortalEmitter from './emitters/portalEmitter.js';
+        import ParticleEmitter from './emitters/particleEmitter.js';
+        import WaterfallEmitter from './emitters/waterfallEmitter.js';
+        import SnowfallEmitter from './emitters/snowfallEmitter.js';
+        import MagicSpellEmitter from './emitters/magicSpellEmitter.js';
+        // import SpinningRope from './spinningRope.js';
+        // import Spikes from './spikes.js';
+        // import Player from './player.js';
+        // import Enemy from './enemy.js';
+        // import Platform from './platform.js';
+        // import Collectible from './collectibles.js';
+
+        // Emitters
+        window.FireEmitter = FireEmitter;
+        window.PortalEmitter = PortalEmitter;
+        window.ParticleEmitter = ParticleEmitter;
+        window.WaterfallEmitter = WaterfallEmitter;
+        window.SnowfallEmitter = SnowfallEmitter;
+        window.MagicSpellEmitter = MagicSpellEmitter;
+
+        // Entities
+        // window.SpinningRope = SpinningRope;
+        // window.Spikes = Spikes;
+
+        // Player
+        // window.Player = Player;
+
+        // Enemy
+        // window.Enemy = Enemy;
+
+        // Platform
+        // window.Platform = Platform;
+
+        // Collectible
+        // window.Collectible = Collectible;
+    </script>
+    <!-- <script src="fireEmitter.js"></script> -->
+    <!-- <script src="portalEmitter.js"></script> -->
+    <!-- <script src="particleEmitter.js"></script> -->
+    <!-- <script src="waterfallEmitter.js"></script> -->
+    <!-- <script src="snowfallEmitter.js"></script> -->
+    <!-- <script src="magicSpellEmitter.js"></script> -->
     <script src="spinningRope.js"></script>
     <script src="spikes.js"></script>
     <script src="player.js"></script>
@@ -65,10 +103,9 @@
     <script src="collectibles.js"></script>
     <script src="input.js"></script>
     <script src="mapManager.js"></script>
-    <script src="tileImages.js"></script>    
+    <script src="tileImages.js"></script>
     <script src="game.js"></script>
 
-    <!-- Add more map scripts as needed -->
     <script>
         async function selectMap(mapName, button) {
             console.log(`selectMap called with mapName: ${mapName}`);
@@ -80,7 +117,7 @@
                 const mapData = await response.json();
                 console.log("Map data loaded:", mapData);
                 initGame(mapData);
-                if (button) button.blur();                
+                if (button) button.blur();
                 document.getElementById('gameCanvas').focus(); // Set focus to the canvas
             } catch (error) {
                 console.error(error);
