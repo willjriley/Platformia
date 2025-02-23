@@ -49,8 +49,9 @@ export default class Player {
         let nextY = this.y + this.velocityY;
 
         // Apply movement with bounds checking
-        this.x = Math.max(0, Math.min(nextX, this.mapData[0].length * this.tileSize - this.width));
-        this.y = Math.max(0, Math.min(nextY, this.height - this.height));
+        this.x = Math.max(0, Math.min(nextX, mapData[0].length * tileSize - this.width));
+        this.y = Math.max(0, Math.min(nextY, height - this.height));
+
 
         // Reset jumping if we hit the ground
         if (this.y === this.height - this.height) {

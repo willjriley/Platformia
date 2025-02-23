@@ -47,7 +47,7 @@ function loadMapData(map) {
     parseParticles(map.particles);
 
     // Set player starting position and reset velocity
-    player = new Player(map.playerStartingPosition.x, map.playerStartingPosition.y, mapData, gravity);
+    player = new Player(map.playerStartingPosition.x, map.playerStartingPosition.y, mapData, 32, gravity);
 
     // Reset velocity and speed
     player.velocityX = 0;
