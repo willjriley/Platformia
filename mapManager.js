@@ -47,7 +47,7 @@ function loadMapData(map) {
     parseParticles(map.particles);
 
     // Set player starting position and reset velocity
-    player = new Player(map.playerStartingPosition.x, map.playerStartingPosition.y);
+    player = new Player(map.playerStartingPosition.x, map.playerStartingPosition.y, mapData, gravity);
 
     // Reset velocity and speed
     player.velocityX = 0;
@@ -68,12 +68,12 @@ function loadMapData(map) {
 }
 
 // Create platforms, enemies, and collectibles from the map
-function parseMap(mapData) {    
+function parseMap(mapData) {
     // First pass: Create all platforms
     for (let y = 0; y < mapData.length; y++) {
-        for (let x = 0; x < mapData[y].length; x++) {               
-            const char = mapData[y][x];            
-            const tileDef = tiles[char];            
+        for (let x = 0; x < mapData[y].length; x++) {
+            const char = mapData[y][x];
+            const tileDef = tiles[char];
 
             if (tileDef && (tileDef.type === "solid" || tileDef.type === "passable" || tileDef.type === "loadMap" || tileDef.type === "bounce")) {
                 let image = tileDef.imageObj || null;
@@ -130,7 +130,7 @@ function parseMap(mapData) {
 
                     // // Patrol logic to determine if the enemy should move left or right and is standing on a platform
                     // // Search through the platforms to find one directly below this enemy.
-                    // // We check if the enemy's bottom (enemyY + height) is near a platform's top.                    
+                    // // We check if the enemy's bottom (enemyY + height) is near a platform's top.
                     // for (let platform of platforms) {
                     //     if (
                     //         enemyX + width > platform.x &&        // Enemy overlaps platform horizontally
@@ -214,4 +214,14 @@ function parseParticles(particles) {
             particleEmitters.push(new PortalEmitter(particle.x, particle.y, particle.color1, particle.color2, particle.density, particle.count, particle.emissionSpeed));
         }
     });
+}
+
+function loadTileImages() {
+    for (let key in tiles) {
+        if (tiles[key].image) {
+            let image = new Image();
+            image.src = tiles[key].image;
+            tiles[key].imageObj = image;
+        }
+    }
 }

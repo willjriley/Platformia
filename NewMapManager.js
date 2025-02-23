@@ -11,49 +11,28 @@ import SnowfallEmitter from './emitters/SnowfallEmitter.js';
 import MagicSpellEmitter from './emitters/MagicSpellEmitter.js';
 import PortalEmitter from './emitters/PortalEmitter.js';
 
-export default class NewMapManager {
-    constructor({
-        mapData,
-        tiles,
-        mapBackgroundColor,
-        gradientTop,
-        gradientMiddle,
-        gradientBottom,
-        useGradient,
-        currentMusic,
-        platforms,
-        enemies,
-        collectibles,
-        spinningRopes,
-        spikes,
-        particleEmitters,
-        player,
-        camera,
-        gameLoopId,
-        tileSize,
-        loadTileImages,
-        updateGame
-    }) {
-        this.mapData = mapData;
-        this.tiles = tiles;
-        this.mapBackgroundColor = mapBackgroundColor;
-        this.gradientTop = gradientTop;
-        this.gradientMiddle = gradientMiddle;
-        this.gradientBottom = gradientBottom;
-        this.useGradient = useGradient;
-        this.currentMusic = currentMusic;
-        this.platforms = platforms;
-        this.enemies = enemies;
-        this.collectibles = collectibles;
-        this.spinningRopes = spinningRopes;
-        this.spikes = spikes;
-        this.particleEmitters = particleEmitters;
-        this.player = player;
-        this.camera = camera;
-        this.gameLoopId = gameLoopId;
-        this.tileSize = tileSize;
-        this.loadTileImages = loadTileImages;
-        this.updateGame = updateGame;
+export default class MapManager {
+    constructor() {
+        this.currentMusic = null;
+        this.player = null;
+        this.camera = { x: 0, y: 0, width: 800, height: 400 };
+        this.tileSize = 32;
+        this.mapData = [];
+        this.height = 600;
+        this.gravity = 0.5;
+        this.platforms = [];
+        this.enemies = [];
+        this.collectibles = [];
+        this.spinningRopes = [];
+        this.spikes = [];
+        this.particleEmitters = [];
+        this.tiles = {};
+        this.mapBackgroundColor = "#000000";
+        this.gradientTop = "";
+        this.gradientMiddle = "";
+        this.gradientBottom = "";
+        this.useGradient = false;
+        this.gameLoopId = null;
     }
 
     doPlayMusic() {
@@ -103,7 +82,7 @@ export default class NewMapManager {
         this.parseParticles(map.particles);
 
         // Set player starting position and reset velocity
-        this.player = new Player(map.playerStartingPosition.x, map.playerStartingPosition.y);
+        this.player = new Player(map.playerStartingPosition.x, map.playerStartingPosition.y, this.mapData, this.height, this.gravity);
 
         // Reset velocity and speed
         this.player.velocityX = 0;
@@ -120,7 +99,7 @@ export default class NewMapManager {
         }
 
         // Start a fresh game loop
-        this.gameLoopId = requestAnimationFrame(this.updateGame);
+        this.gameLoopId = requestAnimationFrame(this.updateGame.bind(this));
     }
 
     parseMap(mapData) {
@@ -269,5 +248,26 @@ export default class NewMapManager {
                 this.particleEmitters.push(new PortalEmitter(particle.x, particle.y, particle.color1, particle.color2, particle.density, particle.count, particle.emissionSpeed));
             }
         });
+    }
+
+    loadTileImages() {
+        for (let key in this.tiles) {
+            if (this.tiles[key].image) {
+                let image = new Image();
+                image.src = this.tiles[key].image;
+                this.tiles[key].imageObj = image;
+            }
+        }
+    }
+
+    updateGame() {
+        ctx.clearRect(0, 0, canvas.width, canvas.height);
+        this.player.move();
+        this.player.draw(ctx, this.camera);
+        this.particleEmitters.forEach(emitter => {
+            emitter.update();
+            emitter.draw(ctx, this.camera);
+        });
+        this.gameLoopId = requestAnimationFrame(this.updateGame.bind(this));
     }
 }

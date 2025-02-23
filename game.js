@@ -72,9 +72,9 @@ function checkCollisions() {
             }
 
             // Check if player is on a loadMap tile
-            if (platform.type === "loadMap") {                
-                if (platform.script && platform.script !== "") {                    
-                    selectMap(platform.script);                                        
+            if (platform.type === "loadMap") {
+                if (platform.script && platform.script !== "") {
+                    selectMap(platform.script);
                     return;
                 }
             }
@@ -86,7 +86,7 @@ function checkCollisions() {
             // }
 
             //     console.log("player.y", player.y, "player.x", player.x, "player.width", player.width, "player.height", player.height, "player.velocityY", player.velocityY, "player.velocityX", player.velocityX);
-            //     console.log("platform.y", platform.y, "platform.x", platform.x, "platform.width", platform.width, "platform.height", platform.height);                        
+            //     console.log("platform.y", platform.y, "platform.x", platform.x, "platform.width", platform.width, "platform.height", platform.height);
             // Check if the player is standing on a bounce tile
 
             if (platform.type === "bounce") {
@@ -112,7 +112,7 @@ function checkCollisions() {
             // Check player tile boundaries
             const velocityBuffer = .5; // Small buffer to prevent sticking
 
-            // the player hits the top of a platform            
+            // the player hits the top of a platform
             if ((playerBottomBoundary) <= platformTopBoundary + player.velocityY + velocityBuffer &&
                 (playerBottomBoundary) + player.velocityY > 0) {
                 // keep player on top of platform
@@ -393,7 +393,7 @@ function updateGame() {
     });
 
     // Draw player
-    player.draw();
+    player.draw(ctx, camera);
 
     // Check collisions with platforms
     checkCollisions();

@@ -13,9 +13,10 @@ function Player(x, y) {
     this.image = new Image();
     this.image.src = "assets/player1.png";
     this.facing = "right"; // default facing direction
+    this.tileSize = 32;
 }
 
-Player.prototype.draw = function () {
+Player.prototype.draw = function (ctx, camera) {
     ctx.save();
 
     let drawX = this.x - camera.x;
