@@ -72,9 +72,9 @@ function checkCollisions() {
             }
 
             // Check if player is on a loadMap tile
-            if (platform.type === "loadMap") {
-                if (platform.script && window[platform.script]) {
-                    loadMapData(window[platform.script]);
+            if (platform.type === "loadMap") {                
+                if (platform.script && platform.script !== "") {                    
+                    selectMap(platform.script);                                        
                     return;
                 }
             }
@@ -409,6 +409,3 @@ function initGame(selectedMap) {
     // Start the game loop
     loadMapData(selectedMap);
 }
-
-// Start the game
-initGame(map0);

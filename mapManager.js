@@ -9,7 +9,7 @@ function doPlayMusic() {
 function loadMapData(map) {
     // Reset map-related variables
     mapData = map.mapData;
-    tiles = map.tiles;
+    tiles = map.tileDefinitions; // Ensure tiles are populated from tileDefinitions
 
     mapBackgroundColor = map.mapBackgroundColor || "#000000";
 
@@ -68,12 +68,12 @@ function loadMapData(map) {
 }
 
 // Create platforms, enemies, and collectibles from the map
-function parseMap(mapData) {
+function parseMap(mapData) {    
     // First pass: Create all platforms
     for (let y = 0; y < mapData.length; y++) {
-        for (let x = 0; x < mapData[y].length; x++) {
-            const char = mapData[y][x];
-            const tileDef = tiles[char];
+        for (let x = 0; x < mapData[y].length; x++) {               
+            const char = mapData[y][x];            
+            const tileDef = tiles[char];            
 
             if (tileDef && (tileDef.type === "solid" || tileDef.type === "passable" || tileDef.type === "loadMap" || tileDef.type === "bounce")) {
                 let image = tileDef.imageObj || null;
@@ -156,7 +156,6 @@ function parseMap(mapData) {
         }
     }
 }
-
 // Parse Entities from the map
 function parseEntities(entities) {
     if (!Array.isArray(entities)) return; // Ensure entities is an array

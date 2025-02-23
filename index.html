@@ -37,7 +37,7 @@
     </style>
 </head>
 
-<body>
+<body onload="selectMap('map0')">
     <div class="map-buttons">
         <button onclick="selectMap('map0', this)">Welcome</button>
         <button onclick="selectMap('map1', this)">Level 1</button>
@@ -65,29 +65,27 @@
     <script src="collectibles.js"></script>
     <script src="input.js"></script>
     <script src="mapManager.js"></script>
-    <script src="tileImages.js"></script>
-    <script src="assets/maps/map0.js"></script>
-    <script src="assets/maps/map1.js"></script>
-    <script src="assets/maps/map2.js"></script>
-    <script src="assets/maps/map3.js"></script>
-    <script src="assets/maps/hallofemitters.js"></script>
-    <script src="assets/maps/sandBox.js"></script>    
-    <script src="assets/maps/lavaCaverns.js"></script>
-    <script src="assets/maps/batsAndSpings.js"></script>    
-    <script src="assets/maps/desertDash.js"></script>   
+    <script src="tileImages.js"></script>    
     <script src="game.js"></script>
 
     <!-- Add more map scripts as needed -->
     <script>
-        function selectMap(mapName, button) {
+        async function selectMap(mapName, button) {
             console.log(`selectMap called with mapName: ${mapName}`);
-            if (window[mapName]) {
-                initGame(window[mapName]);
-                button.blur(); // Remove focus from the button
+            try {
+                const response = await fetch(`assets/maps/${mapName}.json`);
+                if (!response.ok) {
+                    throw new Error(`Failed to load map: ${mapName}`);
+                }
+                const mapData = await response.json();
+                console.log("Map data loaded:", mapData);
+                initGame(mapData);
+                if (button) button.blur();                
                 document.getElementById('gameCanvas').focus(); // Set focus to the canvas
+            } catch (error) {
+                console.error(error);
             }
         }
     </script>
-</body>
-
+ </body>
 </html>

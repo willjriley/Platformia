@@ -1,6 +1,9 @@
-const map2 = {
+{
     "name": "Level 2",
-    "playerStartingPosition": { x: 50, y: 60 },
+    "playerStartingPosition": {
+        "x": 50,
+        "y": 60
+    },
     "gradientTop": "#FF5733",
     "gradientMiddle": "#FFC300",
     "gradientBottom": "#C70039",
@@ -27,19 +30,54 @@ const map2 = {
         "T                    #gghh##hhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhh#",
         "#######################################################################################"
     ],
-    "tiles": {
-        "#": { "type": "solid", "color": "gray", "image": "./assets/dirt.png" },
-        "!": { "type": "solid", "color": "darkgray", "image": "./assets/dirt2.png" },
-        "T": { "type": "solid", "color": "transparent" },
-        "g": { "type": "solid", "color": "#224D15" },
-        "h": { "type": "solid", "color": "#11260A" },
-        "@": { "type": "enemy", "color": "red", "image": "./assets/enemy1.png" },
-        "$": { "type": "collectible", "color": "yellow", "image": "./assets/coin.png" },
-        "0": { "type": "loadMap", "script": "map3", "color": "#000000", "width": 64, "height": 64, "image": "./assets/door.png" },
-        "~": { "type": "filler", "note:": "filler for the map editor, i do nothing but show the occupied space for the door" },
-        "P": { "type": "passable", "color": "lightgray" }
+    "tileDefinitions": {
+        "#": {
+            "type": "solid",
+            "color": "gray",
+            "image": "./assets/dirt.png"
+        },
+        "!": {
+            "type": "solid",
+            "color": "darkgray",
+            "image": "./assets/dirt2.png"
+        },
+        "T": {
+            "type": "solid",
+            "color": "transparent"
+        },
+        "g": {
+            "type": "solid",
+            "color": "#224D15"
+        },
+        "h": {
+            "type": "solid",
+            "color": "#11260A"
+        },
+        "@": {
+            "type": "enemy",
+            "color": "red",
+            "image": "./assets/enemy1.png"
+        },
+        "$": {
+            "type": "collectible",
+            "color": "yellow",
+            "image": "./assets/coin.png"
+        },
+        "0": {
+            "type": "loadMap",
+            "script": "map3",
+            "color": "#000000",
+            "width": 64,
+            "height": 64,
+            "image": "./assets/door.png"
+        },
+        "~": {
+            "type": "filler",
+            "note:": "filler for the map editor, i do nothing but show the occupied space for the door"
+        },
+        "P": {
+            "type": "passable",
+            "color": "lightgray"
+        }
     }
-};
-
-window.map2 = map2;
-
+}
