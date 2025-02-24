@@ -10,25 +10,25 @@
     "mapBackgroundColor": "#87CEEB",
     "music": "./assets/music/2019-12-11_-_Retro_Platforming_-_David_Fesliyan.mp3",
     "mapData": [
-        "T                                                                                      ",
-        "T                                                                                      ",
-        "T                                                                                      ",
-        "T                                                                                      ",
-        "T                                                                                      ",
-        "T                                                                                      ",
-        "T                                                                                      ",
-        "T                                                                                      ",
-        "T                                                                                     T",
-        "T                                                                                     T",
-        "T                                                                                     T",
-        "T                                         lllllllllllllll                             T",
-        "T                                                                                     T",
-        "T                                      jj                                             T",
-        "T                                  kkkkkkkkkkk                                        T",
-        "T                       ee         k        kk                                     0~ T",
-        "T                     !!!!!!!!!!!!!!!!!!!!!!!!!                                    ~~ T",
-        "T          cbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbd      nm T",
-        "aaaighgoaaaffaaoaaaighgaahaaaighgaifaagaahffaaahaaiaoaighgaaaaaaaoaahffaaaaaaoaaaoaoaaaa"
+        "T                                                                                                                                               ",
+        "T                                                                                                                                               ",
+        "T                                                                                                                                               ",
+        "T                                                                                                                                               ",
+        "T                                                                                                                                               ",
+        "T                                                                                                                                               ",
+        "T                                                                                                                                               ",
+        "T                                                                                                                                               ",
+        "T                                                                                          Vllllllllll                                         T",
+        "T                                                                                                                                              T",
+        "T                                                                                                                                              T",
+        "T                                         lllllllllllllll                                                                                      T",
+        "T                                                                                                                                              T",
+        "T                                      jj                                                                                                      T",
+        "T                                  kkkkkkkkkkk                                                                                                 T",
+        "T                       ee         k        kk                                                                                              0~ T",
+        "T                     !!!!!!!!!!!!!!!!!!!!!!!!!                                                                                             ~~ T",
+        "T          cbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbd                                                               nm T",
+        "aaaighgoaaaffaaoaaaighgaahaaaighgaifaagaahffaaahaaiaoaighgaaaaaaaoaahffaaaaaaoaaaoaoaaaaqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqaighgaaaaaaighT"
     ],
     "tileDefinitions": {
         "a": {
@@ -81,7 +81,10 @@
         },
         "l": {
             "type": "solid",
-            "image": "./assets/desert/yellowDirt.png"
+            "image": "./assets/desert/yellowDirt.png",
+            "moveSpeed": 5,
+            "fallDelay": "1",
+            "canFall": true
         },
         "m": {
             "type": "solid",
@@ -132,6 +135,27 @@
         "P": {
             "type": "passable",
             "color": "lightgray"
+        },
+        "q": {
+            "type": "solid",
+            "color": "#FF0000",
+            "deadly": true
+        },
+        "H": {
+            "type": "solid",
+            "color": "#4B0082",
+            "image": "./assets/red_tile.png",
+            "moveDirection": "horizontal",
+            "moveRange": 200,
+            "moveSpeed": 1
+        },
+        "V": {
+            "type": "solid",
+            "color": "#4B0082",
+            "image": "./assets/red_tile.png",
+            "moveDirection": "vertical",
+            "moveRange": 300,
+            "moveSpeed": "1"
         }
     },
     "entities": [
