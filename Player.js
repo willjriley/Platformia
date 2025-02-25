@@ -11,7 +11,7 @@ export default class Player {
         this.color = 'blue';
         this.isJumping = false;
         this.image = new Image();
-        this.image.src = "/assets/player1.png";
+        this.image.src = "./assets/player1.png";
         this.facing = "right"; // default facing direction
         this.tileSize = 32;
         this.mapData = mapData;
