@@ -99,7 +99,7 @@
         "o": {
             "type": "solid",
             "color": "#261615",
-            "image": "./assets/desert/solidfiller.png"
+            "image": "./assets/desert/solidFiller.png"
         },
         "!": {
             "type": "solid",
