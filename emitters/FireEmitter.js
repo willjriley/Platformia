@@ -49,11 +49,6 @@ export default class FireEmitter {
         ctx.save();
         ctx.translate(this.x - camera.x, this.y - camera.y);
 
-        // Draw the image if provided and loaded
-        if (this.image && this.imageLoaded) {
-            ctx.drawImage(this.image, -this.image.width / 2, -this.image.height / 2);
-        }
-
         // Determine the vertical offset based on alignment
         let verticalOffset = 0;
         if (this.image) {
@@ -85,6 +80,14 @@ export default class FireEmitter {
             ctx.arc(particle.x - this.x, particle.y - this.y + verticalOffset, 4, 0, Math.PI * 2); // Increase particle size to 4
             ctx.fill();
         });
+
+        // Reset globalAlpha before drawing the image
+        ctx.globalAlpha = 1;
+
+        // Draw the image if provided and loaded
+        if (this.image && this.imageLoaded) {
+            ctx.drawImage(this.image, -this.image.width / 2, -this.image.height / 2);
+        }
 
         ctx.restore();
     }
