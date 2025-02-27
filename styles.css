@@ -26,3 +26,16 @@ canvas {
     font-size: 16px;
     cursor: pointer;
 }
+
+.yellow-button {
+    background-color: rgb(233, 233, 9);
+    color: black;
+}
+
+.green-button {
+    background-color: rgb(4, 203, 64);
+    color: black;
+}
+.map-buttons h3 {
+    color: white;
+}

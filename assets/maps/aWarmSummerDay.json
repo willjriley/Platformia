@@ -1,8 +1,8 @@
 {
-    "name": "Level 1",
+    "name": "A Warm Summer Day",
     "playerStartingPosition": {
-        "x": 50,
-        "y": 60
+        "x": 40,
+        "y": 544
     },
     "mapBackgroundColor": "#87CEEB",
     "gradientTop": "#001F3F",
@@ -60,7 +60,7 @@
         },
         "0": {
             "type": "loadMap",
-            "script": "map2",
+            "script": "lavaCaverns",
             "color": "#000000",
             "width": 64,
             "height": 64,

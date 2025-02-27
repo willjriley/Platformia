@@ -11,18 +11,20 @@
     <link rel="stylesheet" href="styles.css">
 </head>
 
-<body onload="selectMap('map0')">
+<body onload="selectMap('welcome')">
     <div class="map-buttons">
-        <button onclick="selectMap('map0', this)">Welcome</button>
-        <button onclick="selectMap('map1', this)">Level 1</button>
-        <button onclick="selectMap('map2', this)">Level 2</button>
-        <button onclick="selectMap('map3', this)">Level 3</button>
-        <button onclick="selectMap('lavaCaverns', this)">Lava Caverns</button>
-        <button onclick="selectMap('batsAndSpings', this)">Bats And Spings Oh My!</button>
-        <button onclick="selectMap('desertDash', this)">Desert Dash</button>
-        <button onclick="selectMap('hallofemitters', this)">Hall Of Emitters</button>
-        <button onclick="selectMap('guruMeditationChamber', this)">Guru Meditation Chamber</button>
-        <button onclick="selectMap('sandBox', this)">Sand Box</button>
+        <button class="green-button" onclick="selectMap('welcome', this)">Welcome</button>
+        <button class="green-button" onclick="selectMap('aWarmSummerDay', this)">A Warm Summer Day</button>
+        <button class="green-button" onclick="selectMap('lavaCaverns', this)">Lava Caverns</button>
+        <button class="green-button" onclick="selectMap('batsAndSpings', this)">Bats And Spings Oh My!</button>
+
+        <h3>Under Construction</h3>
+        <button class="yellow-button" onclick="selectMap('desertDash', this)">Desert Dash</button>
+        <!-- <button onclick="selectMap('map2', this)">(needs work)</button>
+        <button onclick="selectMap('map3', this)">(needs work)</button> -->
+        <button class="yellow-button" onclick="selectMap('hallofemitters', this)">Hall Of Emitters</button>
+        <button class="yellow-button" onclick="selectMap('guruMeditationChamber', this)">Guru Meditation Chamber</button>
+        <!-- <button onclick="selectMap('sandBox', this)">Sand Box</button> -->
         <!-- Add more buttons as needed -->
     </div>
     <canvas id="gameCanvas" width="800" height="400"></canvas>

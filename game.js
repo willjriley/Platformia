@@ -242,8 +242,23 @@ function handleScrolling() {
     }
 }
 
+// Add FPS tracking variables
+let lastFrameTime = performance.now();
+let frameCount = 0;
+let fps = 0;
+
 // Update the game
 function updateGame() {
+    const currentFrameTime = performance.now();
+    frameCount++;
+    const deltaTime = currentFrameTime - lastFrameTime;
+
+    if (deltaTime >= 1000) {
+        fps = frameCount;
+        frameCount = 0;
+        lastFrameTime = currentFrameTime;
+    }
+
     if (!gameStarted) {
         let gradient = ctx.createLinearGradient(0, 0, 0, canvas.height); // Vertical gradient
         gradient.addColorStop(0, "#001F3F");
@@ -324,9 +339,11 @@ function updateGame() {
 
     ctx.fillStyle = "white";
     ctx.font = "bold 30px 'Courier New', monospace";
-    ctx.fillText("SCORE: " + score, 60, 50);
-    ctx.fillText("LIVES: " + lives, 550, 50);
+    ctx.fillText("SCORE: " + score, 50, 55);
+    ctx.fillText("LIVES: " + lives, 350, 55);
 
+    // Display FPS
+    ctx.fillText("FPS: " + fps, 640, 55);
 
     // Update and draw platforms
     platforms.forEach(platform => {

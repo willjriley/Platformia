@@ -4,7 +4,7 @@ export default class Player {
         this.y = y || 544;
         this.width = 32;
         this.height = 32;
-        this.speed = 3;
+        this.speed = 2.5;
         this.velocityX = 0;
         this.velocityY = 0;
         this.jumpPower = -8;

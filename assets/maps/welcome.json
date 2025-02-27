@@ -135,7 +135,7 @@
         },
         "0": {
             "type": "loadMap",
-            "script": "map1",
+            "script": "aWarmSummerDay",
             "width": 64,
             "height": 64,
             "image": "./assets/door.png"
