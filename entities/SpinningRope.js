@@ -12,7 +12,7 @@ export default class SpinningRope {
         this.rotationSpeed = typeof spinRate === 'string' ? parseFloat(spinRate) : spinRate;
     }
 
-    update() {
+    update(player, platforms) {
         this.angle += this.rotationSpeed;
     }
 

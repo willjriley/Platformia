@@ -31,9 +31,7 @@ let collectibles = [];
 let camera = { x: 0, y: 0, width: 800, height: 400 };
 let gravity = 0.25;
 let player;
-let enemies = [];
-let spinningRopes = [];
-let spikes = [];
+let entitiesCollection = [];
 let score = 0;
 let lives = 3;
 let paused = false;
@@ -64,7 +62,7 @@ function checkCollisions() {
     player.velocityY = Math.min(player.velocityY, maxFallSpeed); // Limit falling speed
 
     for (let platform of platforms) {
-        if (String(platform.type).toLocaleLowerCase() != "passable" && isColliding(player, platform)) {
+        if (String(platform.type).toLocaleLowerCase() != "passable".toLocaleLowerCase() && isColliding(player, platform)) {
             // Check if the platform is deadly
             if (platform.deadly) {
                 loseLife(); // Player loses a life if they touch a deadly platform
@@ -72,24 +70,14 @@ function checkCollisions() {
             }
 
             // Check if player is on a loadMap tile
-            if (platform.type === "loadMap") {
+            if (String(platform.type).toLocaleLowerCase() === "loadMap".toLocaleLowerCase()) {
                 if (platform.script && platform.script !== "") {
                     selectMap(platform.script);
                     return;
                 }
             }
 
-            // Check if the player is standing on a loadMap tile and pressing the down key
-            // if (platform.type === "loadMap" && platform.script && window[platform.script] && keys.down) {
-            //     loadMapData(window[platform.script]);
-            //     return;
-            // }
-
-            //     console.log("player.y", player.y, "player.x", player.x, "player.width", player.width, "player.height", player.height, "player.velocityY", player.velocityY, "player.velocityX", player.velocityX);
-            //     console.log("platform.y", platform.y, "platform.x", platform.x, "platform.width", platform.width, "platform.height", platform.height);
-            // Check if the player is standing on a bounce tile
-
-            if (platform.type === "bounce") {
+            if (String(platform.type).toLocaleLowerCase() === "bounce".toLocaleLowerCase()) {
                 player.bounce(platform.force, 'vertical'); // Apply bounce force upwards
 
                 let bounceSound = new Audio("./assets/sounds/springy-bounce-86214.mp3");
@@ -169,28 +157,9 @@ function checkCollisions() {
         return true; // Keep uncollected items
     });
 
-    // Check for enemy collisions
-    enemies.forEach(enemy => {
-        if (
-            player.x + player.width > enemy.x &&
-            player.x < enemy.x + enemy.width &&
-            player.y + player.height > enemy.y &&
-            player.y < enemy.y + enemy.height
-        ) {
-            loseLife(); // Call function when player touches an enemy
-        }
-    });
-
-    // Check for spinning rope collisions
-    spinningRopes.forEach(rope => {
-        if (rope.checkCollision(player)) {
-            loseLife(); // Player loses a life if they touch the spinning rope
-        }
-    });
-
-    // Check for spinning rope collisions
-    spikes.forEach(spike => {
-        if (spike.checkCollision(player)) {
+    // Check for spinning rope / spikes / collisions
+    entitiesCollection.forEach(entity => {
+        if (entity.checkCollision(player)) {
             loseLife(); // Player loses a life if they touch the spinning rope
         }
     });
@@ -353,8 +322,6 @@ function updateGame() {
     ctx.fillText("SCORE: " + score, 60, 50);
     ctx.fillText("LIVES: " + lives, 550, 50);
 
-    // Draw collectibles
-    collectibles.forEach(collectible => collectible.draw());
 
     // Update and draw platforms
     platforms.forEach(platform => {
@@ -362,27 +329,15 @@ function updateGame() {
         platform.draw(ctx, camera); // Pass the camera to the draw method
     });
 
-    // Update and draw enemies
-    enemies.forEach(enemy => {
-        enemy.update(player, platforms); // Update enemy behavior
-        enemy.draw(ctx, camera); // Draw enemy
-    });
+    // Draw collectibles
+    collectibles.forEach(collectible => collectible.draw());
 
-    // Update and draw spinning ropes
-    spinningRopes.forEach(rope => {
-        rope.update();
-        rope.draw(ctx, camera); // Pass the camera to the draw method
-        if (rope.checkCollision(player)) {
+    // Update and draw spinning ropes and spikes
+    entitiesCollection.forEach(entity => {
+        entity.update(player, platforms); // Update enemy behavior
+        entity.draw(ctx, camera); // Pass the camera to the draw method
+        if (entity.checkCollision(player)) {
             loseLife(); // Player loses a life if they touch the spinning rope
-        }
-    });
-
-    // Update and draw spikes
-    spikes.forEach(spike => {
-        spike.update();
-        spike.draw(ctx, camera); // Pass the camera to the draw method
-        if (spike.checkCollision(player)) {
-            loseLife(); // Player loses a life if they touch the spikes
         }
     });
 

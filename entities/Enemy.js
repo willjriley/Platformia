@@ -54,6 +54,14 @@ export default class Enemy {
         this.x = nextX;
     }
 
+    checkCollision(player) {
+        return player.x + player.width > this.x &&
+            player.x < this.x + this.width &&
+            player.y + player.height > this.y &&
+            player.y < this.y + this.height
+
+    }
+
     getPlatformAt(x, y, platforms) {
         for (let i = 0; i < platforms.length; i++) {
             const plat = platforms[i];

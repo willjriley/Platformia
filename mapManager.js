@@ -35,10 +35,8 @@ function loadMapData(map) {
 
     // Reset platforms, enemies, collectibles, spinning ropes, and particleEmitters
     platforms = [];
-    enemies = [];
     collectibles = [];
-    spinningRopes = [];
-    spikes = [];
+    entitiesCollection = [];
     particleEmitters = [];
 
     loadTileImages();
@@ -123,31 +121,6 @@ function parseMap(mapData) {
                 let height = tileDef.height || tileSize;
 
                 if (tileDef.type === "enemy") {
-                    // let enemyX = x * tileSize;
-                    // let enemyY = y * tileSize;
-                    // let platformBelow = null;
-                    // const tolerance = 5;  // Allow a little slack when matching positions
-
-                    // // Patrol logic to determine if the enemy should move left or right and is standing on a platform
-                    // // Search through the platforms to find one directly below this enemy.
-                    // // We check if the enemy's bottom (enemyY + height) is near a platform's top.
-                    // for (let platform of platforms) {
-                    //     if (
-                    //         enemyX + width > platform.x &&        // Enemy overlaps platform horizontally
-                    //         enemyX < platform.x + platform.width &&    // Enemy overlaps platform horizontally
-                    //         Math.abs((enemyY + height) - platform.y) <= tolerance // Enemy bottom is within tolerance of platform top
-                    //     ) {
-                    //         platformBelow = platform;
-                    //         break; // Found a matching platform; no need to search further
-                    //     }
-                    // }
-
-                    // // Determine the enemy type based on the tile definition
-                    // let enemyType = tileDef.enemyType || 'patrol';
-
-                    // // Create the enemy with the found platform (or null if not found)
-                    // let enemy = new Enemy(enemyX, enemyY, image, platformBelow, enemyType, width, height);
-                    // enemies.push(enemy);
 
                 } else if (tileDef.type === "collectible") {
                     collectibles.push(new Collectible(x * tileSize, y * tileSize, image));
@@ -161,9 +134,9 @@ function parseEntities(entities) {
     if (!Array.isArray(entities)) return; // Ensure entities is an array
     entities.forEach(entity => {
         if (entity.type === "spinningRope") {
-            spinningRopes.push(new SpinningRope(entity.x, entity.y, entity.length, entity.color, entity.image, entity.spinRate));
+            entitiesCollection.push(new SpinningRope(entity.x, entity.y, entity.length, entity.color, entity.image, entity.spinRate));
         } else if (entity.type === "spikes") {
-            spikes.push(new Spikes(entity.x, entity.y, entity.width, entity.height, entity.color, entity.riseRate, entity.delay));
+            entitiesCollection.push(new Spikes(entity.x, entity.y, entity.width, entity.height, entity.color, entity.riseRate, entity.delay));
         } else if (entity.type === "enemy") {
             let platformBelow = null;
             const tolerance = 5;  // Allow a little slack when matching positions
@@ -186,7 +159,7 @@ function parseEntities(entities) {
             image.onload = () => {
                 // Create the enemy with the found platform (or null if not found)
                 let enemy = new Enemy(entity.x, entity.y, image, platformBelow, entity.enemyType, entity.width, entity.height);
-                enemies.push(enemy);
+                entitiesCollection.push(enemy);
             };
         }
     });

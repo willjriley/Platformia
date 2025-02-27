@@ -12,7 +12,7 @@ export default class Spikes {
         this.lastToggleTime = Date.now(); // Track the last time the spikes were toggled
     }
 
-    update() {
+    update(player, platforms) {
         const currentTime = Date.now();
         if (currentTime - this.lastToggleTime < this.delay) {
             return; // Exit the update method until the delay is over
