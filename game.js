@@ -112,10 +112,11 @@ function checkCollisions() {
 
             } else if (playerTopBoundary < platformBottomBoundary &&
                 playerBottomBoundary > platformTopBoundary &&
-                playerRightBoundary > platformLeftBoundary &&
-                playerLeftBoundary < platformRightBoundary &&
+                playerRightBoundary - 5 > platformLeftBoundary &&
+                playerLeftBoundary + 5 < platformRightBoundary &&
                 player.velocityY < 0 && !isOnPlatform) {
                 // player hits the bottom of a platform
+
                 player.velocityY = 0;
             }
 
@@ -137,6 +138,9 @@ function checkCollisions() {
                     player.x = platformRightBoundary + velocityBuffer;
                     player.velocityX = 0;
                 }
+
+                // Set isOnPlatform to true if the player is horizontally overlapping with the platform
+                isOnPlatform = true;
             }
         }
     }
@@ -168,6 +172,7 @@ function checkCollisions() {
     if (!isOnPlatform) {
         player.isJumping = true;
     }
+
 }
 
 function isColliding(player, platform) {
