@@ -2,7 +2,7 @@
     "name": "Lava Caverns",
     "playerStartingPosition": {
         "x": 40,
-        "y": 544
+        "y": 120
     },
     "mapBackgroundColor": "#000000",
     "mapData": [
