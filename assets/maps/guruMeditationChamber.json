@@ -4,10 +4,7 @@
         "x": 430,
         "y": 280
     },
-    "gradientTop": "#000000 ",
-    "gradientMiddle": "#2C2C5A",
-    "gradientBottom": "#000000",
-    "mapBackgroundColor": "#000000",
+    "mapBackgroundColor": "#2C2C5A",
     "mapData": [
         "TTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTT",
         "T                       ############TT                       T",
@@ -31,7 +28,15 @@
     ],
     "backgroundImages": [
         {
-            "type": "backgroundImage",
+            "type": "backgroundImage 1",
+            "x": 0,
+            "y": 100,
+            "width": 960,
+            "height": 641,
+            "imageSrc": "./assets/castle/background/Bright/wall.png"
+        },
+        {
+            "type": "backgroundImage 2",
             "x": 1215,
             "y": 150,
             "width": 800,
@@ -74,8 +79,8 @@
         {
             "name": "torch 1",
             "type": "fireEmitter",
-            "x": 75,
-            "y": 550,
+            "x": 50,
+            "y": 580,
             "color1": "#ff0000",
             "color2": "#ff0000",
             "density": 2,
@@ -87,8 +92,8 @@
         {
             "name": "torch 2",
             "type": "fireEmitter",
-            "x": 185,
-            "y": 450,
+            "x": 310,
+            "y": 360,
             "color1": "#ff0000",
             "color2": "#ff0000",
             "density": 2,
