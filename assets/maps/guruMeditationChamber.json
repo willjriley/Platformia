@@ -1,5 +1,5 @@
 {
-    "name": "Sand Box 2 because one is never enough",
+    "name": "Guru Meditation Chamber",
     "playerStartingPosition": {
         "x": 430,
         "y": 280
@@ -20,14 +20,24 @@
         "T                       ##############                       T",
         "T                       ##############                       T",
         "T         ########      ##############                       T",
-        "T          ######       ##############              ######## T",
-        "T       ########        ##############                       T",
-        "T       ########        ##############                       T",
-        "T       ########        ##############                       T",
-        "T    ###########        ##############                       T",
-        "T    ###########        ##############                       T",
-        "################        ##############                       T",
+        "T          ######       ##############                       #",
+        "T       ########        ######################################",
+        "T       ########        ######################################",
+        "T       ########        ######################################",
+        "T    ###########        ######################################",
+        "T    ###########        ######################################",
+        "################        ######################################",
         "##############################################################"
+    ],
+    "backgroundImages": [
+        {
+            "type": "backgroundImage",
+            "x": 1215,
+            "y": 160,
+            "width": 800,
+            "height": 300,
+            "imageSrc": "./assets/winter/backgrounds/background1.png"
+        }
     ],
     "tileDefinitions": {
         "#": {
@@ -66,6 +76,39 @@
             "alignment": "top",
             "image": "./assets/torch.png",
             "emissionSpeed": ".1"
+        },
+        {
+            "name": "snowfall 1",
+            "type": "snowfallEmitter",
+            "x": 1400,
+            "y": 160,
+            "color1": "#FFFF00",
+            "color2": "#000FFF",
+            "density": 2,
+            "count": 40,
+            "emissionSpeed": 1
+        },
+        {
+            "name": "snowfall 2",
+            "type": "snowfallEmitter",
+            "x": 1700,
+            "y": 160,
+            "color1": "#FFFF00",
+            "color2": "#000FFF",
+            "density": 2,
+            "count": 80,
+            "emissionSpeed": 1
+        },
+        {
+            "name": "snowfall 3",
+            "type": "snowfallEmitter",
+            "x": 2000,
+            "y": 160,
+            "color1": "#FFFF00",
+            "color2": "#000FFF",
+            "density": 8,
+            "count": 75,
+            "emissionSpeed": 1
         }
     ],
     "entities": [

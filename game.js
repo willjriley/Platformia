@@ -334,6 +334,9 @@ function updateGame() {
     player.move();
     handleScrolling();
 
+    // Draw background images
+    backgroundImages.forEach(bgImage => bgImage.draw(ctx, camera));
+
     // Draw platforms
     platforms.forEach(platform => platform.draw());
 

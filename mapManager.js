@@ -38,11 +38,13 @@ function loadMapData(map) {
     collectibles = [];
     entitiesCollection = [];
     particleEmitters = [];
+    backgroundImages = [];
 
     loadTileImages();
     parseMap(mapData);
     parseEntities(map.entities);
     parseParticles(map.particles);
+    parseBackgroundImages(map.backgroundImages);
 
     // Set player starting position and reset velocity
     player = new Player(map.playerStartingPosition.x, map.playerStartingPosition.y, mapData, 32, gravity);
@@ -165,6 +167,15 @@ function parseEntities(entities) {
         }
     });
 }
+
+// Parse Background Images from the map
+function parseBackgroundImages(backgroundImagesData) {
+    if (!Array.isArray(backgroundImagesData)) return; // Ensure backgroundImagesData is an array
+    backgroundImagesData.forEach(bgImage => {
+        backgroundImages.push(new BackgroundImage(bgImage.x, bgImage.y, bgImage.width, bgImage.height, bgImage.imageSrc));
+    });
+}
+
 // Parse particles from the map
 function parseParticles(particles) {
     if (!Array.isArray(particles)) return; // Ensure particles is an array
