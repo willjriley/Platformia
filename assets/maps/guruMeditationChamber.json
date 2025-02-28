@@ -10,7 +10,7 @@
     "mapBackgroundColor": "#000000",
     "mapData": [
         "TTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTT",
-        "T                       ##############                       T",
+        "T                       ############TT                       T",
         "T                       ##############                       T",
         "T                       ##############                       T",
         "T                       ##############                       T",
@@ -20,9 +20,9 @@
         "T                       ##############                       T",
         "T                       ##############                       T",
         "T         ########      ##############                       T",
-        "T          ######       ##############                       #",
-        "T       ########        ######################################",
-        "T       ########        ######################################",
+        "T          ######       ##############                       T",
+        "T       ########        ##############abdaabbaadaabaabaadaada#",
+        "T       ########        ##############eeeeeeeeeeeeeeeeeeeeeee#",
         "T       ########        ######################################",
         "T    ###########        ######################################",
         "T    ###########        ######################################",
@@ -33,9 +33,9 @@
         {
             "type": "backgroundImage",
             "x": 1215,
-            "y": 160,
+            "y": 150,
             "width": 800,
-            "height": 300,
+            "height": 418,
             "imageSrc": "./assets/winter/backgrounds/background1.png"
         }
     ],
@@ -48,6 +48,26 @@
         "T": {
             "type": "solid",
             "color": "transparent"
+        },
+        "a": {
+            "type": "solid",
+            "color": "#4B0082",
+            "image": "./assets/winter/tiles/Tile_02.png"
+        },
+        "b": {
+            "type": "solid",
+            "color": "#4B0082",
+            "image": "./assets/winter/tiles/Tile_03.png"
+        },
+        "d": {
+            "type": "solid",
+            "color": "#4B0082",
+            "image": "./assets/winter/tiles/Tile_01.png"
+        },
+        "e": {
+            "type": "solid",
+            "color": "#4B0082",
+            "image": "./assets/winter/tiles/Tile_60.png"
         }
     },
     "particles": [
