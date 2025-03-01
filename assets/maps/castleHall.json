@@ -30,7 +30,7 @@
         {
             "type": "backgroundImage 2",
             "x": 0,
-            "y": 150,
+            "y": 0,
             "width": 800,
             "height": 418,
             "imageSrc": "./assets/winter/backgrounds/background2.png"
@@ -38,7 +38,7 @@
         {
             "type": "backgroundImage 1",
             "x": 0,
-            "y": 110,
+            "y": 0,
             "width": 960,
             "height": 641,
             "imageSrc": "./assets/castle/background/Bright/wall.png"
@@ -46,7 +46,7 @@
         {
             "type": "background down 1",
             "x": 0,
-            "y": 125,
+            "y": 45,
             "width": 960,
             "height": 541,
             "imageSrc": "./assets/castle/background/Bright/down.png"
@@ -168,7 +168,7 @@
             "name": "portal 1",
             "type": "portal",
             "x": 640,
-            "y": 500,
+            "y": 450,
             "targetX": 1700,
             "targetY": 260,
             "color1": "#4B0082",

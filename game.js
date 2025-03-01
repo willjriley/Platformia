@@ -367,7 +367,6 @@ function updateGame() {
         scrollEntireMap();
     }
 
-
     // Define the visible area with a margin
     const margin = 400;
     const visibleArea = {
@@ -509,4 +508,6 @@ function scrollEntireMap() {
 function initGame(selectedMap) {
     // Start the game loop
     loadMapData(selectedMap);
+    //player = new Player(40, 500, mapData, 32, gravity); // Instantiate the player
+    //gameLoopId = requestAnimationFrame(updateGame);
 }

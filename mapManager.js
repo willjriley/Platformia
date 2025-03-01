@@ -54,8 +54,8 @@ function loadMapData(map) {
     player.velocityY = 0;
 
     // **Reset the camera to match the new player position**
-    camera.x = Math.max(0, player.x - camera.width / 2);
-    camera.y = Math.max(0, player.y - camera.height / 2);
+    // camera.x = Math.max(0, player.x - camera.width / 2);
+    // camera.y = Math.max(0, player.y - camera.height / 2);
 
     // Stop previous game loop before starting a new one
     if (gameLoopId) {

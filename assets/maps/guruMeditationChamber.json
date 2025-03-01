@@ -33,7 +33,7 @@
         {
             "type": "backgroundImage 2",
             "x": 1215,
-            "y": 150,
+            "y": 65,
             "width": 800,
             "height": 418,
             "imageSrc": "./assets/winter/backgrounds/background1.png"
@@ -75,7 +75,7 @@
             "name": "torch 1",
             "type": "fireEmitter",
             "x": 50,
-            "y": 580,
+            "y": 480,
             "color1": "#ff0000",
             "color2": "#ff0000",
             "density": 2,
@@ -87,8 +87,8 @@
         {
             "name": "torch 2",
             "type": "fireEmitter",
-            "x": 310,
-            "y": 360,
+            "x": 260,
+            "y": 330,
             "color1": "#ff0000",
             "color2": "#ff0000",
             "density": 2,
