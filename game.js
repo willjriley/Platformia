@@ -402,14 +402,6 @@ function updateGame() {
         }
     });
 
-    ctx.fillStyle = "white";
-    ctx.font = "bold 30px 'Courier New', monospace";
-    ctx.fillText("SCORE: " + score, 50, 55);
-    ctx.fillText("LIVES: " + lives, 350, 55);
-
-    // Display FPS
-    ctx.fillText("FPS: " + fps, 640, 55);
-
     // Update and draw platforms
     platforms.forEach(platform => {
         if (isInVisibleArea(platform, visibleArea)) {
@@ -455,6 +447,14 @@ function updateGame() {
             culledParticleEmitters.push(particleEmitter);
         }
     });
+
+    ctx.fillStyle = "white";
+    ctx.font = "bold 30px 'Courier New', monospace";
+    ctx.fillText("SCORE: " + score, 50, 55);
+    ctx.fillText("LIVES: " + lives, 350, 55);
+
+    // Display FPS
+    ctx.fillText("FPS: " + fps, 640, 55);
 
     // Draw player
     player.draw(ctx, camera);
