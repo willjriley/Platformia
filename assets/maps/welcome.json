@@ -114,18 +114,6 @@
             "type": "solid",
             "color": "#11260A"
         },
-        "@": {
-            "type": "enemy",
-            "color": "red",
-            "image": "./assets/enemy1.png",
-            "enemyType": "patrol"
-        },
-        "^": {
-            "type": "enemy",
-            "color": "red",
-            "image": "./assets/enemy2.png",
-            "enemyType": "hunter"
-        },
         "$": {
             "type": "coin"
         },

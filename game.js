@@ -25,6 +25,13 @@ canvas.addEventListener('mousemove', function (event) {
     mouseX = event.clientX - rect.left + window.scrollX + camera.x;
     mouseY = event.clientY - rect.top + window.scrollY;
 });
+
+// scrollCamera() variables
+let showMeTheMap = false;
+let scrollingRight = true; // Flag to indicate the scrolling direction
+let scrollingSpeed = 2; // Speed of the scrolling
+
+
 // Game objects
 let platforms = [];
 let collectibles = [];
@@ -352,7 +359,14 @@ function updateGame() {
     handleInput(); // Handle input in the main loop
 
     player.move();
-    handleScrolling();
+
+    if (!showMeTheMap) {
+        handleScrolling();
+    }
+    else {
+        scrollEntireMap();
+    }
+
 
     // Define the visible area with a margin
     const margin = 400;
@@ -449,11 +463,13 @@ function updateGame() {
     checkCollisions();
 
     // Log the culled objects
+    /*
     console.log('Culled Background Images:', culledBackgroundImages.length);
     console.log('Culled Platforms:', culledPlatforms.length);
     console.log('Culled Collectibles:', culledCollectibles.length);
     console.log('Culled Entities:', culledEntities.length);
     console.log('Culled Particle Emitters:', culledParticleEmitters.length);
+    */
 
     // Display "You Died" message if lives were lost
     if (lives < 3 && respawning) {
@@ -472,6 +488,23 @@ function isInVisibleArea(obj, visibleArea) {
     );
 }
 
+function scrollEntireMap() {
+    const maxCameraX = (mapData[0].length * tileSize) - camera.width;
+
+    if (scrollingRight) {
+        camera.x += scrollingSpeed;
+        if (camera.x >= maxCameraX) {
+            camera.x = maxCameraX;
+            scrollingRight = false; // Change direction to left
+        }
+    } else {
+        camera.x -= scrollingSpeed;
+        if (camera.x <= 0) {
+            camera.x = 0;
+            scrollingRight = true; // Change direction to right
+        }
+    }
+}
 // Initialize game
 function initGame(selectedMap) {
     // Start the game loop
