@@ -41,9 +41,7 @@
             "color": "#1A1A1A"
         },
         "$": {
-            "type": "collectible",
-            "color": "yellow",
-            "image": "./assets/coin.png"
+            "type": "coin"
         },
         "L": {
             "type": "loadMap",

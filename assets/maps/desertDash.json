@@ -116,9 +116,7 @@
             "image": "./assets/enemy1.png"
         },
         "$": {
-            "type": "collectible",
-            "color": "yellow",
-            "image": "./assets/coin.png"
+            "type": "coin"
         },
         "0": {
             "type": "loadMap",

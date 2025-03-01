@@ -36,9 +36,7 @@
             "image": "./assets/metalBox.png"
         },
         "$": {
-            "type": "collectible",
-            "color": "yellow",
-            "image": "./assets/coin.png"
+            "type": "coin"
         },
         "S": {
             "type": "bounce",

@@ -42,9 +42,7 @@
             "color": "transparent"
         },
         "$": {
-            "type": "collectible",
-            "color": "yellow",
-            "image": "./assets/coin.png"
+            "type": "coin"
         },
         "P": {
             "type": "passable",

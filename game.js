@@ -72,6 +72,7 @@ function checkCollisions() {
             // Check if player is on a loadMap tile
             if (String(platform.type).toLocaleLowerCase() === "loadMap".toLocaleLowerCase()) {
                 if (platform.script && platform.script !== "") {
+                    playSound("./assets/sounds/mixkit-game-level-completed-2059.mp3");
                     selectMap(platform.script);
                     return;
                 }
@@ -153,12 +154,26 @@ function checkCollisions() {
             player.y + player.height > collectible.y &&
             player.y < collectible.y + collectible.height
         ) {
-            let collectibleSound = new Audio("./assets/sounds/coin-dropped-81172.mp3");
-            collectibleSound.play();
-            score += 5; // Increase score by 5
-            return false; // Remove the collected item
+            if (collectible.type === "coin") {
+                playSound("./assets/sounds/coin-dropped-81172.mp3");
+                score += 1;
+                return false;
+            } else if (collectible.type === "speed") {
+                playSound("./assets/sounds/high-speed-2-192899.mp3");
+                player.speed = 3;
+                setTimeout(() => {
+                    playSound("./assets/sounds/drop-sound-effect-240899.mp3");
+                    player.speed = player.initialSpeed;
+                }, 5000); // Reset speed boost after 5 seconds
+                return false
+            } else if (collectible.type === "heart") {
+                playSound("./assets/sounds/mixkit-video-game-treasure-2066.mp3");
+                lives++;
+                return false
+            } // Remove the collected item
+            return true; // Keep uncollected items
         }
-        return true; // Keep uncollected items
+        return true; // Keep uncollected items if no collision
     });
 
     // Check for spinning rope / spikes / collisions
@@ -173,6 +188,12 @@ function checkCollisions() {
         player.isJumping = true;
     }
 
+}
+
+function playSound(sound) {
+    let audio = new Audio(sound);
+    audio.volume = 0.3;
+    audio.play();
 }
 
 function isColliding(player, platform) {
@@ -197,7 +218,8 @@ function loseLife() {
     player.velocityX = 0;
     player.velocityY = 0;
 
-    let deathSound = new Audio("./assets/sounds/8-bit-wrong-2-84407.mp3");
+    let deathSound = new Audio("./assets/sounds/mixkit-player-losing-or-failing-2042.mp3");
+    deathSound.volume = 0.2;
     deathSound.play();
 
     if (lives <= 0) {
@@ -355,7 +377,10 @@ function updateGame() {
     });
 
     // Draw collectibles
-    collectibles.forEach(collectible => collectible.draw());
+    collectibles.forEach(collectible => {
+        collectible.update();
+        collectible.draw(ctx, camera);
+    });
 
     // Update and draw spinning ropes and spikes
     entitiesCollection.forEach(entity => {

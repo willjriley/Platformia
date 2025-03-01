@@ -33,11 +33,11 @@
         "                                                                                                                                   ",
         "                                  $$                                                                                               ",
         "                                $$$$$$                                                                                             ",
-        "y                        @ $$$$$$$$$$$$$$$ @                                                                              0~       ",
-        "r                    #############################                                                                        ~~       ",
-        "r            #########!!!!!!!!!!!!!!!!!!!!!!###########                                                                   rry      ",
+        "y                        @ $$$$$$$H$$$$$$$ @                                                                              0~       ",
+        "r               S    #############################                                                                         ~~      ",
+        "r            #########!!!!!!!!!!!!!!!!!!!!!!###########     S                                                             rry      ",
         "rr           ###ggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggg                                         #######r     ",
-        "rr        @###gghh##h##gghh##hhhhhhhhhhhhh##gghh##hhhhhhhhhhhhhhhhhh##gghh##h##gg                               ###########yyr     ",
+        "rr        @###gghh##h##gghh##hhhhhhhhhhhhh##gghh##hhhhhhhhhhhhhhhhhh##gghh##h##gg      S                        ###########yyr     ",
         "######################################################################################################################r#y###yyrryyr"
     ],
     "tileDefinitions": {
@@ -127,11 +127,13 @@
             "enemyType": "hunter"
         },
         "$": {
-            "type": "collectible",
-            "color": "yellow",
-            "width": 64,
-            "height": 64,
-            "image": "./assets/coin.png"
+            "type": "coin"
+        },
+        "H": {
+            "type": "heart"
+        },
+        "S": {
+            "type": "speed"
         },
         "0": {
             "type": "loadMap",

@@ -107,26 +107,16 @@ function parseMap(mapData) {
                     )
                 );
             }
-        }
-    }
-
-    // Second pass: Create enemies and collectibles
-    for (let y = 0; y < mapData.length; y++) {
-        for (let x = 0; x < mapData[y].length; x++) {
-            const char = mapData[y][x];
-            const tileDef = tiles[char];
-
-            if (tileDef) {
-                let image = tileDef.imageObj || null;
-                let width = tileDef.width || tileSize;
-                let height = tileDef.height || tileSize;
-
-                if (tileDef.type === "enemy") {
-
-                } else if (tileDef.type === "collectible") {
-                    collectibles.push(new Collectible(x * tileSize, y * tileSize, image));
-                }
+            else if (tileDef && tileDef.type === "coin") {
+                collectibles.push(new Coin(x * tileSize, y * tileSize));
             }
+            else if (tileDef && tileDef.type === "heart") {
+                collectibles.push(new Heart(x * tileSize, y * tileSize));
+            }
+            else if (tileDef && tileDef.type === "speed") {
+                collectibles.push(new Speed(x * tileSize, y * tileSize));
+            }
+
         }
     }
 }

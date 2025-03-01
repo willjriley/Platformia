@@ -14,20 +14,20 @@
         "T                                                                                     T    ",
         "T                                              $$                                     T    ",
         "T                                  $$$$         $$                                    T    ",
-        "T                            MMMMMMMMMMMM                                             T    ",
+        "T                   S        MMMMMMMMMMMM                                             T    ",
         "T                                                                                     T    ",
-        "T                        MMM                                                          T    ",
+        "T                        MMM                     S                                    T    ",
         "T                                                                                     T    ",
         "T  $            $                                                                     T    ",
         "T           ########                                                                  T    ",
-        "T   ####    ## $   #   S                                                              T    ",
+        "T   ####    ## $   #   B                                                              T    ",
         "T           ##   $ #   #                                                              T    ",
         "T                 $#      #                                                           T    ",
         "T  #  #####     ###                         s##########                               T    ",
-        "T       $                      ###########################                            T    ",
+        "T       $                      ###########################     S                      T    ",
         "T        $    #       #########!!!!!!!!!!!!!!!!!!!!!!###########                     0~    ",
         "T                    ##!!!!!!!!!!!!!!!!!!!!!!!!!!!!!################                 ~~    ",
-        "T        ####       ########!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!##########         DDDDMMDDD ",
+        "T        ####       ########!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!##########         MMMMMMMMM ",
         "############################################################################################"
     ],
     "tileDefinitions": {
@@ -42,9 +42,7 @@
             "image": "./assets/dirt2.png"
         },
         "$": {
-            "type": "collectible",
-            "color": "yellow",
-            "image": "./assets/coin.png"
+            "type": "coin"
         },
         "P": {
             "type": "passable",
@@ -53,10 +51,6 @@
         "T": {
             "type": "solid",
             "color": "transparent"
-        },
-        "D": {
-            "type": "solid",
-            "color": "#1A1A1A"
         },
         "0": {
             "type": "loadMap",
@@ -70,7 +64,7 @@
             "type": "filler",
             "note:": "filler for the map editor, i do nothing but show the occupied space for the door"
         },
-        "S": {
+        "B": {
             "type": "bounce",
             "image": "./assets/spring.png",
             "force": 10
@@ -79,6 +73,9 @@
             "type": "bounce",
             "image": "./assets/spring.png",
             "force": 13
+        },
+        "S": {
+            "type": "speed"
         },
         "M": {
             "type": "solid",
