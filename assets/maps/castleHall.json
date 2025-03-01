@@ -18,9 +18,9 @@
         "T                       T###########TT                       T",
         "T                       T###########TT                       T",
         "T                       T###########TT                       T",
-        "T                       T#############abdaabbaadaabaabaadaada#",
-        "T                       T#############eeeeeeeeeeeeeeeeeeeeeee#",
-        "T                       T#####################################",
+        "T                       T#############                       T",
+        "T                       T#############aaaaaaaaaaaaaaaaaaaaaaaa",
+        "T                       T#############hh##hh##hh##hh##hh##hh##",
         "T                       T#####################################",
         "TTTTTTTTTTTTTTTTTTTTTTTTT#####################################",
         "                         #####################################",
@@ -85,10 +85,10 @@
             "color": "#4B0082",
             "image": "./assets/winter/tiles/Tile_01.png"
         },
-        "e": {
+        "h": {
             "type": "solid",
             "color": "#4B0082",
-            "image": "./assets/winter/tiles/Tile_60.png"
+            "image": "./assets/winter/tiles/Tile_12.png"
         }
     },
     "particles": [
