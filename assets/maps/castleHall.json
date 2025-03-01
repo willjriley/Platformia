@@ -123,8 +123,8 @@
             "type": "snowfallEmitter",
             "x": 1400,
             "y": 100,
-            "color1": "#FFFF00",
-            "color2": "#000FFF",
+            "color1": "#ffffff",
+            "color2": "#FFFFFF",
             "density": 2,
             "count": 40,
             "emissionSpeed": 1
@@ -134,8 +134,8 @@
             "type": "snowfallEmitter",
             "x": 1700,
             "y": 100,
-            "color1": "#FFFF00",
-            "color2": "#000FFF",
+            "color1": "#ffffff",
+            "color2": "#FFFFFF",
             "density": 2,
             "count": 80,
             "emissionSpeed": 1
@@ -145,10 +145,21 @@
             "type": "snowfallEmitter",
             "x": 2000,
             "y": 100,
-            "color1": "#FFFF00",
-            "color2": "#000FFF",
+            "color1": "#ffffff",
+            "color2": "#FFFFFF",
             "density": 8,
             "count": 75,
+            "emissionSpeed": 1
+        },
+        {
+            "name": "snowfall 4",
+            "type": "snowfallEmitter",
+            "x": 1400,
+            "y": 250,
+            "color1": "#ffffff",
+            "color2": "#FFFFFF",
+            "density": 6,
+            "count": 30,
             "emissionSpeed": 1
         }
     ],
