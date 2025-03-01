@@ -3,6 +3,8 @@ export default class SpinningRope {
         this.x = x;
         this.y = y;
         this.length = length;
+        this.width = length;
+        this.height = length;
         this.color = color;
         this.image = image ? new Image() : null;
         if (this.image) {

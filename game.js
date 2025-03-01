@@ -268,7 +268,6 @@ let lastFrameTime = performance.now();
 let frameCount = 0;
 let fps = 0;
 
-// Update the game
 function updateGame() {
     const currentFrameTime = performance.now();
     frameCount++;
@@ -355,11 +354,39 @@ function updateGame() {
     player.move();
     handleScrolling();
 
+    // Define the visible area with a margin
+    const margin = 400;
+    const visibleArea = {
+        left: camera.x - margin,
+        right: camera.x + camera.width + margin,
+        top: camera.y - margin,
+        bottom: camera.y + camera.height + margin
+    };
+
+    // Clear the culled objects arrays
+    culledBackgroundImages = [];
+    culledPlatforms = [];
+    culledCollectibles = [];
+    culledEntities = [];
+    culledParticleEmitters = [];
+
     // Draw background images
-    backgroundImages.forEach(bgImage => bgImage.draw(ctx, camera));
+    backgroundImages.forEach(bgImage => {
+        if (isInVisibleArea(bgImage, visibleArea)) {
+            bgImage.draw(ctx, camera);
+        } else {
+            culledBackgroundImages.push(bgImage);
+        }
+    });
 
     // Draw platforms
-    platforms.forEach(platform => platform.draw());
+    platforms.forEach(platform => {
+        if (isInVisibleArea(platform, visibleArea)) {
+            platform.draw(ctx, camera);
+        } else {
+            culledPlatforms.push(platform);
+        }
+    });
 
     ctx.fillStyle = "white";
     ctx.font = "bold 30px 'Courier New', monospace";
@@ -371,32 +398,48 @@ function updateGame() {
 
     // Update and draw platforms
     platforms.forEach(platform => {
-        platform.update(player); // Pass the player to the update method
-        platform.draw(ctx, camera); // Pass the camera to the draw method
+        if (isInVisibleArea(platform, visibleArea)) {
+            platform.update(player); // Pass the player to the update method
+            platform.draw(ctx, camera); // Pass the camera to the draw method
+        } else {
+            culledPlatforms.push(platform);
+        }
     });
 
     // Draw collectibles
     collectibles.forEach(collectible => {
-        collectible.update();
-        collectible.draw(ctx, camera);
+        if (isInVisibleArea(collectible, visibleArea)) {
+            collectible.update();
+            collectible.draw(ctx, camera);
+        } else {
+            culledCollectibles.push(collectible);
+        }
     });
 
     // Update and draw spinning ropes and spikes
     entitiesCollection.forEach(entity => {
-        entity.update(player, platforms); // Update enemy behavior
-        entity.draw(ctx, camera); // Pass the camera to the draw method
-        if (entity.checkCollision(player)) {
-            if (entity.type === "hunter" || entity.type === "patrol") {
-                entity.respawn();
+        if (isInVisibleArea(entity, visibleArea)) {
+            entity.update(player, platforms); // Update enemy behavior
+            entity.draw(ctx, camera); // Pass the camera to the draw method
+            if (entity.checkCollision(player)) {
+                if (entity.type === "hunter" || entity.type === "patrol") {
+                    entity.respawn();
+                }
+                loseLife(); // Player loses a life if they touch the spinning rope
             }
-            loseLife(); // Player loses a life if they touch the spinning rope
+        } else {
+            culledEntities.push(entity);
         }
     });
 
     // Update and draw particle emitters
     particleEmitters.forEach(particleEmitter => {
-        particleEmitter.update();
-        particleEmitter.draw(ctx, camera); // Pass the camera to the draw method
+        if (isInVisibleArea(particleEmitter, visibleArea)) {
+            particleEmitter.update();
+            particleEmitter.draw(ctx, camera); // Pass the camera to the draw method
+        } else {
+            culledParticleEmitters.push(particleEmitter);
+        }
     });
 
     // Draw player
@@ -405,10 +448,28 @@ function updateGame() {
     // Check collisions with platforms
     checkCollisions();
 
+    // Log the culled objects
+    console.log('Culled Background Images:', culledBackgroundImages.length);
+    console.log('Culled Platforms:', culledPlatforms.length);
+    console.log('Culled Collectibles:', culledCollectibles.length);
+    console.log('Culled Entities:', culledEntities.length);
+    console.log('Culled Particle Emitters:', culledParticleEmitters.length);
+
     // Display "You Died" message if lives were lost
     if (lives < 3 && respawning) {
         displayYouDiedMessage();
     }
+}
+
+// Helper function to check if an object is in the visible area - also know as frustum culling
+// This technique is known as "view frustum culling" or simply "culling."
+function isInVisibleArea(obj, visibleArea) {
+    return (
+        obj.x + obj.width > visibleArea.left &&
+        obj.x < visibleArea.right &&
+        obj.y + obj.height > visibleArea.top &&
+        obj.y < visibleArea.bottom
+    );
 }
 
 // Initialize game

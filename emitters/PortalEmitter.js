@@ -2,6 +2,8 @@ export default class PortalEmitter {
     constructor(x, y, color1, color2, density, count, emissionSpeed = 1) {
         this.x = x;
         this.y = y;
+        this.width = 164;
+        this.height = 164;
         this.color1 = color1;
         this.color2 = color2;
         this.density = density;

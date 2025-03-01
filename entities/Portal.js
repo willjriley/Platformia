@@ -7,6 +7,8 @@ export default class Portal {
         this.targetX = targetX;
         this.targetY = targetY;
         this.emitter = new MagicSpellEmitter(x, y, color1, color2, density, count, emissionSpeed);
+        this.width = this.emitter.width;
+        this.height = this.emitter.height;
     }
 
     update(player, platforms) {

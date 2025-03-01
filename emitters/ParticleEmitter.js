@@ -2,6 +2,8 @@ export default class ParticleEmitter {
     constructor(x, y, color1, color2, density, count, image, alignment = 'top', emissionSpeed = 0.5) {
         this.x = x;
         this.y = y;
+        this.width = 32;
+        this.height = 32;
         this.color1 = color1;
         this.color2 = color2;
         this.density = density;
