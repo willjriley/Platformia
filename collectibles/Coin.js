@@ -2,7 +2,6 @@ import CollectibleBase from './CollectibleBase.js';
 
 class Coin extends CollectibleBase {
     constructor(x, y, width = 32, height = 32, frameRate = 5) {
-        console.log('Coin constructor');
         const imageUrls = [
             './assets/castle/items/coin1.png',
             './assets/castle/items/coin2.png',

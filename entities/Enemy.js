@@ -17,6 +17,11 @@ export default class Enemy {
         this.tileSize = 32;
     }
 
+    respawn() {
+        this.x = this.startX;
+        this.y = this.startY;
+    }
+
     draw(ctx, camera) {
         if (this.image) {
             ctx.drawImage(this.image, 0, 0, this.tileSize, this.tileSize, this.x - camera.x, this.y, this.width, this.height); // Offset by camera's x

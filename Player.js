@@ -2,6 +2,8 @@ export default class Player {
     constructor(x, y, mapData, height, gravity) {
         this.x = x || 50;
         this.y = y || 544;
+        this.startX = x;
+        this.startY = y;
         this.width = 32;
         this.height = 32;
         this.initialSpeed = 2;
@@ -18,6 +20,14 @@ export default class Player {
         this.mapData = mapData;
         this.height = height;
         this.gravity = gravity;
+    }
+
+    respawn() {
+        this.x = this.startX;
+        this.y = this.startY;
+        this.velocityX = 0;
+        this.velocityY = 0;
+        this.isJumping = false;
     }
 
     draw(ctx, camera) {

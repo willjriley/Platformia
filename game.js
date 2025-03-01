@@ -235,8 +235,7 @@ function loseLife() {
         // Add a short delay before respawning
         setTimeout(() => {
             // set player respawn position
-            player.x = 50;
-            player.y = height - 60;
+            player.respawn();
             respawning = false; // Reset respawning flag
             gamePaused = false; // Resume the game
         }, 1000); // 1 second delay
@@ -387,6 +386,9 @@ function updateGame() {
         entity.update(player, platforms); // Update enemy behavior
         entity.draw(ctx, camera); // Pass the camera to the draw method
         if (entity.checkCollision(player)) {
+            if (entity.type === "hunter" || entity.type === "patrol") {
+                entity.respawn();
+            }
             loseLife(); // Player loses a life if they touch the spinning rope
         }
     });
