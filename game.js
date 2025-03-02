@@ -424,7 +424,7 @@ function updateGame() {
     // Update and draw spinning ropes and spikes
     entitiesCollection.forEach(entity => {
         if (isInVisibleArea(entity, visibleArea)) {
-            entity.update(player, platforms); // Update enemy behavior
+            entity.update(player, platforms);
             entity.draw(ctx, camera); // Pass the camera to the draw method
             if (entity.checkCollision(player)) {
                 if (typeof entity.respawn === "function") {
