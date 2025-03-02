@@ -1,8 +1,8 @@
 {
     "name": "Guru Meditation Chamber",
     "playerStartingPosition": {
-        "x": 430,
-        "y": 280
+        "x": 51,
+        "y": 350
     },
     "mapBackgroundColor": "#2C2C5A",
     "mapData": [
@@ -14,14 +14,14 @@
         "T                       T###########TT                       T",
         "T                       T###########TT                       T",
         "T                       T###########TT                       T",
+        "T             ###       T###########TT                       T",
         "T                       T###########TT                       T",
+        "T                 ##    T###########TT                       T",
         "T                       T###########TT                       T",
-        "T                       T###########TT                       T",
-        "T                       T###########TT                       T",
-        "T                       T#############                       T",
-        "T                       T#############aaaaaaaaaaaaaaaaaaaaaaaa",
-        "T                       T#############hh##hh##hh##hh##hh##hh##",
-        "T                       T#####################################",
+        "T####                   T#############                       T",
+        "T                     CCT#############aaaaaaaaaaaaaaaaaaaaaaaa",
+        "T                     CCT#############hh##hh##hh##hh##hh##hh##",
+        "T                     CCT#####################################",
         "TTTTTTTTTTTTTTTTTTTTTTTTT#####################################",
         "                         #####################################",
         "##############################################################"
@@ -66,6 +66,10 @@
             "color": "#4B0082",
             "image": "./assets/metalBox.png"
         },
+        "C": {
+            "type": "solid",
+            "image": "./assets/desert/crate.png"
+        },
         "T": {
             "type": "solid",
             "color": "transparent"
@@ -94,19 +98,6 @@
     "particles": [
         {
             "name": "torch 1",
-            "type": "fireEmitter",
-            "x": 630,
-            "y": 360,
-            "color1": "#ff0000",
-            "color2": "#ff0000",
-            "density": 2,
-            "count": 50,
-            "alignment": "top",
-            "image": "./assets/torch.png",
-            "emissionSpeed": ".1"
-        },
-        {
-            "name": "torch 2",
             "type": "fireEmitter",
             "x": 310,
             "y": 360,
@@ -167,8 +158,8 @@
         {
             "name": "portal 1",
             "type": "portal",
-            "x": 640,
-            "y": 450,
+            "x": 340,
+            "y": 150,
             "targetX": 1700,
             "targetY": 260,
             "color1": "#4B0082",
@@ -181,7 +172,7 @@
             "name": "portal 2",
             "type": "portal",
             "x": 1600,
-            "y": 350,
+            "y": 300,
             "targetX": 450,
             "targetY": 260,
             "color1": "#4B0082",
@@ -189,6 +180,13 @@
             "density": 5,
             "count": 160,
             "emissionSpeed": ".3"
+        },
+        {
+            "name": "beholder",
+            "type": "animatedEnemy",
+            "x": 50,
+            "y": 414,
+            "enemyType": "patrol"
         }
     ]
 }

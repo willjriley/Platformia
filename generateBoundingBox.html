@@ -1,0 +1,135 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Bounding Box Calculator</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 20px;
+        }
+        .container {
+            max-width: 800px;
+            margin: auto;
+        }
+        .output {
+            white-space: pre-wrap;
+            background-color: #f4f4f4;
+            padding: 10px;
+            border: 1px solid #ccc;
+            margin-top: 20px;
+        }
+        .button-container {
+            margin-top: 10px;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Bounding Box Calculator</h1>
+        <label for="stateName">State Name:</label>
+        <input type="text" id="stateName" placeholder="Enter state name">
+        <br><br>
+        <label for="fileInput">Select PNG Files:</label>
+        <input type="file" id="fileInput" accept="image/png" multiple>
+        <br><br>
+        <div class="button-container">
+            <button onclick="generateOutput()">Generate Output</button>
+            <button onclick="copyToClipboard()">Copy to Clipboard</button>
+        </div>
+        <div class="output" id="output"></div>
+    </div>
+
+    <script>
+        function calculateBoundingBox(image) {
+            const canvas = document.createElement('canvas');
+            const ctx = canvas.getContext('2d');
+            canvas.width = image.width;
+            canvas.height = image.height;
+            ctx.drawImage(image, 0, 0);
+
+            const imageData = ctx.getImageData(0, 0, canvas.width, canvas.height);
+            const data = imageData.data;
+
+            let left = canvas.width;
+            let right = 0;
+            let top = canvas.height;
+            let bottom = 0;
+
+            for (let y = 0; y < canvas.height; y++) {
+                for (let x = 0; x < canvas.width; x++) {
+                    const alpha = data[(y * canvas.width + x) * 4 + 3];
+                    if (alpha > 0) {
+                        if (x < left) left = x;
+                        if (x > right) right = x;
+                        if (y < top) top = y;
+                        if (y > bottom) bottom = y;
+                    }
+                }
+            }
+
+            return { left, right, top, bottom };
+        }
+
+        function generateOutput() {
+            const stateName = document.getElementById('stateName').value;
+            const files = document.getElementById('fileInput').files;
+            const output = document.getElementById('output');
+            const frames = [];
+
+            if (!stateName) {
+                alert('Please enter a state name.');
+                return;
+            }
+
+            if (files.length === 0) {
+                alert('Please select at least one PNG file.');
+                return;
+            }
+
+            let loadedImages = 0;
+
+            for (let i = 0; i < files.length; i++) {
+                const file = files[i];
+                const reader = new FileReader();
+
+                reader.onload = function(event) {
+                    const img = new Image();
+                    img.src = event.target.result;
+
+                    img.onload = function() {
+                        const boundingBox = calculateBoundingBox(img);
+                        frames.push({
+                            src: `./assets/fantasy/beholder/${file.name}`,
+                            boundingBox
+                        });
+
+                        loadedImages++;
+                        if (loadedImages === files.length) {
+                            const stateOutput = {
+                                state: stateName,
+                                frames
+                            };
+                            output.textContent = JSON.stringify(stateOutput, null, 4);
+                        }
+                    };
+                };
+
+                reader.readAsDataURL(file);
+            }
+        }
+
+        function copyToClipboard() {
+            const output = document.getElementById('output');
+            const textArea = document.createElement('textarea');
+            textArea.value = output.textContent;
+            document.body.appendChild(textArea);
+            textArea.select();
+            document.execCommand('copy');
+            document.body.removeChild(textArea);
+            alert('Output copied to clipboard!');
+        }
+    </script>
+</body>
+</html>

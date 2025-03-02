@@ -1,0 +1,252 @@
+{
+    "name": "beholder",
+    "default": "walk_right",
+    "states": [
+        {
+            "state": "idle_right",
+            "frames": [
+                {
+                    "src": "./assets/fantasy/beholder/idle1.png",
+                    "boundingBox": {
+                        "left": 21,
+                        "right": 77,
+                        "top": 30,
+                        "bottom": 97
+                    }
+                },
+                {
+                    "src": "./assets/fantasy/beholder/idle3.png",
+                    "boundingBox": {
+                        "left": 27,
+                        "right": 67,
+                        "top": 24,
+                        "bottom": 89
+                    }
+                },
+                {
+                    "src": "./assets/fantasy/beholder/idle2.png",
+                    "boundingBox": {
+                        "left": 26,
+                        "right": 69,
+                        "top": 27,
+                        "bottom": 92
+                    }
+                },
+                {
+                    "src": "./assets/fantasy/beholder/idle4.png",
+                    "boundingBox": {
+                        "left": 26,
+                        "right": 69,
+                        "top": 27,
+                        "bottom": 92
+                    }
+                }
+            ]
+        },
+        {
+            "state": "idle_left",
+            "frames": [
+                {
+                    "src": "./assets/fantasy/beholder/idle1_left.png",
+                    "boundingBox": {
+                        "left": 50,
+                        "right": 106,
+                        "top": 30,
+                        "bottom": 97
+                    }
+                },
+                {
+                    "src": "./assets/fantasy/beholder/idle2_left.png",
+                    "boundingBox": {
+                        "left": 58,
+                        "right": 101,
+                        "top": 27,
+                        "bottom": 92
+                    }
+                },
+                {
+                    "src": "./assets/fantasy/beholder/idle4_left.png",
+                    "boundingBox": {
+                        "left": 58,
+                        "right": 101,
+                        "top": 27,
+                        "bottom": 92
+                    }
+                },
+                {
+                    "src": "./assets/fantasy/beholder/idle3_left.png",
+                    "boundingBox": {
+                        "left": 60,
+                        "right": 100,
+                        "top": 24,
+                        "bottom": 89
+                    }
+                }
+            ]
+        },
+        {
+            "state": "walk_right",
+            "frames": [
+                {
+                    "src": "./assets/fantasy/beholder/walk2.png",
+                    "boundingBox": {
+                        "left": 26,
+                        "right": 67,
+                        "top": 28,
+                        "bottom": 93
+                    }
+                },
+                {
+                    "src": "./assets/fantasy/beholder/walk1.png",
+                    "boundingBox": {
+                        "left": 27,
+                        "right": 67,
+                        "top": 30,
+                        "bottom": 93
+                    }
+                },
+                {
+                    "src": "./assets/fantasy/beholder/walk3.png",
+                    "boundingBox": {
+                        "left": 28,
+                        "right": 67,
+                        "top": 26,
+                        "bottom": 92
+                    }
+                },
+                {
+                    "src": "./assets/fantasy/beholder/walk4.png",
+                    "boundingBox": {
+                        "left": 27,
+                        "right": 67,
+                        "top": 28,
+                        "bottom": 91
+                    }
+                }
+            ]
+        },
+        {
+            "state": "walk_left",
+            "frames": [
+                {
+                    "src": "./assets/fantasy/beholder/walk1_left.png",
+                    "boundingBox": {
+                        "left": 60,
+                        "right": 100,
+                        "top": 30,
+                        "bottom": 93
+                    }
+                },
+                {
+                    "src": "./assets/fantasy/beholder/walk2_left.png",
+                    "boundingBox": {
+                        "left": 60,
+                        "right": 101,
+                        "top": 28,
+                        "bottom": 93
+                    }
+                },
+                {
+                    "src": "./assets/fantasy/beholder/walk3_left.png",
+                    "boundingBox": {
+                        "left": 60,
+                        "right": 99,
+                        "top": 26,
+                        "bottom": 92
+                    }
+                },
+                {
+                    "src": "./assets/fantasy/beholder/walk4_left.png",
+                    "boundingBox": {
+                        "left": 60,
+                        "right": 100,
+                        "top": 28,
+                        "bottom": 91
+                    }
+                }
+            ]
+        },
+        {
+            "state": "attack_right",
+            "frames": [
+                {
+                    "src": "./assets/fantasy/beholder/attack1.png",
+                    "boundingBox": {
+                        "left": 26,
+                        "right": 78,
+                        "top": 31,
+                        "bottom": 92
+                    }
+                },
+                {
+                    "src": "./assets/fantasy/beholder/attack4.png",
+                    "boundingBox": {
+                        "left": 21,
+                        "right": 102,
+                        "top": 30,
+                        "bottom": 96
+                    }
+                },
+                {
+                    "src": "./assets/fantasy/beholder/attack2.png",
+                    "boundingBox": {
+                        "left": 31,
+                        "right": 124,
+                        "top": 33,
+                        "bottom": 92
+                    }
+                },
+                {
+                    "src": "./assets/fantasy/beholder/attack3.png",
+                    "boundingBox": {
+                        "left": 26,
+                        "right": 100,
+                        "top": 33,
+                        "bottom": 92
+                    }
+                }
+            ]
+        },
+        {
+            "state": "attack_left",
+            "frames": [
+                {
+                    "src": "./assets/fantasy/beholder/attack1.png",
+                    "boundingBox": {
+                        "left": 26,
+                        "right": 78,
+                        "top": 31,
+                        "bottom": 92
+                    }
+                },
+                {
+                    "src": "./assets/fantasy/beholder/attack4.png",
+                    "boundingBox": {
+                        "left": 21,
+                        "right": 102,
+                        "top": 30,
+                        "bottom": 96
+                    }
+                },
+                {
+                    "src": "./assets/fantasy/beholder/attack2.png",
+                    "boundingBox": {
+                        "left": 31,
+                        "right": 124,
+                        "top": 33,
+                        "bottom": 92
+                    }
+                },
+                {
+                    "src": "./assets/fantasy/beholder/attack3.png",
+                    "boundingBox": {
+                        "left": 26,
+                        "right": 100,
+                        "top": 33,
+                        "bottom": 92
+                    }
+                }
+            ]
+        }
+    ]
+}
