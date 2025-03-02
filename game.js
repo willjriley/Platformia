@@ -427,7 +427,7 @@ function updateGame() {
             entity.update(player, platforms); // Update enemy behavior
             entity.draw(ctx, camera); // Pass the camera to the draw method
             if (entity.checkCollision(player)) {
-                if (entity.type === "hunter" || entity.type === "patrol") {
+                if (typeof entity.respawn === "function") {
                     entity.respawn();
                 }
                 loseLife(); // Player loses a life if they touch the spinning rope

@@ -73,8 +73,21 @@ export default class AnimatedEnemy {
     }
 
     respawn() {
+        console.log('Respawning enemy');
         this.x = this.startX;
         this.y = this.startY;
+        this.patrolDirection = 'right';
+        this.setState(this.patrolDirection === "right" ? "walk_right" : "walk_left");
+        this.frameIndex = 0;
+        this.tickCount = 0;
+
+        // Clear any pending pause timeout
+        if (this.pauseTimeout) {
+            clearTimeout(this.pauseTimeout);
+            this.pauseTimeout = null;
+        }
+
+
     }
 
     draw(ctx, camera) {

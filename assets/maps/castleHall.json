@@ -112,7 +112,7 @@
         {
             "name": "snowfall 1",
             "type": "snowfallEmitter",
-            "x": 1400,
+            "x": 1500,
             "y": 100,
             "color1": "#ffffff",
             "color2": "#FFFFFF",
@@ -145,7 +145,7 @@
         {
             "name": "snowfall 4",
             "type": "snowfallEmitter",
-            "x": 1400,
+            "x": 1500,
             "y": 250,
             "color1": "#ffffff",
             "color2": "#FFFFFF",
