@@ -28,7 +28,7 @@ export default class AnimatedEnemy {
 
     async loadAnimations() {
         try {
-            const response = await fetch('/assets/fantasy/beholder/animate.json');
+            const response = await fetch('./assets/fantasy/beholder/animate.json');
             const data = await response.json();
             data.states.forEach(state => {
                 this.animations[state.state] = state.frames.map(frame => ({
