@@ -12,6 +12,9 @@ export default class AnimatedEnemy {
         this.mode = mode; // mode of enemy: 'patrol' or 'hunter'
         this.chaseRange = 250; // Range within which the Hunter chases the player
         this.tileSize = tileSize;
+        this.pauseTimeout = null; // Store the timeout ID for pausing patrol
+        this.justRespawned = false; // Flag to indicate if the enemy has just respawned
+        this.canFire = true; // Flag to indicate if the enemy can fire a projectile
 
         // Load animation data
         this.animations = {};
@@ -28,7 +31,7 @@ export default class AnimatedEnemy {
 
     async loadAnimations() {
         try {
-            const response = await fetch('./assets/fantasy/beholder/animate.json');
+            const response = await fetch('/assets/fantasy/beholder/animate.json');
             const data = await response.json();
             data.states.forEach(state => {
                 this.animations[state.state] = state.frames.map(frame => ({
@@ -87,7 +90,14 @@ export default class AnimatedEnemy {
             this.pauseTimeout = null;
         }
 
+        // Reset mode to patrol
+        this.mode = 'patrol';
+        this.justRespawned = true; // Set the justRespawned flag
 
+        // Reset the justRespawned flag after a short delay
+        setTimeout(() => {
+            this.justRespawned = false;
+        }, 1000); // Adjust the delay as needed
     }
 
     draw(ctx, camera) {
@@ -137,7 +147,7 @@ export default class AnimatedEnemy {
 
     update(player, platforms) {
         if (this.mode === 'patrol') {
-            this.patrol(platforms);
+            this.patrol(platforms, player);
         } else if (this.mode === 'hunter') {
             this.hunt(player);
         } else if (this.mode === 'pausePatrol') {
@@ -185,20 +195,46 @@ export default class AnimatedEnemy {
         }
     }
 
-    patrol(platforms) {
+    scanForPlayer(player, scanDistance) {
+        const playerInRange = this.patrolDirection === 'right'
+            ? player.x > this.x && player.x < this.x + scanDistance
+            : player.x < this.x && player.x > this.x - scanDistance;
+
+        const playerYInRange = player.y > this.startY && player.y < this.startY + this.height;
+
+        if (playerInRange && playerYInRange && this.canFire) {
+            this.setState(this.patrolDirection === 'right' ? 'attack_right' : 'attack_left');
+            this.fireProjectile();
+            this.canFire = false; // Set canFire to false to start cooldown
+            setTimeout(() => {
+                this.setState(this.patrolDirection === 'right' ? 'walk_right' : 'walk_left');
+                this.canFire = true; // Reset canFire after cooldown
+            }, 1000); // Adjust the delay as needed
+        }
+    }
+
+    fireProjectile() {
+        // Implement the logic to fire a projectile
+        console.log('Firing projectile');
+    }
+
+    patrol(platforms, player) {
         const nextX = (this.patrolDirection === "right") ? this.x + this.speed : this.x - this.speed;
         const sensorX = (this.patrolDirection === "right") ? nextX + this.width : nextX;
         const sensorY = this.y + this.height + 1;
 
         // Check if there is a platform below the next position
         if (!this.getPlatformAt(sensorX, sensorY, platforms)) {
-            this.patrolDirection = (this.patrolDirection === "right") ? "left" : "right";
-            this.setState((this.patrolDirection === "right") ? "idle_right" : "idle_left");
-            this.mode = 'pausePatrol';
-            setTimeout(() => {
-                this.mode = 'patrol';
-                this.setState((this.patrolDirection === "right") ? "walk_right" : "walk_left");
-            }, 10000); // Pause for 10 seconds
+            if (this.mode !== 'pausePatrol' && !this.justRespawned) {
+                this.patrolDirection = (this.patrolDirection === "right") ? "left" : "right";
+                this.setState((this.patrolDirection === "right") ? "idle_right" : "idle_left");
+                this.mode = 'pausePatrol';
+                this.pauseTimeout = setTimeout(() => {
+                    this.mode = 'patrol';
+                    this.setState((this.patrolDirection === "right") ? "walk_right" : "walk_left");
+                    this.pauseTimeout = null;
+                }, 5000); // Pause for 5 seconds
+            }
             return;
         }
 
@@ -207,15 +243,21 @@ export default class AnimatedEnemy {
         const wallSensorY = this.y + this.height / 2;
 
         if (this.getPlatformAt(wallSensorX, wallSensorY, platforms)) {
-            this.patrolDirection = (this.patrolDirection === "right") ? "left" : "right";
-            this.setState((this.patrolDirection === "right") ? "idle_right" : "idle_left");
-            this.mode = 'pausePatrol';
-            setTimeout(() => {
-                this.mode = 'patrol';
-                this.setState((this.patrolDirection === "right") ? "walk_right" : "walk_left");
-            }, 10000); // Pause for 10 seconds
+            if (this.mode !== 'pausePatrol' && !this.justRespawned) {
+                this.patrolDirection = (this.patrolDirection === "right") ? "left" : "right";
+                this.setState((this.patrolDirection === "right") ? "idle_right" : "idle_left");
+                this.mode = 'pausePatrol';
+                this.pauseTimeout = setTimeout(() => {
+                    this.mode = 'patrol';
+                    this.setState((this.patrolDirection === "right") ? "walk_right" : "walk_left");
+                    this.pauseTimeout = null;
+                }, 5000); // Pause for 5 seconds
+            }
             return;
         }
+
+        // Scan for player
+        this.scanForPlayer(player, 200); // Adjust the scan distance as needed
 
         this.x = nextX;
     }

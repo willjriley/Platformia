@@ -1,6 +1,7 @@
 {
     "name": "beholder",
     "default": "walk_right",
+    "fireImage": "./assets/fantasy/beholder/attack_fire.png",
     "states": [
         {
             "state": "idle_right",
@@ -179,15 +180,6 @@
                     }
                 },
                 {
-                    "src": "./assets/fantasy/beholder/attack4.png",
-                    "boundingBox": {
-                        "left": 21,
-                        "right": 102,
-                        "top": 30,
-                        "bottom": 96
-                    }
-                },
-                {
                     "src": "./assets/fantasy/beholder/attack2.png",
                     "boundingBox": {
                         "left": 31,
@@ -203,6 +195,15 @@
                         "right": 100,
                         "top": 33,
                         "bottom": 92
+                    }
+                },
+                {
+                    "src": "./assets/fantasy/beholder/attack4.png",
+                    "boundingBox": {
+                        "left": 21,
+                        "right": 102,
+                        "top": 30,
+                        "bottom": 96
                     }
                 }
             ]
@@ -211,39 +212,39 @@
             "state": "attack_left",
             "frames": [
                 {
-                    "src": "./assets/fantasy/beholder/attack1.png",
+                    "src": "./assets/fantasy/beholder/attack1_left.png",
                     "boundingBox": {
-                        "left": 26,
-                        "right": 78,
+                        "left": 49,
+                        "right": 101,
                         "top": 31,
                         "bottom": 92
                     }
                 },
                 {
-                    "src": "./assets/fantasy/beholder/attack4.png",
+                    "src": "./assets/fantasy/beholder/attack2_left.png",
                     "boundingBox": {
-                        "left": 21,
-                        "right": 102,
+                        "left": 3,
+                        "right": 96,
+                        "top": 33,
+                        "bottom": 92
+                    }
+                },
+                {
+                    "src": "./assets/fantasy/beholder/attack3_left.png",
+                    "boundingBox": {
+                        "left": 27,
+                        "right": 101,
+                        "top": 33,
+                        "bottom": 92
+                    }
+                },
+                {
+                    "src": "./assets/fantasy/beholder/attack4_left.png",
+                    "boundingBox": {
+                        "left": 25,
+                        "right": 106,
                         "top": 30,
                         "bottom": 96
-                    }
-                },
-                {
-                    "src": "./assets/fantasy/beholder/attack2.png",
-                    "boundingBox": {
-                        "left": 31,
-                        "right": 124,
-                        "top": 33,
-                        "bottom": 92
-                    }
-                },
-                {
-                    "src": "./assets/fantasy/beholder/attack3.png",
-                    "boundingBox": {
-                        "left": 26,
-                        "right": 100,
-                        "top": 33,
-                        "bottom": 92
                     }
                 }
             ]
