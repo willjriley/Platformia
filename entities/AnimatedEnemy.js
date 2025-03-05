@@ -1,20 +1,31 @@
+import Projectile from './Projectile.js';
+
 export default class AnimatedEnemy {
-    constructor(x, y, platform, mode = 'patrol', width = 128, height = 128, tileSize = 128) {
+    constructor(x, y, platform, mode = 'patrol', onFireProjectile) {
         this.x = x;
         this.y = y;
         this.startX = x; // Store the starting position for Hunter mode
         this.startY = y;
-        this.width = width;
-        this.height = height;
+        this.width = null;
+        this.height = null;
+        this.idleTime = 0; // Time the enemy will stand idle before resuming patrol
         this.platform = platform; // Store the platform on which the enemy is patrolling
         this.patrolDirection = 'right'; // Direction the enemy is patrolling
-        this.speed = 1; // Patrol speed
+        this.speed = .8; // Patrol speed
         this.mode = mode; // mode of enemy: 'patrol' or 'hunter'
         this.chaseRange = 250; // Range within which the Hunter chases the player
-        this.tileSize = tileSize;
         this.pauseTimeout = null; // Store the timeout ID for pausing patrol
         this.justRespawned = false; // Flag to indicate if the enemy has just respawned
-        this.canFire = true; // Flag to indicate if the enemy can fire a projectile
+        this.projectiles = []; // Array to store active projectiles
+        this.onFireProjectile = onFireProjectile; // Callback function for handling projectile firing events
+        this.projectileImage = null; // Image for the projectile
+        this.projectileYOffset = null; // Offset for the projectile's y position
+        this.projectileSpeed = null; // Speed of the projectile pixel per second
+        this.projectileReloadTime = null; // Time between projectile fires
+        this.lastFireTime = 0; // Timestamp of the last projectile fire
+        this.useProjectile = false; // Flag to indicate if the enemy uses projectiles
+        this.seeDistance = 1; // Distance at which the enemy can see the player
+        this.projectileBoundingBox = null;
 
         // Load animation data
         this.animations = {};
@@ -27,11 +38,12 @@ export default class AnimatedEnemy {
         this.ticksPerFrame = 10; // Adjust this value to control the animation speed
         this.image = null;
         this.boundingBox = null;
+        this.camera = { x: 0, y: 0, width: 800, height: 400 };// need to update this to pass into the constructor
     }
 
     async loadAnimations() {
         try {
-            const response = await fetch('./assets/fantasy/beholder/animate.json');
+            const response = await fetch('/assets/fantasy/beholder/animate.json');
             const data = await response.json();
             data.states.forEach(state => {
                 this.animations[state.state] = state.frames.map(frame => ({
@@ -39,6 +51,18 @@ export default class AnimatedEnemy {
                     boundingBox: frame.boundingBox
                 }));
             });
+
+            // Load the projectile image
+            this.projectileImage = await this.loadImage(data.projectileImage);
+            this.width = data.width;
+            this.height = data.height;
+            this.idleTime = data.idleTime;
+            this.projectileYOffset = data.projectileYOffset;
+            this.projectileSpeed = data.projectileSpeed;
+            this.projectileReloadTime = data.projectileReloadTime;
+            this.useProjectile = data.useProjectile;
+            this.seeDistance = data.seeDistance;
+            this.projectileBoundingBox = data.projectileBoundingBox;
 
             // Set the initial state and frame after loading animations
             this.state = data.default;
@@ -55,6 +79,8 @@ export default class AnimatedEnemy {
 
     loadImage(src) {
         const img = new Image();
+        img.onload = () => console.log(`Image loaded: ${src}`);
+        img.onerror = () => console.error(`Failed to load image: ${src}`);
         img.src = src;
         return img;
     }
@@ -76,7 +102,6 @@ export default class AnimatedEnemy {
     }
 
     respawn() {
-        console.log('Respawning enemy');
         this.x = this.startX;
         this.y = this.startY;
         this.patrolDirection = 'right';
@@ -101,11 +126,11 @@ export default class AnimatedEnemy {
     }
 
     draw(ctx, camera) {
-        if (this.image) {
-            ctx.drawImage(this.image, this.x - camera.x, this.y, this.width, this.height); // Offset by camera's x
+        if (this.image && this.image.complete && this.image.naturalWidth !== 0) {
+            ctx.drawImage(this.image, this.x - camera.x, this.y - camera.y, this.width, this.height); // Offset by camera's x and y
         } else {
             ctx.fillStyle = 'red';
-            ctx.fillRect(this.x - camera.x, this.y, this.width, this.height); // Offset by camera's x
+            ctx.fillRect(this.x - camera.x, this.y - camera.y, this.width, this.height); // Offset by camera's x and y
         }
     }
 
@@ -171,6 +196,7 @@ export default class AnimatedEnemy {
                 console.error('Failed to update frame: Invalid frame index');
             }
         }
+
     }
 
     hunt(player) {
@@ -202,20 +228,48 @@ export default class AnimatedEnemy {
 
         const playerYInRange = player.y > this.startY && player.y < this.startY + this.height;
 
-        if (playerInRange && playerYInRange && this.canFire) {
+        if (playerInRange && playerYInRange && this.useProjectile) {
             this.setState(this.patrolDirection === 'right' ? 'attack_right' : 'attack_left');
             this.fireProjectile();
-            this.canFire = false; // Set canFire to false to start cooldown
+            this.useProjectile = false; // Set useProjectile to false to start cooldown
             setTimeout(() => {
                 this.setState(this.patrolDirection === 'right' ? 'walk_right' : 'walk_left');
-                this.canFire = true; // Reset canFire after cooldown
-            }, 1000); // Adjust the delay as needed
+                this.useProjectile = true; // Reset useProjectile after cooldown
+            }, this.projectileReloadTime); // Use projectileReloadTime for cooldown
         }
     }
 
     fireProjectile() {
-        // Implement the logic to fire a projectile
-        console.log('Firing projectile');
+        const currentTime = Date.now();
+        if (currentTime - this.lastFireTime < this.projectileReloadTime) {
+            return; // Not enough time has passed since the last fire
+        }
+        this.lastFireTime = currentTime;
+
+        // Calculate the projectile's starting x position based on the patrol direction and bounding box
+        const boundingBox = this.getBoundingBox();
+        const projectileXOffset = (this.patrolDirection === "right") ? boundingBox.right : boundingBox.left - this.projectileImage.width;
+        const projectileYPosition = boundingBox.top + (boundingBox.bottom - boundingBox.top) / 2 - this.projectileYOffset;
+
+        // Create a new projectile and add it to the projectiles array
+        const projectile = new Projectile(projectileXOffset - this.camera.x, projectileYPosition - this.camera.y, this.patrolDirection, this.projectileSpeed, 500, this.projectileImage, this.projectileBoundingBox);
+        this.projectiles.push(projectile);
+
+        // Notify the higher-level component or manager about the projectile firing event
+        if (this.onFireProjectile) {
+            this.onFireProjectile(projectile);
+        }
+
+        // Set the state to attack
+        this.setState(this.patrolDirection === 'right' ? 'attack_right' : 'attack_left');
+
+        // Calculate the duration of the attack animation
+        const attackAnimationDuration = this.animations[this.state].length * this.ticksPerFrame * (1000 / 60); // Assuming 60 FPS
+
+        // Set a timeout to switch back to the walking state after the attack animation completes
+        setTimeout(() => {
+            this.setState(this.patrolDirection === 'right' ? 'walk_right' : 'walk_left');
+        }, attackAnimationDuration);
     }
 
     patrol(platforms, player) {
@@ -251,13 +305,13 @@ export default class AnimatedEnemy {
                     this.mode = 'patrol';
                     this.setState((this.patrolDirection === "right") ? "walk_right" : "walk_left");
                     this.pauseTimeout = null;
-                }, 5000); // Pause for 5 seconds
+                }, this.idleTime); // Enemy will pause for idleTime milliseconds
             }
             return;
         }
 
         // Scan for player
-        this.scanForPlayer(player, 200); // Adjust the scan distance as needed
+        this.scanForPlayer(player, this.seeDistance);
 
         this.x = nextX;
     }

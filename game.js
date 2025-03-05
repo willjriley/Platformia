@@ -39,6 +39,7 @@ let camera = { x: 0, y: 0, width: 800, height: 400 };
 let gravity = 0.25;
 let player;
 let entitiesCollection = [];
+let projectileCollection = [];
 let score = 0;
 let lives = 3;
 let paused = false;
@@ -220,10 +221,16 @@ function displayYouDiedMessage() {
 function loseLife() {
     if (respawning) return; // Prevent multiple calls during respawn
 
+    entitiesCollection
+        .filter(entity => typeof entity.respawn === "function")
+        .forEach(entity => entity.respawn());
+
     lives--; // Reduce lives by 1
     player.isJumping = false;
     player.velocityX = 0;
     player.velocityY = 0;
+
+    projectileCollection = []; // Clear projectiles
 
     let deathSound = new Audio("./assets/sounds/mixkit-player-losing-or-failing-2042.mp3");
     deathSound.volume = 0.2;
@@ -427,13 +434,25 @@ function updateGame() {
             entity.update(player, platforms);
             entity.draw(ctx, camera); // Pass the camera to the draw method
             if (entity.checkCollision(player)) {
-                if (typeof entity.respawn === "function") {
-                    entity.respawn();
-                }
-                loseLife(); // Player loses a life if they touch the spinning rope
+                loseLife();
             }
         } else {
             culledEntities.push(entity);
+        }
+    });
+
+    // Update and draw projectiles - DO NOT perform culling but rather remove stale projectiles
+    projectileCollection = projectileCollection.filter(projectile => {
+        if (isInVisibleArea(projectile, visibleArea)) {
+            projectile.update();
+            projectile.draw(ctx, camera);
+            if (projectile.checkCollision(player)) {
+                loseLife();
+                return false;
+            }
+            return true; // Keep the projectile in the collection
+        } else {
+            return false; // Remove the projectile from the collection
         }
     });
 
@@ -508,6 +527,4 @@ function scrollEntireMap() {
 function initGame(selectedMap) {
     // Start the game loop
     loadMapData(selectedMap);
-    //player = new Player(40, 500, mapData, 32, gravity); // Instantiate the player
-    //gameLoopId = requestAnimationFrame(updateGame);
 }

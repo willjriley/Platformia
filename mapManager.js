@@ -37,6 +37,7 @@ function loadMapData(map) {
     platforms = [];
     collectibles = [];
     entitiesCollection = [];
+    projectileCollection = [];
     particleEmitters = [];
     backgroundImages = [];
 
@@ -53,10 +54,6 @@ function loadMapData(map) {
     player.velocityX = 0;
     player.velocityY = 0;
 
-    // **Reset the camera to match the new player position**
-    // camera.x = Math.max(0, player.x - camera.width / 2);
-    // camera.y = Math.max(0, player.y - camera.height / 2);
-
     // Stop previous game loop before starting a new one
     if (gameLoopId) {
         cancelAnimationFrame(gameLoopId);
@@ -64,6 +61,11 @@ function loadMapData(map) {
 
     // Start a fresh game loop
     gameLoopId = requestAnimationFrame(updateGame);
+}
+
+// call back from animated enemy
+function onFireProjectile(projectile) {
+    projectileCollection.push(projectile);
 }
 
 // Create platforms, enemies, and collectibles from the map
@@ -129,7 +131,7 @@ function parseEntities(entities) {
         } else if (entity.type === "portal") {
             entitiesCollection.push(new Portal(entity.x, entity.y, entity.targetX, entity.targetY, entity.color1, entity.color2, entity.density, entity.count, entity.emissionSpeed));
         } else if (entity.type === "animatedEnemy") {
-            entitiesCollection.push(new AnimatedEnemy(entity.x, entity.y));
+            entitiesCollection.push(new AnimatedEnemy(entity.x, entity.y, null, 'patrol', onFireProjectile));
         } else if (entity.type === "spikes") {
             entitiesCollection.push(new Spikes(entity.x, entity.y, entity.width, entity.height, entity.color, entity.riseRate, entity.delay));
         } else if (entity.type === "enemy") {

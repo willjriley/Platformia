@@ -1,7 +1,22 @@
 {
     "name": "beholder",
     "default": "walk_right",
-    "fireImage": "./assets/fantasy/beholder/attack_fire.png",
+    "width": 128,
+    "height": 128,
+    "idleTime": 500,
+    "useProjectile": true,
+    "seeDistance": 400,
+    "projectileImage": "./assets/fantasy/beholder/attack_fire.png",
+    "projectileYOffset": 36,
+    "projectileSpeed": 150,
+    "projectileReloadTime": 5000,
+    "projectileDamage": 10,
+    "projectileBoundingBox": {
+        "left": 9,
+        "right": 54,
+        "top": 29,
+        "bottom": 53
+    },
     "states": [
         {
             "state": "idle_right",
