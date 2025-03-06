@@ -1,0 +1,286 @@
+{
+    "name": "Bear",
+    "default": "walk_right",
+    "width": 128,
+    "height": 128,
+    "idleTime": 80,
+    "useProjectile": false,
+    "seeDistance": 5,
+    "projectileImage": "",
+    "projectileYOffset": 0,
+    "projectileSpeed": 0,
+    "projectileReloadTime": 0,
+    "projectileDamage": 0,
+    "projectileBoundingBox": {
+        "left": 0,
+        "right": 0,
+        "top": 0,
+        "bottom": 0
+    },
+    "states": [
+        {
+            "state": "idle_right",
+            "frames": [
+                {
+                    "src": "./assets/fantasy/Bear/Idle1.png",
+                    "boundingBox": {
+                        "left": 8,
+                        "right": 98,
+                        "top": 56,
+                        "bottom": 112
+                    }
+                },
+                {
+                    "src": "./assets/fantasy/Bear/Idle2.png",
+                    "boundingBox": {
+                        "left": 9,
+                        "right": 97,
+                        "top": 54,
+                        "bottom": 112
+                    }
+                },
+                {
+                    "src": "./assets/fantasy/Bear/Idle3.png",
+                    "boundingBox": {
+                        "left": 9,
+                        "right": 95,
+                        "top": 53,
+                        "bottom": 112
+                    }
+                }
+            ]
+        },
+        {
+            "state": "idle_left",
+            "frames": [
+                {
+                    "src": "./assets/fantasy/Bear/Idle1_left.png",
+                    "boundingBox": {
+                        "left": 29,
+                        "right": 119,
+                        "top": 56,
+                        "bottom": 112
+                    }
+                },
+                {
+                    "src": "./assets/fantasy/Bear/Idle2_left.png",
+                    "boundingBox": {
+                        "left": 30,
+                        "right": 118,
+                        "top": 54,
+                        "bottom": 112
+                    }
+                },
+                {
+                    "src": "./assets/fantasy/Bear/Idle3_left.png",
+                    "boundingBox": {
+                        "left": 32,
+                        "right": 118,
+                        "top": 53,
+                        "bottom": 112
+                    }
+                }
+            ]
+        },
+        {
+            "state": "walk_right",
+            "frames": [
+                {
+                    "src": "./assets/fantasy/Bear/Walk1.png",
+                    "boundingBox": {
+                        "left": 7,
+                        "right": 98,
+                        "top": 56,
+                        "bottom": 112
+                    }
+                },
+                {
+                    "src": "./assets/fantasy/Bear/Walk2.png",
+                    "boundingBox": {
+                        "left": 8,
+                        "right": 95,
+                        "top": 55,
+                        "bottom": 112
+                    }
+                },
+                {
+                    "src": "./assets/fantasy/Bear/Walk3.png",
+                    "boundingBox": {
+                        "left": 8,
+                        "right": 93,
+                        "top": 55,
+                        "bottom": 112
+                    }
+                },
+                {
+                    "src": "./assets/fantasy/Bear/Walk4.png",
+                    "boundingBox": {
+                        "left": 9,
+                        "right": 96,
+                        "top": 55,
+                        "bottom": 112
+                    }
+                },
+                {
+                    "src": "./assets/fantasy/Bear/Walk5.png",
+                    "boundingBox": {
+                        "left": 8,
+                        "right": 98,
+                        "top": 58,
+                        "bottom": 113
+                    }
+                }
+            ]
+        },
+        {
+            "state": "walk_left",
+            "frames": [
+                {
+                    "src": "./assets/fantasy/Bear/Walk1_left.png",
+                    "boundingBox": {
+                        "left": 29,
+                        "right": 120,
+                        "top": 56,
+                        "bottom": 112
+                    }
+                },
+                {
+                    "src": "./assets/fantasy/Bear/Walk2_left.png",
+                    "boundingBox": {
+                        "left": 32,
+                        "right": 119,
+                        "top": 55,
+                        "bottom": 112
+                    }
+                },
+                {
+                    "src": "./assets/fantasy/Bear/Walk3_left.png",
+                    "boundingBox": {
+                        "left": 34,
+                        "right": 119,
+                        "top": 55,
+                        "bottom": 112
+                    }
+                },
+                {
+                    "src": "./assets/fantasy/Bear/Walk4_left.png",
+                    "boundingBox": {
+                        "left": 31,
+                        "right": 118,
+                        "top": 55,
+                        "bottom": 112
+                    }
+                },
+                {
+                    "src": "./assets/fantasy/Bear/Walk5_left.png",
+                    "boundingBox": {
+                        "left": 29,
+                        "right": 119,
+                        "top": 58,
+                        "bottom": 113
+                    }
+                }
+            ]
+        },
+        {
+            "state": "attack_right",
+            "frames": [
+                {
+                    "src": "./assets/fantasy/Bear/Attack1.png",
+                    "boundingBox": {
+                        "left": 7,
+                        "right": 93,
+                        "top": 36,
+                        "bottom": 112
+                    }
+                },
+                {
+                    "src": "./assets/fantasy/Bear/Attack2.png",
+                    "boundingBox": {
+                        "left": 0,
+                        "right": 56,
+                        "top": 13,
+                        "bottom": 111
+                    }
+                },
+                {
+                    "src": "./assets/fantasy/Bear/Attack3.png",
+                    "boundingBox": {
+                        "left": 15,
+                        "right": 119,
+                        "top": 34,
+                        "bottom": 111
+                    }
+                },
+                {
+                    "src": "./assets/fantasy/Bear/Attack4.png",
+                    "boundingBox": {
+                        "left": 21,
+                        "right": 127,
+                        "top": 60,
+                        "bottom": 111
+                    }
+                },
+                {
+                    "src": "./assets/fantasy/Bear/Attack5.png",
+                    "boundingBox": {
+                        "left": 16,
+                        "right": 114,
+                        "top": 58,
+                        "bottom": 113
+                    }
+                }
+            ]
+        },
+        {
+            "state": "attack_left",
+            "frames": [
+                {
+                    "src": "./assets/fantasy/Bear/Attack1_left.png",
+                    "boundingBox": {
+                        "left": 34,
+                        "right": 120,
+                        "top": 36,
+                        "bottom": 112
+                    }
+                },
+                {
+                    "src": "./assets/fantasy/Bear/Attack2_left.png",
+                    "boundingBox": {
+                        "left": 71,
+                        "right": 127,
+                        "top": 13,
+                        "bottom": 111
+                    }
+                },
+                {
+                    "src": "./assets/fantasy/Bear/Attack3_left.png",
+                    "boundingBox": {
+                        "left": 8,
+                        "right": 112,
+                        "top": 34,
+                        "bottom": 111
+                    }
+                },
+                {
+                    "src": "./assets/fantasy/Bear/Attack4_left.png",
+                    "boundingBox": {
+                        "left": 0,
+                        "right": 106,
+                        "top": 60,
+                        "bottom": 111
+                    }
+                },
+                {
+                    "src": "./assets/fantasy/Bear/Attack5_left.png",
+                    "boundingBox": {
+                        "left": 13,
+                        "right": 111,
+                        "top": 58,
+                        "bottom": 113
+                    }
+                }
+            ]
+        }
+    ]
+}

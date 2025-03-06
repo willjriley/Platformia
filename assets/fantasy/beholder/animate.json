@@ -3,7 +3,7 @@
     "default": "walk_right",
     "width": 128,
     "height": 128,
-    "idleTime": 500,
+    "idleTime": 5000,
     "useProjectile": true,
     "seeDistance": 400,
     "projectileImage": "./assets/fantasy/beholder/attack_fire.png",

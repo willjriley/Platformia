@@ -182,11 +182,10 @@
             "emissionSpeed": ".3"
         },
         {
-            "name": "beholder",
-            "type": "animatedEnemy",
+            "name": "Beholder",
+            "type": "beholder",
             "x": 50,
-            "y": 414,
-            "enemyType": "patrol"
+            "y": 414
         }
     ]
 }

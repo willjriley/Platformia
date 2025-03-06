@@ -130,8 +130,10 @@ function parseEntities(entities) {
             entitiesCollection.push(new SpinningRope(entity.x, entity.y, entity.length, entity.color, entity.image, entity.spinRate));
         } else if (entity.type === "portal") {
             entitiesCollection.push(new Portal(entity.x, entity.y, entity.targetX, entity.targetY, entity.color1, entity.color2, entity.density, entity.count, entity.emissionSpeed));
-        } else if (entity.type === "animatedEnemy") {
-            entitiesCollection.push(new AnimatedEnemy(entity.x, entity.y, null, 'patrol', onFireProjectile));
+        } else if (entity.type === "beholder") {
+            entitiesCollection.push(new Beholder(entity.x, entity.y, onFireProjectile));
+        } else if (entity.type === "bear") {
+            entitiesCollection.push(new Bear(entity.x, entity.y, onFireProjectile));
         } else if (entity.type === "spikes") {
             entitiesCollection.push(new Spikes(entity.x, entity.y, entity.width, entity.height, entity.color, entity.riseRate, entity.delay));
         } else if (entity.type === "enemy") {

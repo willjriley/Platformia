@@ -1,7 +1,7 @@
 import Projectile from './Projectile.js';
 
 export default class AnimatedEnemy {
-    constructor(x, y, platform, mode = 'patrol', onFireProjectile) {
+    constructor(x, y, mode = 'patrol', onFireProjectile, animationDataUrl) {
         this.x = x;
         this.y = y;
         this.startX = x; // Store the starting position for Hunter mode
@@ -9,7 +9,6 @@ export default class AnimatedEnemy {
         this.width = null;
         this.height = null;
         this.idleTime = 0; // Time the enemy will stand idle before resuming patrol
-        this.platform = platform; // Store the platform on which the enemy is patrolling
         this.patrolDirection = 'right'; // Direction the enemy is patrolling
         this.speed = .8; // Patrol speed
         this.mode = mode; // mode of enemy: 'patrol' or 'hunter'
@@ -26,6 +25,7 @@ export default class AnimatedEnemy {
         this.useProjectile = false; // Flag to indicate if the enemy uses projectiles
         this.seeDistance = 1; // Distance at which the enemy can see the player
         this.projectileBoundingBox = null;
+        this.animationDataUrl = animationDataUrl; // URL for animation data
 
         // Load animation data
         this.animations = {};
@@ -43,7 +43,7 @@ export default class AnimatedEnemy {
 
     async loadAnimations() {
         try {
-            const response = await fetch('/assets/fantasy/beholder/animate.json');
+            const response = await fetch(this.animationDataUrl);
             const data = await response.json();
             data.states.forEach(state => {
                 this.animations[state.state] = state.frames.map(frame => ({
@@ -67,8 +67,9 @@ export default class AnimatedEnemy {
             // Set the initial state and frame after loading animations
             this.state = data.default;
             if (this.animations[this.state] && this.animations[this.state][0]) {
-                this.image = this.animations[this.state][this.frameIndex].image;
+                this.image = await this.animations[this.state][this.frameIndex].image;
                 this.boundingBox = this.animations[this.state][this.frameIndex].boundingBox;
+                console.log(`Initial state set to ${this.state}`);
             } else {
                 console.error('Failed to set initial state and frame: Invalid state or frames');
             }
@@ -132,6 +133,7 @@ export default class AnimatedEnemy {
             ctx.fillStyle = 'red';
             ctx.fillRect(this.x - camera.x, this.y - camera.y, this.width, this.height); // Offset by camera's x and y
         }
+
     }
 
     checkCollision(player) {
@@ -192,11 +194,11 @@ export default class AnimatedEnemy {
             if (this.animations[this.state][this.frameIndex]) {
                 this.image = this.animations[this.state][this.frameIndex].image;
                 this.boundingBox = this.animations[this.state][this.frameIndex].boundingBox;
+                console.log(`Frame updated to ${this.frameIndex} for state ${this.state}`);
             } else {
                 console.error('Failed to update frame: Invalid frame index');
             }
         }
-
     }
 
     hunt(player) {
@@ -287,7 +289,7 @@ export default class AnimatedEnemy {
                     this.mode = 'patrol';
                     this.setState((this.patrolDirection === "right") ? "walk_right" : "walk_left");
                     this.pauseTimeout = null;
-                }, 5000); // Pause for 5 seconds
+                }, 5000); // Enemy will pause for idleTime milliseconds
             }
             return;
         }
