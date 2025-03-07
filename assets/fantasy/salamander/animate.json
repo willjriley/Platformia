@@ -5,6 +5,7 @@
     "height": 128,
     "speed": 0.8,
     "aggroSpeed": 1.2,
+    "aggroSound": "./assets/fantasy/salamander/thanglang-101035.mp3",
     "floorSensorXOffset": -25,
     "floorSensorYOffset": 35,
     "wallSensorXOffset": 0,

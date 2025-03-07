@@ -31,6 +31,7 @@ export default class AnimatedEnemy {
         this.debugMode = false; // Debug mode flag
         this.floorSensorXOffset = 0; // Offset for the bottom platform sensor's x position
         this.floorSensorYOffset = 0; // Offset for the bottom platform sensor's y position
+        this.aggroSound = null; // Sound to play when the enemy is aggroed
 
         // Load animation data
         this.animations = {};
@@ -75,6 +76,7 @@ export default class AnimatedEnemy {
             this.floorSensorYOffset = data.floorSensorYOffset || 0;
             this.wallSensorXOffset = data.wallSensorXOffset || 0;
             this.wallSensorYOffset = data.wallSensorYOffset || 0;
+            this.aggroSound = new Audio(data.aggroSound);
 
             // Set the initial state and frame after loading animations
             this.state = data.default;
@@ -108,6 +110,13 @@ export default class AnimatedEnemy {
                 this.image = this.animations[this.state][this.frameIndex].image;
                 this.boundingBox = this.animations[this.state][this.frameIndex].boundingBox;
                 if (this.debugMode) console.log(`State set to ${state}`);
+
+                // Play aggro sound if the state is an attack state
+                if (state.includes("attack") && this.aggroSound) {
+                    this.aggroSound.volume = 0.5;
+                    this.aggroSound.play();
+                }
+                else { this.aggroSound.pause(); };
 
                 // If nextState is provided, set a timeout to change the state after the current animation loop completes
                 if (nextState) {
