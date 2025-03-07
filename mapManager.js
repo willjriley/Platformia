@@ -134,6 +134,8 @@ function parseEntities(entities) {
             entitiesCollection.push(new Beholder(entity.x, entity.y, onFireProjectile));
         } else if (entity.type === "bear") {
             entitiesCollection.push(new Bear(entity.x, entity.y, onFireProjectile));
+        } else if (entity.type === "salamander") {
+            entitiesCollection.push(new Salamander(entity.x, entity.y, onFireProjectile));
         } else if (entity.type === "spikes") {
             entitiesCollection.push(new Spikes(entity.x, entity.y, entity.width, entity.height, entity.color, entity.riseRate, entity.delay));
         } else if (entity.type === "enemy") {

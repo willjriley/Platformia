@@ -203,6 +203,12 @@
             "width": 256,
             "riseRate": 1,
             "delay": 4
+        },
+        {
+            "name": "Salamander 1",
+            "type": "salamander",
+            "x": 240,
+            "y": 490
         }
     ],
     "particles": [

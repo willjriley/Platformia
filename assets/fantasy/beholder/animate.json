@@ -5,6 +5,8 @@
     "height": 128,
     "speed": 0.8,
     "aggroSpeed": 1.2,
+    "sensorXOffset": 0,
+    "sensorYOffset": 0,
     "idleTime": 3000,
     "useProjectile": true,
     "seeDistance": 300,

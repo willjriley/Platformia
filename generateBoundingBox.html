@@ -101,12 +101,15 @@
                     img.onload = function() {
                         const boundingBox = calculateBoundingBox(img);
                         frames.push({
-                            src: `./assets/fantasy/beholder/${file.name}`,
+                            src: `./assets/fantasy/salamander/${file.name}`,
                             boundingBox
                         });
 
                         loadedImages++;
                         if (loadedImages === files.length) {
+                            // Sort frames by src file name
+                            frames.sort((a, b) => a.src.localeCompare(b.src));
+
                             const stateOutput = {
                                 state: stateName,
                                 frames

@@ -29,6 +29,8 @@ export default class AnimatedEnemy {
         this.projectileBoundingBox = null;
         this.animationDataUrl = animationDataUrl; // URL for animation data
         this.debugMode = false; // Debug mode flag
+        this.sensorXOffset = 0; // Offset for the sensor's x position
+        this.sensorYOffset = 0; // Offset for the sensor's y position
 
         // Load animation data
         this.animations = {};
@@ -69,6 +71,8 @@ export default class AnimatedEnemy {
             this.useProjectile = data.useProjectile;
             this.seeDistance = data.seeDistance;
             this.projectileBoundingBox = data.projectileBoundingBox;
+            this.sensorXOffset = data.sensorXOffset || 0;
+            this.sensorYOffset = data.sensorYOffset || 0;
 
             // Set the initial state and frame after loading animations
             this.state = data.default;
@@ -93,22 +97,14 @@ export default class AnimatedEnemy {
     }
 
     setState(state) {
-        if (this.animations[state]) {
-            this.state = state;
-            this.frameIndex = 0;
-            if (this.animations[this.state][0]) {
-                this.image = this.animations[this.state][this.frameIndex].image;
-                this.boundingBox = this.animations[this.state][this.frameIndex].boundingBox;
-                if (this.debugMode) console.log(`State set to ${state}`);
-            } else {
-                console.error('Failed to set state: Invalid frames');
-            }
+        if (this.debugMode) console.log("Setting state to", state);
+
+        if (state.includes("right")) {
+            this.patrolDirection = "right";
         } else {
-            console.error('Failed to set state: Invalid state');
+            this.patrolDirection = "left";
         }
-    }
 
-    playAnimationThenSetNewState(state, onAnimateEndState) {
         if (this.animations[state]) {
             this.state = state;
             this.frameIndex = 0;
@@ -119,28 +115,23 @@ export default class AnimatedEnemy {
             } else {
                 console.error('Failed to set state: Invalid frames');
             }
-
-            // Calculate the duration of the animation
-            const animationDuration = this.animations[this.state].length * this.ticksPerFrame * (1000 / 60); // Assuming 60 FPS
-
-            // Set a timeout to switch to the onAnimateEndState after the animation completes
-            setTimeout(() => {
-                this.setState(onAnimateEndState);
-            }, animationDuration);
         } else {
             console.error('Failed to set state: Invalid state');
         }
     }
 
     respawn() {
+
+        if (this.debugMode) console.log("Respawning enemy");
         this.x = this.startX;
         this.y = this.startY;
         this.patrolDirection = 'right';
-        this.setState(this.patrolDirection === "right" ? "walk_right" : "walk_left");
+        this.setState("walk_right");
+        this.pauseTimeout = null;
         this.frameIndex = 0;
         this.tickCount = 0;
         this.speed = this.restoreSpeed;
-        this.canAttack = true;
+        this.canAttack = false;
 
         // Clear any pending pause timeout
         if (this.pauseTimeout) {
@@ -155,7 +146,8 @@ export default class AnimatedEnemy {
         // Reset the justRespawned flag after a short delay
         setTimeout(() => {
             this.justRespawned = false;
-        }, 1000); // Adjust the delay as needed
+        }, 20000); // Adjust the delay as needed
+
     }
 
     draw(ctx, camera) {
@@ -181,9 +173,33 @@ export default class AnimatedEnemy {
         const boxWidth = this.seeDistance;
         const boxHeight = boundingBox.bottom - boundingBox.top;
 
+        // Scanning box
         ctx.strokeStyle = 'yellow';
         ctx.lineWidth = 2;
         ctx.strokeRect(boxX - camera.x, boxY - camera.y, boxWidth, boxHeight);
+
+        // Draw the sensor for checking if there is a platform below the next position
+        const nextX = (this.patrolDirection === "right") ? this.x + this.speed : this.x - this.speed;
+        const sensorX = (this.patrolDirection === "right") ? nextX + this.width + this.sensorXOffset : nextX + this.sensorXOffset;
+        const sensorY = this.y + this.height - this.sensorYOffset;
+
+        ctx.strokeStyle = 'red';
+        ctx.lineWidth = 2;
+        ctx.beginPath();
+        ctx.moveTo(sensorX - camera.x, sensorY - camera.y);
+        ctx.lineTo(sensorX - camera.x, sensorY - camera.y + 10); // Draw a short line downwards
+        ctx.stroke();
+
+        // Draw the sensor for checking if there is a wall in front of the enemy
+        const wallSensorX = (this.patrolDirection === "right") ? this.x + this.width + this.speed : this.x - this.speed;
+        const wallSensorY = this.y + this.height / 2;
+
+        ctx.strokeStyle = 'blue';
+        ctx.lineWidth = 2;
+        ctx.beginPath();
+        ctx.moveTo(wallSensorX - camera.x, wallSensorY - camera.y);
+        ctx.lineTo(wallSensorX - camera.x + 10, wallSensorY - camera.y); // Draw a short line to the right
+        ctx.stroke();
     }
 
     checkCollision(player) {
@@ -291,11 +307,13 @@ export default class AnimatedEnemy {
         const playerYInRange = adjustedPlayerY > adjustedBoxY && adjustedPlayerY < adjustedBoxY + boxHeight;
         const canSeePlayer = playerInRange && playerYInRange;
 
-        if (this.debugMode) console.log("canSeePlayer", canSeePlayer, "Loaded", this.canAttack);
+        if (this.debugMode) console.log("canSeePlayer", canSeePlayer, "canAttack", this.canAttack);
+        if (this.debugMode) console.log("patrolDirection", this.patrolDirection, "state", this.state);
 
         if (this.canAttack && canSeePlayer) {
             this.speed = this.aggroSpeed;
-            this.playAnimationThenSetNewState(this.patrolDirection === 'right' ? 'attack_right' : 'attack_left', this.patrolDirection === 'right' ? 'walk_right' : 'walk_left');
+
+            this.setState(this.patrolDirection === 'right' ? 'attack_right' : 'attack_left');
 
             if (this.useProjectile) {
                 this.fireProjectile();
@@ -327,8 +345,8 @@ export default class AnimatedEnemy {
 
     patrol(platforms, player) {
         const nextX = (this.patrolDirection === "right") ? this.x + this.speed : this.x - this.speed;
-        const sensorX = (this.patrolDirection === "right") ? nextX + this.width : nextX;
-        const sensorY = this.y + this.height + 1;
+        const sensorX = (this.patrolDirection === "right") ? nextX + this.width + this.sensorXOffset : nextX + this.sensorXOffset;
+        const sensorY = this.y + this.height - this.sensorYOffset;
 
         // Check if there is a platform below the next position
         if (!this.getPlatformAt(sensorX, sensorY, platforms)) {
@@ -336,6 +354,7 @@ export default class AnimatedEnemy {
                 this.patrolDirection = (this.patrolDirection === "right") ? "left" : "right";
                 this.setState((this.patrolDirection === "right") ? "idle_right" : "idle_left");
                 this.mode = 'pausePatrol';
+
                 this.pauseTimeout = setTimeout(() => {
                     this.mode = 'patrol';
                     this.setState((this.patrolDirection === "right") ? "walk_right" : "walk_left");
@@ -350,10 +369,14 @@ export default class AnimatedEnemy {
         const wallSensorY = this.y + this.height / 2;
 
         if (this.getPlatformAt(wallSensorX, wallSensorY, platforms)) {
-            if (this.mode !== 'pausePatrol' && !this.justRespawned) {
+
+            if (this.debugMode) console.log("Wall detected, mode:", this.mode);
+
+            if (this.mode !== 'pausePatrol') {
                 this.patrolDirection = (this.patrolDirection === "right") ? "left" : "right";
                 this.setState((this.patrolDirection === "right") ? "idle_right" : "idle_left");
                 this.mode = 'pausePatrol';
+
                 this.pauseTimeout = setTimeout(() => {
                     this.mode = 'patrol';
                     this.setState((this.patrolDirection === "right") ? "walk_right" : "walk_left");
