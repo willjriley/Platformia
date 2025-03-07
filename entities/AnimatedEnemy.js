@@ -29,8 +29,8 @@ export default class AnimatedEnemy {
         this.projectileBoundingBox = null;
         this.animationDataUrl = animationDataUrl; // URL for animation data
         this.debugMode = false; // Debug mode flag
-        this.sensorXOffset = 0; // Offset for the sensor's x position
-        this.sensorYOffset = 0; // Offset for the sensor's y position
+        this.floorSensorXOffset = 0; // Offset for the bottom platform sensor's x position
+        this.floorSensorYOffset = 0; // Offset for the bottom platform sensor's y position
 
         // Load animation data
         this.animations = {};
@@ -71,8 +71,10 @@ export default class AnimatedEnemy {
             this.useProjectile = data.useProjectile;
             this.seeDistance = data.seeDistance;
             this.projectileBoundingBox = data.projectileBoundingBox;
-            this.sensorXOffset = data.sensorXOffset || 0;
-            this.sensorYOffset = data.sensorYOffset || 0;
+            this.floorSensorXOffset = data.floorSensorXOffset || 0;
+            this.floorSensorYOffset = data.floorSensorYOffset || 0;
+            this.wallSensorXOffset = data.wallSensorXOffset || 0;
+            this.wallSensorYOffset = data.wallSensorYOffset || 0;
 
             // Set the initial state and frame after loading animations
             this.state = data.default;
@@ -123,7 +125,6 @@ export default class AnimatedEnemy {
     }
 
     respawn() {
-
         if (this.debugMode) console.log("Respawning enemy");
         this.x = this.startX;
         this.y = this.startY;
@@ -148,8 +149,7 @@ export default class AnimatedEnemy {
         // Reset the justRespawned flag after a short delay
         setTimeout(() => {
             this.justRespawned = false;
-        }, 20000); // Adjust the delay as needed
-
+        }, 1000); // Adjust the delay as needed
     }
 
     draw(ctx, camera) {
@@ -182,19 +182,19 @@ export default class AnimatedEnemy {
 
         // Draw the sensor for checking if there is a platform below the next position
         const nextX = (this.patrolDirection === "right") ? this.x + this.speed : this.x - this.speed;
-        const sensorX = (this.patrolDirection === "right") ? nextX + this.width + this.sensorXOffset : nextX + this.sensorXOffset;
-        const sensorY = this.y + this.height - this.sensorYOffset;
+        const floorSensorX = (this.patrolDirection === "right") ? nextX + this.width + this.floorSensorXOffset : nextX - this.floorSensorXOffset;
+        const floorSensorY = this.y + this.height - this.floorSensorYOffset;
 
         ctx.strokeStyle = 'red';
         ctx.lineWidth = 2;
         ctx.beginPath();
-        ctx.moveTo(sensorX - camera.x, sensorY - camera.y);
-        ctx.lineTo(sensorX - camera.x, sensorY - camera.y + 10); // Draw a short line downwards
+        ctx.moveTo(floorSensorX - camera.x, floorSensorY - camera.y);
+        ctx.lineTo(floorSensorX - camera.x, floorSensorY - camera.y + 10); // Draw a short line downwards
         ctx.stroke();
 
         // Draw the sensor for checking if there is a wall in front of the enemy
-        const wallSensorX = (this.patrolDirection === "right") ? this.x + this.width + this.speed : this.x - this.speed;
-        const wallSensorY = this.y + this.height / 2;
+        const wallSensorX = (this.patrolDirection === "right") ? this.x + this.width + this.speed + this.wallSensorXOffset : this.x - this.speed - this.wallSensorXOffset;
+        const wallSensorY = this.y + this.height / 2 - this.wallSensorYOffset;
 
         ctx.strokeStyle = 'blue';
         ctx.lineWidth = 2;
@@ -353,11 +353,11 @@ export default class AnimatedEnemy {
 
     patrol(platforms, player) {
         const nextX = (this.patrolDirection === "right") ? this.x + this.speed : this.x - this.speed;
-        const sensorX = (this.patrolDirection === "right") ? nextX + this.width + this.sensorXOffset : nextX + this.sensorXOffset;
-        const sensorY = this.y + this.height - this.sensorYOffset;
+        const floorSensorX = (this.patrolDirection === "right") ? nextX + this.width + this.floorSensorXOffset : nextX + this.floorSensorXOffset;
+        const floorSensorY = this.y + this.height - this.floorSensorYOffset;
 
         // Check if there is a platform below the next position
-        if (!this.getPlatformAt(sensorX, sensorY, platforms)) {
+        if (!this.getPlatformAt(floorSensorX, floorSensorY, platforms)) {
             if (this.mode !== 'pausePatrol' && !this.justRespawned) {
                 this.patrolDirection = (this.patrolDirection === "right") ? "left" : "right";
                 this.setState((this.patrolDirection === "right") ? "idle_right" : "idle_left");
@@ -377,7 +377,6 @@ export default class AnimatedEnemy {
         const wallSensorY = this.y + this.height / 2;
 
         if (this.getPlatformAt(wallSensorX, wallSensorY, platforms)) {
-
             if (this.debugMode) console.log("Wall detected, mode:", this.mode);
 
             if (this.mode !== 'pausePatrol') {
