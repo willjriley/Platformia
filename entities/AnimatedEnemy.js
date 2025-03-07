@@ -28,7 +28,7 @@ export default class AnimatedEnemy {
         this.seeDistance = 1; // Distance at which the enemy can see the player
         this.projectileBoundingBox = null;
         this.animationDataUrl = animationDataUrl; // URL for animation data
-        this.debugMode = false; // Debug mode flag
+        this.debugMode = true; // Debug mode flag
         this.sensorXOffset = 0; // Offset for the sensor's x position
         this.sensorYOffset = 0; // Offset for the sensor's y position
 
@@ -96,14 +96,8 @@ export default class AnimatedEnemy {
         return img;
     }
 
-    setState(state) {
+    setState(state, nextState = null) {
         if (this.debugMode) console.log("Setting state to", state);
-
-        if (state.includes("right")) {
-            this.patrolDirection = "right";
-        } else {
-            this.patrolDirection = "left";
-        }
 
         if (this.animations[state]) {
             this.state = state;
@@ -112,6 +106,14 @@ export default class AnimatedEnemy {
                 this.image = this.animations[this.state][this.frameIndex].image;
                 this.boundingBox = this.animations[this.state][this.frameIndex].boundingBox;
                 if (this.debugMode) console.log(`State set to ${state}`);
+
+                // If nextState is provided, set a timeout to change the state after the current animation loop completes
+                if (nextState) {
+                    const animationDuration = this.animations[this.state].length * this.ticksPerFrame * (1000 / 60); // Assuming 60 FPS
+                    setTimeout(() => {
+                        this.setState(nextState);
+                    }, animationDuration);
+                }
             } else {
                 console.error('Failed to set state: Invalid frames');
             }
@@ -313,16 +315,22 @@ export default class AnimatedEnemy {
         if (this.canAttack && canSeePlayer) {
             this.speed = this.aggroSpeed;
 
-            this.setState(this.patrolDirection === 'right' ? 'attack_right' : 'attack_left');
+            // This is a hack to prevent none projectile from walking backwards when respawning
+            if (this.useProjectile) {
+                this.setState(this.patrolDirection === 'right' ? 'attack_right' : 'attack_left', this.state);
+            }
+            else {
+                this.setState(this.patrolDirection === 'right' ? 'attack_right' : 'attack_left');
+            }
 
             if (this.useProjectile) {
                 this.fireProjectile();
             }
             this.canAttack = false; // Set useProjectile to false to start cooldown
             setTimeout(() => {
-                if (this.debugMode) console.log("canAttack");
                 this.speed = this.restoreSpeed;
                 this.canAttack = true; // Reset useProjectile after cooldown
+                if (this.debugMode) console.log("canAttack", canAttack);
             }, this.projectileReloadTime); // Use projectileReloadTime for cooldown
         }
     }
