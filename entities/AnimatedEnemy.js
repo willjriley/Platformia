@@ -143,7 +143,7 @@ export default class AnimatedEnemy {
         this.frameIndex = 0;
         this.tickCount = 0;
         this.speed = this.restoreSpeed;
-        this.canAttack = false;
+        this.canAttack = true;
 
         // Clear any pending pause timeout
         if (this.pauseTimeout) {
