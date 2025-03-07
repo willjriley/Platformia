@@ -164,9 +164,6 @@ export default class AnimatedEnemy {
     draw(ctx, camera) {
         if (this.image && this.image.complete && this.image.naturalWidth !== 0) {
             ctx.drawImage(this.image, this.x - camera.x, this.y - camera.y, this.width, this.height); // Offset by camera's x and y
-        } else {
-            ctx.fillStyle = 'red';
-            ctx.fillRect(this.x - camera.x, this.y - camera.y, this.width, this.height); // Offset by camera's x and y
         }
 
         // Draw debug box if debug mode is enabled

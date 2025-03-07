@@ -37,9 +37,6 @@ class CollectibleBase {
         if (this.images.length > 0 && this.imagesLoaded === this.images.length) {
             const image = this.images[this.currentFrame];
             ctx.drawImage(image, this.x - camera.x, this.y, this.width, this.height); // Offset by camera's x
-        } else {
-            ctx.fillStyle = 'yellow';
-            ctx.fillRect(this.x - camera.x, this.y, this.width, this.height); // Offset by camera's x
         }
     }
 }
