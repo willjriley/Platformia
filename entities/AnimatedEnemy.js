@@ -28,7 +28,7 @@ export default class AnimatedEnemy {
         this.seeDistance = 1; // Distance at which the enemy can see the player
         this.projectileBoundingBox = null;
         this.animationDataUrl = animationDataUrl; // URL for animation data
-        this.debugMode = true; // Debug mode flag
+        this.debugMode = false; // Debug mode flag
         this.sensorXOffset = 0; // Offset for the sensor's x position
         this.sensorYOffset = 0; // Offset for the sensor's y position
 
