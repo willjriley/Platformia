@@ -3,13 +3,15 @@
     "default": "walk_right",
     "width": 128,
     "height": 128,
-    "idleTime": 5000,
+    "speed": 0.8,
+    "aggroSpeed": 1.2,
+    "idleTime": 3000,
     "useProjectile": true,
-    "seeDistance": 400,
+    "seeDistance": 300,
     "projectileImage": "./assets/fantasy/beholder/attack_fire.png",
     "projectileYOffset": 36,
     "projectileSpeed": 150,
-    "projectileReloadTime": 5000,
+    "projectileReloadTime": 3000,
     "projectileDamage": 10,
     "projectileBoundingBox": {
         "left": 9,
@@ -31,21 +33,21 @@
                     }
                 },
                 {
-                    "src": "./assets/fantasy/beholder/idle3.png",
-                    "boundingBox": {
-                        "left": 27,
-                        "right": 67,
-                        "top": 24,
-                        "bottom": 89
-                    }
-                },
-                {
                     "src": "./assets/fantasy/beholder/idle2.png",
                     "boundingBox": {
                         "left": 26,
                         "right": 69,
                         "top": 27,
                         "bottom": 92
+                    }
+                },
+                {
+                    "src": "./assets/fantasy/beholder/idle3.png",
+                    "boundingBox": {
+                        "left": 27,
+                        "right": 67,
+                        "top": 24,
+                        "bottom": 89
                     }
                 },
                 {
@@ -81,21 +83,21 @@
                     }
                 },
                 {
-                    "src": "./assets/fantasy/beholder/idle4_left.png",
-                    "boundingBox": {
-                        "left": 58,
-                        "right": 101,
-                        "top": 27,
-                        "bottom": 92
-                    }
-                },
-                {
                     "src": "./assets/fantasy/beholder/idle3_left.png",
                     "boundingBox": {
                         "left": 60,
                         "right": 100,
                         "top": 24,
                         "bottom": 89
+                    }
+                },
+                {
+                    "src": "./assets/fantasy/beholder/idle4_left.png",
+                    "boundingBox": {
+                        "left": 58,
+                        "right": 101,
+                        "top": 27,
+                        "bottom": 92
                     }
                 }
             ]
@@ -104,20 +106,20 @@
             "state": "walk_right",
             "frames": [
                 {
-                    "src": "./assets/fantasy/beholder/walk2.png",
-                    "boundingBox": {
-                        "left": 26,
-                        "right": 67,
-                        "top": 28,
-                        "bottom": 93
-                    }
-                },
-                {
                     "src": "./assets/fantasy/beholder/walk1.png",
                     "boundingBox": {
                         "left": 27,
                         "right": 67,
                         "top": 30,
+                        "bottom": 93
+                    }
+                },
+                {
+                    "src": "./assets/fantasy/beholder/walk2.png",
+                    "boundingBox": {
+                        "left": 26,
+                        "right": 67,
+                        "top": 28,
                         "bottom": 93
                     }
                 },

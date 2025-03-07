@@ -10,7 +10,9 @@ export default class AnimatedEnemy {
         this.height = null;
         this.idleTime = 0; // Time the enemy will stand idle before resuming patrol
         this.patrolDirection = 'right'; // Direction the enemy is patrolling
-        this.speed = .8; // Patrol speed
+        this.speed = 1; // Patrol speed
+        this.restoreSpeed = 1;
+        this.aggroSpeed = 1;
         this.mode = mode; // mode of enemy: 'patrol' or 'hunter'
         this.chaseRange = 250; // Range within which the Hunter chases the player
         this.pauseTimeout = null; // Store the timeout ID for pausing patrol
@@ -21,11 +23,12 @@ export default class AnimatedEnemy {
         this.projectileYOffset = null; // Offset for the projectile's y position
         this.projectileSpeed = null; // Speed of the projectile pixel per second
         this.projectileReloadTime = null; // Time between projectile fires
-        this.lastFireTime = 0; // Timestamp of the last projectile fire
+        this.canAttack = true; // Flag to indicate if the enemy has canAttack
         this.useProjectile = false; // Flag to indicate if the enemy uses projectiles
         this.seeDistance = 1; // Distance at which the enemy can see the player
         this.projectileBoundingBox = null;
         this.animationDataUrl = animationDataUrl; // URL for animation data
+        this.debugMode = false; // Debug mode flag
 
         // Load animation data
         this.animations = {};
@@ -53,9 +56,12 @@ export default class AnimatedEnemy {
             });
 
             // Load the projectile image
-            this.projectileImage = await this.loadImage(data.projectileImage);
+            this.projectileImage = this.loadImage(data.projectileImage);
             this.width = data.width;
             this.height = data.height;
+            this.speed = data.speed;
+            this.restoreSpeed = data.speed;
+            this.aggroSpeed = data.aggroSpeed;
             this.idleTime = data.idleTime;
             this.projectileYOffset = data.projectileYOffset;
             this.projectileSpeed = data.projectileSpeed;
@@ -67,9 +73,9 @@ export default class AnimatedEnemy {
             // Set the initial state and frame after loading animations
             this.state = data.default;
             if (this.animations[this.state] && this.animations[this.state][0]) {
-                this.image = await this.animations[this.state][this.frameIndex].image;
+                this.image = this.animations[this.state][this.frameIndex].image;
                 this.boundingBox = this.animations[this.state][this.frameIndex].boundingBox;
-                console.log(`Initial state set to ${this.state}`);
+                if (this.debugMode) console.log(`Initial state set to ${this.state}`);
             } else {
                 console.error('Failed to set initial state and frame: Invalid state or frames');
             }
@@ -93,10 +99,34 @@ export default class AnimatedEnemy {
             if (this.animations[this.state][0]) {
                 this.image = this.animations[this.state][this.frameIndex].image;
                 this.boundingBox = this.animations[this.state][this.frameIndex].boundingBox;
-                console.log(`State set to ${state}`);
+                if (this.debugMode) console.log(`State set to ${state}`);
             } else {
                 console.error('Failed to set state: Invalid frames');
             }
+        } else {
+            console.error('Failed to set state: Invalid state');
+        }
+    }
+
+    playAnimationThenSetNewState(state, onAnimateEndState) {
+        if (this.animations[state]) {
+            this.state = state;
+            this.frameIndex = 0;
+            if (this.animations[this.state][0]) {
+                this.image = this.animations[this.state][this.frameIndex].image;
+                this.boundingBox = this.animations[this.state][this.frameIndex].boundingBox;
+                if (this.debugMode) console.log(`State set to ${state}`);
+            } else {
+                console.error('Failed to set state: Invalid frames');
+            }
+
+            // Calculate the duration of the animation
+            const animationDuration = this.animations[this.state].length * this.ticksPerFrame * (1000 / 60); // Assuming 60 FPS
+
+            // Set a timeout to switch to the onAnimateEndState after the animation completes
+            setTimeout(() => {
+                this.setState(onAnimateEndState);
+            }, animationDuration);
         } else {
             console.error('Failed to set state: Invalid state');
         }
@@ -109,6 +139,8 @@ export default class AnimatedEnemy {
         this.setState(this.patrolDirection === "right" ? "walk_right" : "walk_left");
         this.frameIndex = 0;
         this.tickCount = 0;
+        this.speed = this.restoreSpeed;
+        this.canAttack = true;
 
         // Clear any pending pause timeout
         if (this.pauseTimeout) {
@@ -134,6 +166,24 @@ export default class AnimatedEnemy {
             ctx.fillRect(this.x - camera.x, this.y - camera.y, this.width, this.height); // Offset by camera's x and y
         }
 
+        // Draw debug box if debug mode is enabled
+        if (this.debugMode) {
+            this.drawDebugBox(ctx, camera);
+        }
+    }
+
+    drawDebugBox(ctx, camera) {
+        const boundingBox = this.getBoundingBox();
+        const boxX = this.patrolDirection === 'right'
+            ? boundingBox.right
+            : boundingBox.left - this.seeDistance;
+        const boxY = boundingBox.top;
+        const boxWidth = this.seeDistance;
+        const boxHeight = boundingBox.bottom - boundingBox.top;
+
+        ctx.strokeStyle = 'yellow';
+        ctx.lineWidth = 2;
+        ctx.strokeRect(boxX - camera.x, boxY - camera.y, boxWidth, boxHeight);
     }
 
     checkCollision(player) {
@@ -194,11 +244,11 @@ export default class AnimatedEnemy {
             if (this.animations[this.state][this.frameIndex]) {
                 this.image = this.animations[this.state][this.frameIndex].image;
                 this.boundingBox = this.animations[this.state][this.frameIndex].boundingBox;
-                console.log(`Frame updated to ${this.frameIndex} for state ${this.state}`);
             } else {
                 console.error('Failed to update frame: Invalid frame index');
             }
         }
+
     }
 
     hunt(player) {
@@ -224,30 +274,42 @@ export default class AnimatedEnemy {
     }
 
     scanForPlayer(player, scanDistance) {
-        const playerInRange = this.patrolDirection === 'right'
-            ? player.x > this.x && player.x < this.x + scanDistance
-            : player.x < this.x && player.x > this.x - scanDistance;
+        const boundingBox = this.getBoundingBox();
+        const boxX = this.patrolDirection === 'right'
+            ? boundingBox.right
+            : boundingBox.left - scanDistance;
+        const boxY = boundingBox.top;
+        const boxWidth = scanDistance;
+        const boxHeight = boundingBox.bottom - boundingBox.top;
 
-        const playerYInRange = player.y > this.startY && player.y < this.startY + this.height;
+        const adjustedBoxX = boxX - this.camera.x;
+        const adjustedBoxY = boxY - this.camera.y;
+        const adjustedPlayerX = player.x - this.camera.x;
+        const adjustedPlayerY = player.y - this.camera.y;
 
-        if (playerInRange && playerYInRange && this.useProjectile) {
-            this.setState(this.patrolDirection === 'right' ? 'attack_right' : 'attack_left');
-            this.fireProjectile();
-            this.useProjectile = false; // Set useProjectile to false to start cooldown
+        const playerInRange = adjustedPlayerX + player.width > adjustedBoxX && adjustedPlayerX < adjustedBoxX + boxWidth;
+        const playerYInRange = adjustedPlayerY > adjustedBoxY && adjustedPlayerY < adjustedBoxY + boxHeight;
+        const canSeePlayer = playerInRange && playerYInRange;
+
+        if (this.debugMode) console.log("canSeePlayer", canSeePlayer, "Loaded", this.canAttack);
+
+        if (this.canAttack && canSeePlayer) {
+            this.speed = this.aggroSpeed;
+            this.playAnimationThenSetNewState(this.patrolDirection === 'right' ? 'attack_right' : 'attack_left', this.patrolDirection === 'right' ? 'walk_right' : 'walk_left');
+
+            if (this.useProjectile) {
+                this.fireProjectile();
+            }
+            this.canAttack = false; // Set useProjectile to false to start cooldown
             setTimeout(() => {
-                this.setState(this.patrolDirection === 'right' ? 'walk_right' : 'walk_left');
-                this.useProjectile = true; // Reset useProjectile after cooldown
+                if (this.debugMode) console.log("canAttack");
+                this.speed = this.restoreSpeed;
+                this.canAttack = true; // Reset useProjectile after cooldown
             }, this.projectileReloadTime); // Use projectileReloadTime for cooldown
         }
     }
 
     fireProjectile() {
-        const currentTime = Date.now();
-        if (currentTime - this.lastFireTime < this.projectileReloadTime) {
-            return; // Not enough time has passed since the last fire
-        }
-        this.lastFireTime = currentTime;
-
         // Calculate the projectile's starting x position based on the patrol direction and bounding box
         const boundingBox = this.getBoundingBox();
         const projectileXOffset = (this.patrolDirection === "right") ? boundingBox.right : boundingBox.left - this.projectileImage.width;
@@ -261,17 +323,6 @@ export default class AnimatedEnemy {
         if (this.onFireProjectile) {
             this.onFireProjectile(projectile);
         }
-
-        // Set the state to attack
-        this.setState(this.patrolDirection === 'right' ? 'attack_right' : 'attack_left');
-
-        // Calculate the duration of the attack animation
-        const attackAnimationDuration = this.animations[this.state].length * this.ticksPerFrame * (1000 / 60); // Assuming 60 FPS
-
-        // Set a timeout to switch back to the walking state after the attack animation completes
-        setTimeout(() => {
-            this.setState(this.patrolDirection === 'right' ? 'walk_right' : 'walk_left');
-        }, attackAnimationDuration);
     }
 
     patrol(platforms, player) {
@@ -289,7 +340,7 @@ export default class AnimatedEnemy {
                     this.mode = 'patrol';
                     this.setState((this.patrolDirection === "right") ? "walk_right" : "walk_left");
                     this.pauseTimeout = null;
-                }, 5000); // Enemy will pause for idleTime milliseconds
+                }, this.idleTime); // Enemy will pause for idleTime milliseconds
             }
             return;
         }
