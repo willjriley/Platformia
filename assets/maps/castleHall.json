@@ -18,8 +18,8 @@
         "T                       T###########TT                       T",
         "T                 ##    T###########TT                       T",
         "T                       T###########TT                       T",
-        "T####                   T#############                       T",
-        "T                     CCT#############aaaaaaaaaaaaaaaaaaaaaaaa",
+        "T####                   T###########TT                       T",
+        "T                     CCT###########aaaaaaaaaaaaaaaaaaaaaaaaaa",
         "T                     CCT#############hh##hh##hh##hh##hh##hh##",
         "T                     CCT#####################################",
         "TTTTTTTTTTTTTTTTTTTTTTTTT#####################################",
@@ -53,11 +53,19 @@
         },
         {
             "type": "backgroundImage 2",
-            "x": 1185,
+            "x": 1145,
             "y": 0,
-            "width": 800,
+            "width": 845,
             "height": 518,
             "imageSrc": "./assets/winter/backgrounds/background3.png"
+        },
+        {
+            "type": "winter tree",
+            "x": 1185,
+            "y": 170,
+            "width": 199,
+            "height": 246,
+            "imageSrc": "./assets/props/trees/winter_tree_8.png"
         }
     ],
     "tileDefinitions": {
