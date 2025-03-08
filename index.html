@@ -48,6 +48,7 @@
         import Coin from './collectibles/Coin.js';
         import Heart from './collectibles/Heart.js';
         import Speed from './collectibles/Speed.js';
+        import Platform from './Platform.js';
 
         /* These are assigned to window top level so that they can be accessed from
           other scripts until they have all been converted to modules */
@@ -85,9 +86,12 @@
         window.Heart = Heart;
         window.Speed = Speed;
 
+        // Platform
+        window.Platform = Platform;
+
     </script>
 
-    <script src="platform.js"></script>
+    <!-- <script src="platform.js"></script> -->
     <script src="input.js"></script>
     <script src="mapManager.js"></script>
     <script src="game.js"></script>
