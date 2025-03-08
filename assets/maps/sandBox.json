@@ -44,9 +44,9 @@
             "type": "coin"
         },
         "L": {
-            "type": "loadMap",
+            "type": "loadLevel",
             "color": "#0000ff",
-            "script": "batsAndSpings"
+            "level": "batsAndSpings"
         },
         "S": {
             "type": "bounce",
@@ -54,8 +54,8 @@
             "force": 15
         },
         "0": {
-            "type": "loadMap",
-            "script": "map1",
+            "type": "loadLevel",
+            "level": "map1",
             "width": 64,
             "height": 64,
             "image": "./assets/door.png"

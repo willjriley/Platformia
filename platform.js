@@ -1,12 +1,12 @@
 // Platform object
-function Platform(x, y, width, height, image, type, script, color, force, deadly = false, moveSpeed = 0, moveDirection = 'horizontal', moveRange = 0, fallDelay = 0, canFall = false, canRumble = false, rumbleDelay = 2, rotationSpeed = 0.01) {
+function Platform(x, y, width, height, image, type, level, color, force, deadly = false, moveSpeed = 0, moveDirection = 'horizontal', moveRange = 0, fallDelay = 0, canFall = false, canRumble = false, rumbleDelay = 2, rotationSpeed = 0.01) {
     this.x = x;
     this.y = y;
     this.width = width;
     this.height = height;
     this.image = image || null;
     this.type = type;
-    this.script = script || null;
+    this.level = level || null;
     this.color = color;
     this.force = force || 1;
     this.deadly = deadly;

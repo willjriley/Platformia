@@ -105,10 +105,10 @@ function checkCollisions() {
             }
 
             // Check if player is on a loadMap tile
-            if (String(platform.type).toLocaleLowerCase() === "loadMap".toLocaleLowerCase()) {
-                if (platform.script && platform.script !== "") {
+            if (String(platform.type).toLocaleLowerCase() === "loadLevel".toLocaleLowerCase()) {
+                if (platform.level && platform.level !== "") {
                     playSound("./assets/sounds/mixkit-game-level-completed-2059.mp3");
-                    loadMap(platform.script);
+                    loadMap(platform.level);
                     return;
                 }
             }
@@ -122,23 +122,23 @@ function checkCollisions() {
             }
 
             // Calculate player boundaries
-            const playerTopBoundary = player.y;
-            const playerBottomBoundary = player.y + player.height;
-            const playerLeftBoundary = player.x;
-            const playerRightBoundary = player.x + player.width;
+            const playerTop = player.y;
+            const playerBottom = player.y + player.height;
+            const playerLeft = player.x;
+            const playerRight = player.x + player.width;
 
             // Calculate platform boundaries
-            const platformTopBoundary = platform.y;
-            const platformBottomBoundary = platform.y + platform.height;
-            const platformLeftBoundary = platform.x;
-            const platformRightBoundary = platform.x + platform.width;
+            const platformTop = platform.y;
+            const platformBottom = platform.y + platform.height;
+            const platformLeft = platform.x;
+            const platformRight = platform.x + platform.width;
 
             // Check player tile boundaries
             const velocityBuffer = .5; // Small buffer to prevent sticking
 
             // the player hits the top of a platform
-            if ((playerBottomBoundary) <= platformTopBoundary + player.velocityY + velocityBuffer &&
-                (playerBottomBoundary) + player.velocityY > 0) {
+            if ((playerBottom) <= platformTop + player.velocityY + velocityBuffer &&
+                (playerBottom) + player.velocityY > 0) {
                 // keep player on top of platform
                 player.velocityY = 0;
                 player.y = platform.y - player.height;
@@ -146,10 +146,10 @@ function checkCollisions() {
                 player.isJumping = false;
                 isOnPlatform = true;
 
-            } else if (playerTopBoundary < platformBottomBoundary &&
-                playerBottomBoundary > platformTopBoundary &&
-                playerRightBoundary - 5 > platformLeftBoundary &&
-                playerLeftBoundary + 5 < platformRightBoundary &&
+            } else if (playerTop < platformBottom &&
+                playerBottom > platformTop &&
+                playerRight - 5 > platformLeft &&
+                playerLeft + 5 < platformRight &&
                 player.velocityY < 0 && !isOnPlatform) {
                 // player hits the bottom of a platform
 
@@ -157,21 +157,21 @@ function checkCollisions() {
             }
 
             // Ensure the player is horizontally overlapping with the platform
-            if (playerRightBoundary > platformLeftBoundary &&
-                playerLeftBoundary < platformRightBoundary &&
-                playerBottomBoundary > platformTopBoundary &&
-                playerTopBoundary < platformBottomBoundary) {
+            if (playerRight > platformLeft &&
+                playerLeft < platformRight &&
+                playerBottom > platformTop &&
+                playerTop < platformBottom) {
 
                 // Handle right collision
-                if (player.velocityX > 0 && playerRightBoundary <= platformLeftBoundary + player.velocityX + velocityBuffer) {
+                if (player.velocityX > 0 && playerRight <= platformLeft + player.velocityX + velocityBuffer) {
                     // Player hit right side of platform.
-                    player.x = platformLeftBoundary - player.width;
+                    player.x = platformLeft - player.width;
                     player.velocityX = 0;
 
                     // Handle left collision
-                } else if (player.velocityX < 0 && playerLeftBoundary >= platformRightBoundary + player.velocityX - velocityBuffer) {
+                } else if (player.velocityX < 0 && playerLeft >= platformRight + player.velocityX - velocityBuffer) {
                     // Player hit left side of platform.
-                    player.x = platformRightBoundary + velocityBuffer;
+                    player.x = platformRight + velocityBuffer;
                     player.velocityX = 0;
                 }
 

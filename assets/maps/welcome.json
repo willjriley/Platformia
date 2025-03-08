@@ -124,8 +124,8 @@
             "type": "speed"
         },
         "0": {
-            "type": "loadMap",
-            "script": "aWarmSummerDay",
+            "type": "loadLevel",
+            "level": "aWarmSummerDay",
             "width": 64,
             "height": 64,
             "image": "./assets/door.png"

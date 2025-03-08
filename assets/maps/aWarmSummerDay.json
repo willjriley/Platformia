@@ -79,8 +79,8 @@
             "color": "transparent"
         },
         "0": {
-            "type": "loadMap",
-            "script": "lavaCaverns",
+            "type": "loadLevel",
+            "level": "lavaCaverns",
             "color": "#000000",
             "width": 64,
             "height": 64,

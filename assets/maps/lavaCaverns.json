@@ -89,8 +89,8 @@
             "type": "speed"
         },
         "0": {
-            "type": "loadMap",
-            "script": "batsAndSpings",
+            "type": "loadLevel",
+            "level": "batsAndSpings",
             "width": 64,
             "height": 64,
             "image": "./assets/door.png"
