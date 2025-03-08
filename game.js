@@ -1,52 +1,79 @@
-// Game setup
-const canvas = document.getElementById('gameCanvas');
-const ctx = canvas.getContext('2d');
-// ctx.imageSmoothingEnabled = true;
+// Global variables
+let canvas, ctx, width, height, tileSize;
+let mapData, tiles, mapBackgroundColor, useGradient, gradientTop, gradientMiddle, gradientBottom;
+let mouseX, mouseY;
+let showMeTheMap, scrollingRight, scrollingSpeed;
+let platforms, collectibles, camera, gravity, player, entitiesCollection, projectileCollection, score, lives, paused, gameStarted, gameLoopId, respawning, gamePaused;
+let culledBackgroundImages, culledPlatforms, culledCollectibles, culledEntities, culledParticleEmitters;
+let particleEmitters = [];
 
-const width = canvas.width = 800;
-const height = canvas.height = 600;
-const tileSize = 32;
+// Initialize game
+function initGame(selectedMap) {
+    // Game setup
+    canvas = document.getElementById('gameCanvas');
+    ctx = canvas.getContext('2d');
+    // ctx.imageSmoothingEnabled = true;
 
-let mapData = [];
-let tiles = {};
-let mapBackgroundColor = "#000000";
-let useGradient = false;
-let gradientTop = null;
-let gradientMiddle = null;
-let gradientBottom = null;
+    width = canvas.width = 800;
+    height = canvas.height = 600;
+    tileSize = 32;
 
-// Add a global variable to store mouse coordinates
-let mouseX = 0;
-let mouseY = 0;
+    mapData = [];
+    tiles = {};
+    mapBackgroundColor = "#000000";
+    useGradient = false;
+    gradientTop = null;
+    gradientMiddle = null;
+    gradientBottom = null;
 
-// Add an event listener to update mouse coordinates
-canvas.addEventListener('mousemove', function (event) {
-    const rect = canvas.getBoundingClientRect();
-    mouseX = event.clientX - rect.left + window.scrollX + camera.x;
-    mouseY = event.clientY - rect.top + window.scrollY;
-});
+    // Add a global variable to store mouse coordinates
+    mouseX = 0;
+    mouseY = 0;
 
-// scrollCamera() variables
-let showMeTheMap = false;
-let scrollingRight = true; // Flag to indicate the scrolling direction
-let scrollingSpeed = 2; // Speed of the scrolling
+    // Add an event listener to update mouse coordinates
+    canvas.addEventListener('mousemove', function (event) {
+        const rect = canvas.getBoundingClientRect();
+        mouseX = event.clientX - rect.left + window.scrollX + camera.x;
+        mouseY = event.clientY - rect.top + window.scrollY;
+    });
 
+    // scrollCamera() variables
+    showMeTheMap = false;
+    scrollingRight = true; // Flag to indicate the scrolling direction
+    scrollingSpeed = 2; // Speed of the scrolling
 
-// Game objects
-let platforms = [];
-let collectibles = [];
-let camera = { x: 0, y: 0, width: 800, height: 400 };
-let gravity = 0.25;
-let player;
-let entitiesCollection = [];
-let projectileCollection = [];
-let score = 0;
-let lives = 3;
-let paused = false;
-let gameStarted = false;
-let gameLoopId = null; // Store the current game loop
-let respawning = false; // Add a flag to indicate respawning
-let gamePaused = false; // Add a flag to indicate game pause
+    // Game objects
+    platforms = [];
+    collectibles = [];
+    camera = { x: 0, y: 0, width: 800, height: 400 };
+    gravity = 0.25;
+    player = null; // Initialize player later
+    entitiesCollection = [];
+    projectileCollection = [];
+    score = 0;
+    lives = 3;
+    paused = false;
+    gameStarted = false;
+    gameLoopId = null; // Store the current game loop
+    respawning = false; // Add a flag to indicate respawning
+    gamePaused = false; // Add a flag to indicate game pause
+
+    // Clear the culled objects arrays
+    culledBackgroundImages = [];
+    culledPlatforms = [];
+    culledCollectibles = [];
+    culledEntities = [];
+    culledParticleEmitters = [];
+
+    // Reset key states
+    keys = { right: false, left: false, space: false, down: false, up: false };
+
+    // Load the selected map
+    loadMapData(selectedMap);
+
+    // Start the game loop
+    updateGame();
+}
 
 //helper
 function getPlatformAt(x, y) {
@@ -81,7 +108,7 @@ function checkCollisions() {
             if (String(platform.type).toLocaleLowerCase() === "loadMap".toLocaleLowerCase()) {
                 if (platform.script && platform.script !== "") {
                     playSound("./assets/sounds/mixkit-game-level-completed-2059.mp3");
-                    selectMap(platform.script);
+                    loadMap(platform.script);
                     return;
                 }
             }
@@ -237,7 +264,7 @@ function loseLife() {
     deathSound.play();
 
     if (lives <= 0) {
-        location.reload(); // Reload the page
+        this.selectMap("welcome");
         return;
     } else {
         respawning = true; // Set respawning flag
@@ -369,13 +396,6 @@ function updateGame() {
         bottom: camera.y + camera.height + margin
     };
 
-    // Clear the culled objects arrays
-    culledBackgroundImages = [];
-    culledPlatforms = [];
-    culledCollectibles = [];
-    culledEntities = [];
-    culledParticleEmitters = [];
-
     // Draw background images
     backgroundImages.forEach(bgImage => {
         if (isInVisibleArea(bgImage, visibleArea)) {
@@ -505,9 +525,4 @@ function scrollEntireMap() {
             scrollingRight = true; // Change direction to right
         }
     }
-}
-// Initialize game
-function initGame(selectedMap) {
-    // Start the game loop
-    loadMapData(selectedMap);
 }

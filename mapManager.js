@@ -208,3 +208,18 @@ function loadTileImages() {
         }
     }
 }
+
+async function loadMap(mapName) {
+    console.log(`selectMap called with mapName: ${mapName}`);
+    try {
+        const response = await fetch(`assets/maps/${mapName}.json`);
+        if (!response.ok) {
+            throw new Error(`Failed to load map: ${mapName}`);
+        }
+        const mapData = await response.json();
+        // console.log("Map data loaded:", mapData);
+        loadMapData(mapData);
+    } catch (error) {
+        console.error(error);
+    }
+}
