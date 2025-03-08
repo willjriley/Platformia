@@ -94,9 +94,13 @@ export default class AnimatedEnemy {
 
     loadImage(src) {
         const img = new Image();
-        img.onload = () => console.log(`Image loaded: ${src}`);
-        img.onerror = () => console.error(`Failed to load image: ${src}`);
         img.src = src;
+
+        if (this.debugMode) {
+            img.onload = () => console.log(`Image loaded: ${src}`);
+            img.onerror = () => console.error(`Failed to load image: ${src}`);
+        }
+
         return img;
     }
 
