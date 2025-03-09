@@ -287,7 +287,7 @@ function loseLife() {
     deathSound.play();
 
     if (lives <= 0) {
-        this.selectMap("welcome");
+        selectMap("welcome");
         return;
     } else {
         respawning = true; // Set respawning flag
