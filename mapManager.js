@@ -17,6 +17,7 @@ import WaterfallEmitter from './emitters/WaterfallEmitter.js';
 import SnowfallEmitter from './emitters/SnowfallEmitter.js';
 import MagicSpellEmitter from './emitters/MagicSpellEmitter.js';
 import PortalEmitter from './emitters/PortalEmitter.js';
+import { updateGame } from './game.js';
 
 export let currentMusic = null;
 export let mapData, player, tiles, mapBackgroundColor, gradientTop, gradientMiddle, gradientBottom, useGradient;
@@ -26,7 +27,7 @@ export let platforms = [], collectibles = [], entitiesCollection = [], projectil
 let gameLoopId, gravity = 0.25;
 let tileSize = 32;
 
-export function loadMapData(map, updateGame) {
+export function loadMapData(map) {
     // Reset map-related variables
     console.log("loadMapData called with map:", map);
     mapData = map.mapData;

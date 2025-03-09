@@ -13,6 +13,7 @@ function handleKeyDown(e) {
 
     if (e.key === '1') {
         gameState.gameStarted = true;
+        currentMusic.play();
     }
     if (gameState.gameStarted) {
         if (e.key === 'ArrowRight' || e.key.toLowerCase() === 'd') keys.right = true;
@@ -22,7 +23,6 @@ function handleKeyDown(e) {
         if (e.key === ' ') keys.space = true;
         if (e.key.toLocaleLowerCase() === 'p' || e.key === 'Escape') {
             setPauseGame();
-            console.log("yes", gameState.paused);
 
             if (currentMusic) {
                 if (gameState.paused) {
