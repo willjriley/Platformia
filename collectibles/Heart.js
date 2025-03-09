@@ -1,6 +1,6 @@
 import CollectibleBase from './CollectibleBase.js';
 
-class Heart extends CollectibleBase {
+export default class Heart extends CollectibleBase {
     constructor(x, y, width = 32, height = 32, frameRate = 5) {
         const imageUrls = [
             './assets/castle/items/heart1.png',
@@ -17,5 +17,3 @@ class Heart extends CollectibleBase {
         super(x, y, imageUrls, 'heart', width, height, frameRate);
     }
 }
-
-export default Heart;

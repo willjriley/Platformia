@@ -11,7 +11,7 @@
     <link rel="stylesheet" href="styles.css">
 </head>
 
-<body onload="selectMap('welcome')">
+<body>
     <div class="map-buttons">
         <button class="green-button" onclick="selectMap('welcome', this)">Welcome</button>
         <button class="green-button" onclick="selectMap('aWarmSummerDay', this)">A Warm Summer Day</button>
@@ -20,94 +20,41 @@
 
         <h3>Under Construction</h3>
         <button class="yellow-button" onclick="selectMap('desertDash', this)">Desert Dash</button>
-        <!-- <button onclick="selectMap('map2', this)">(needs work)</button>
-        <button onclick="selectMap('map3', this)">(needs work)</button> -->
         <button class="yellow-button" onclick="selectMap('hallofemitters', this)">Hall Of Emitters</button>
         <button class="yellow-button" onclick="selectMap('guruMeditationChamber', this)">Guru Meditation Chamber</button>
         <button class="yellow-button" onclick="selectMap('castleHall', this)">Castle Hall</button>
         <!-- <button onclick="selectMap('sandBox', this)">Sand Box</button> -->
-        <!-- Add more buttons as needed -->
     </div>
     <canvas id="gameCanvas" width="800" height="400"></canvas>
     <script type="module">
-        import FireEmitter from './emitters/FireEmitter.js';
-        import PortalEmitter from './emitters/PortalEmitter.js';
-        import ParticleEmitter from './emitters/ParticleEmitter.js';
-        import WaterfallEmitter from './emitters/WaterfallEmitter.js';
-        import SnowfallEmitter from './emitters/SnowfallEmitter.js';
-        import MagicSpellEmitter from './emitters/MagicSpellEmitter.js';
-        import SpinningRope from './entities/SpinningRope.js';
-        import Spikes from './entities/Spikes.js';
-        import Player from './Player.js';
-        import Enemy from './entities/Enemy.js';
-        import Portal from './entities/Portal.js';
-        import Beholder from './entities/Beholder.js';
-        import Bear from './entities/Bear.js';
-        import Salamander from './entities/Salamander.js';
-        import BackgroundImage from './BackgroundImage.js';
-        import Coin from './collectibles/Coin.js';
-        import Heart from './collectibles/Heart.js';
-        import Speed from './collectibles/Speed.js';
-        import Platform from './Platform.js';
+        import { initGame } from './game.js';
 
-        /* These are assigned to window top level so that they can be accessed from
-          other scripts until they have all been converted to modules */
 
-        // Emitters
-        window.FireEmitter = FireEmitter;
-        window.PortalEmitter = PortalEmitter;
-        window.ParticleEmitter = ParticleEmitter;
-        window.WaterfallEmitter = WaterfallEmitter;
-        window.SnowfallEmitter = SnowfallEmitter;
-        window.MagicSpellEmitter = MagicSpellEmitter;
-
-        // Entities
-        window.SpinningRope = SpinningRope;
-        window.Spikes = Spikes;
-        window.Portal = Portal;
-
-        // Backgrounds
-        window.BackgroundImage = BackgroundImage;
-
-        // Player
-        window.Player = Player;
-
-        // Enemy
-        window.Enemy = Enemy;
-        window.Beholder = Beholder;
-        window.Bear = Bear;
-        window.Salamander = Salamander;
-
-        // Collectible
-        window.Coin = Coin;
-        window.Heart = Heart;
-        window.Speed = Speed;
-
-        // Platform
-        window.Platform = Platform;
-
-    </script>
-
-    <script src="input.js"></script>
-    <script src="mapManager.js"></script>
-    <script src="game.js"></script>
-    <script>
         async function selectMap(mapName, button) {
-            console.log(`selectMap called with mapName: ${mapName}`);
+            console.clear();
+            console.log("Selecting map:", mapName);
             try {
                 const response = await fetch(`assets/maps/${mapName}.json`);
                 if (!response.ok) {
                     throw new Error(`Failed to load map: ${mapName}`);
                 }
                 const mapData = await response.json();
-                // console.log("Map data loaded:", mapData);
                 initGame(mapData);
                 if (button) button.blur();
                 document.getElementById('gameCanvas').focus(); // Set focus to the canvas
-            } catch (error) {
-                console.error(error);
             }
+            catch (error) {
+                console.error(error);
+            };
         }
+
+        window.selectMap = selectMap;
+
+        // Automatically load the welcome map on page load
+        window.onload = function() {
+            selectMap('welcome');
+        };
     </script>
- </body>
+</body>
+
 </html>

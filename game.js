@@ -1,11 +1,24 @@
+import { keys, musicStarted, initializeInputHandlers, handleInput } from './input.js';
+import {
+    loadMapData, loadMap, mapData, currentMusic, player, platforms, collectibles,
+    entitiesCollection, projectileCollection, particleEmitters, backgroundImages, mapBackgroundColor,
+    useGradient, gradientTop, gradientMiddle, gradientBottom, setCollectibles,
+    setProjectileCollection
+} from './mapManager.js';
+
 // Global variables
 let canvas, ctx, width, height, tileSize;
-let mapData, tiles, mapBackgroundColor, useGradient, gradientTop, gradientMiddle, gradientBottom;
+let tiles;
 let mouseX, mouseY;
 let showMeTheMap, scrollingRight, scrollingSpeed;
-let platforms, collectibles, camera, gravity, player, entitiesCollection, projectileCollection, score, lives, paused, gameStarted, gameLoopId, respawning, gamePaused;
+let camera, gravity, score, lives, gameLoopId, respawning, gamePaused;
 let culledBackgroundImages, culledPlatforms, culledCollectibles, culledEntities, culledParticleEmitters;
-let particleEmitters = [];
+
+// Exported mutable object
+export const gameState = {
+    gameStarted: false,
+    paused: false
+};
 
 // Initialize game
 function initGame(selectedMap) {
@@ -18,13 +31,8 @@ function initGame(selectedMap) {
     height = canvas.height = 600;
     tileSize = 32;
 
-    mapData = [];
+    //mapData.length = 0;
     tiles = {};
-    mapBackgroundColor = "#000000";
-    useGradient = false;
-    gradientTop = null;
-    gradientMiddle = null;
-    gradientBottom = null;
 
     // Add a global variable to store mouse coordinates
     mouseX = 0;
@@ -43,17 +51,20 @@ function initGame(selectedMap) {
     scrollingSpeed = 2; // Speed of the scrolling
 
     // Game objects
-    platforms = [];
-    collectibles = [];
+    platforms.length = 0;
+    collectibles.length = 0;
+    entitiesCollection.length = 0;
+    projectileCollection.length = 0;
+    particleEmitters.length = 0;
+    backgroundImages.length = 0;
+
     camera = { x: 0, y: 0, width: 800, height: 400 };
     gravity = 0.25;
-    player = null; // Initialize player later
-    entitiesCollection = [];
-    projectileCollection = [];
+    //player = null; // Initialize player later
     score = 0;
     lives = 3;
-    paused = false;
-    gameStarted = false;
+    gameState.gameStarted = false;
+    gameState.paused = false;
     gameLoopId = null; // Store the current game loop
     respawning = false; // Add a flag to indicate respawning
     gamePaused = false; // Add a flag to indicate game pause
@@ -66,10 +77,17 @@ function initGame(selectedMap) {
     culledParticleEmitters = [];
 
     // Reset key states
-    keys = { right: false, left: false, space: false, down: false, up: false };
+    keys.right = false;
+    keys.left = false;
+    keys.space = false;
+    keys.down = false;
+    keys.up = false;
 
     // Load the selected map
-    loadMapData(selectedMap);
+    loadMapData(selectedMap, updateGame);
+
+    // Initialize input handlers
+    initializeInputHandlers(updateGame, gameLoopId);
 
     // Start the game loop
     updateGame();
@@ -92,6 +110,10 @@ function getPlatformAt(x, y) {
 }
 
 function checkCollisions() {
+    if (!player) {
+        return; // Exit if player is not initialized
+    }
+
     let isOnPlatform = false;
     const maxFallSpeed = 10;
     player.velocityY = Math.min(player.velocityY, maxFallSpeed); // Limit falling speed
@@ -182,7 +204,7 @@ function checkCollisions() {
     }
 
     // Check for collectible collisions
-    collectibles = collectibles.filter(collectible => {
+    let filterCollectibles = collectibles.filter(collectible => {
         if (
             player.x + player.width > collectible.x &&
             player.x < collectible.x + collectible.width &&
@@ -210,6 +232,7 @@ function checkCollisions() {
         }
         return true; // Keep uncollected items if no collision
     });
+    setCollectibles(filterCollectibles);
 
     // Check for spinning rope / spikes / collisions
     entitiesCollection.forEach(entity => {
@@ -257,7 +280,7 @@ function loseLife() {
     player.velocityX = 0;
     player.velocityY = 0;
 
-    projectileCollection = []; // Clear projectiles
+    projectileCollection.length = 0; // Clear projectiles
 
     let deathSound = new Audio("./assets/sounds/mixkit-player-losing-or-failing-2042.mp3");
     deathSound.volume = 0.2;
@@ -285,6 +308,10 @@ function loseLife() {
 
 // Handle scrolling
 function handleScrolling() {
+    if (!mapData || mapData.length === 0) {
+        return; // Exit if mapData is not initialized
+    }
+
     const edgeDistance = 300; // Increase this value to increase the distance from the edge
 
     // Move camera when player reaches edges of screen
@@ -305,8 +332,7 @@ function handleScrolling() {
 }
 
 function updateGame() {
-
-    if (!gameStarted) {
+    if (!gameState.gameStarted) {
         let gradient = ctx.createLinearGradient(0, 0, 0, canvas.height); // Vertical gradient
         gradient.addColorStop(0, "#001F3F");
         gradient.addColorStop(0.5, "#0074D9");
@@ -360,7 +386,7 @@ function updateGame() {
     ctx.fillRect(0, 0, canvas.width, canvas.height);
     ctx.fillStyle = "white";
 
-    if (paused) {
+    if (gameState.paused) {
         ctx.fillText(" PAUSED ", canvas.width / 2 - 80, canvas.height / 2);
         // Display mouse coordinates
         ctx.font = "bold 20px 'Courier New', monospace";
@@ -376,11 +402,20 @@ function updateGame() {
 
     gameLoopId = requestAnimationFrame(updateGame);
 
-    handleInput(); // Handle input in the main loop
+    if (player && mapData.length) {
+        handleInput(player); // Handle input in the main loop
+        player.move(mapData);
+    } else {
+        if (!player) {
+            console.log('Player!');
+        }
+        if (!mapData.length) {
+            console.log('mapData!');
+        }
 
-    player.move();
+    }
 
-    if (!showMeTheMap) {
+    if (!showMeTheMap && player) {
         handleScrolling();
     }
     else {
@@ -447,8 +482,8 @@ function updateGame() {
         }
     });
 
-    // Update and draw projectiles - DO NOT perform culling but rather remove stale projectiles
-    projectileCollection = projectileCollection.filter(projectile => {
+    // Update and draw projectiles - filter out projectiles that are out of view
+    let filterProjectileCollection = projectileCollection.filter(projectile => {
         if (isInVisibleArea(projectile, visibleArea)) {
             projectile.update();
             projectile.draw(ctx, camera);
@@ -461,6 +496,7 @@ function updateGame() {
             return false; // Remove the projectile from the collection
         }
     });
+    setProjectileCollection(filterProjectileCollection);
 
     // Update and draw particle emitters
     particleEmitters.forEach(particleEmitter => {
@@ -478,7 +514,9 @@ function updateGame() {
     ctx.fillText("LIVES: " + lives, 350, 55);
 
     // Draw player
-    player.draw(ctx, camera);
+    if (player) {
+        player.draw(ctx, camera);
+    }
 
     // Check collisions with platforms
     checkCollisions();
@@ -510,6 +548,10 @@ function isInVisibleArea(obj, visibleArea) {
 }
 
 function scrollEntireMap() {
+    if (!mapData || mapData.length === 0) {
+        return; // Exit if mapData is not initialized
+    }
+
     const maxCameraX = (mapData[0].length * tileSize) - camera.width;
 
     if (scrollingRight) {
@@ -526,3 +568,10 @@ function scrollEntireMap() {
         }
     }
 }
+
+export function setPauseGame() {
+    gameState.paused = !gameState.paused;
+}
+
+// Export necessary functions and variables if needed
+export { initGame, updateGame, gameLoopId, handleScrolling, playSound, loseLife, displayYouDiedMessage, checkCollisions, isColliding, getPlatformAt };

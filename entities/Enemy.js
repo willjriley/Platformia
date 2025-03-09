@@ -12,8 +12,6 @@ export default class Enemy {
         this.speed = 1; // Patrol speed
         this.type = type; // Type of enemy: 'patrol' or 'hunter'
         this.chaseRange = 250; // Range within which the Hunter chases the player
-        this.ctx = ctx;
-        this.camera = camera;
         this.tileSize = 32;
     }
 

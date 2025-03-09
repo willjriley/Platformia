@@ -10,7 +10,7 @@ export default class Platform {
         this.color = color;
         this.force = force || 1;
         this.deadly = deadly;
-
+        this.tileSize = 32;
         // Movement properties
         this.moveSpeed = typeof moveSpeed === 'string' ? parseFloat(moveSpeed) : moveSpeed;
         this.moveDirection = moveDirection;
@@ -129,7 +129,7 @@ export default class Platform {
             ctx.fillRect(this.x - camera.x, this.y, this.width, this.height);
         }
         if (this.image) {
-            ctx.drawImage(this.image, 0, 0, tileSize, tileSize, this.x - camera.x, this.y, this.width, this.height);
+            ctx.drawImage(this.image, 0, 0, this.tileSize, this.tileSize, this.x - camera.x, this.y, this.width, this.height);
         }
 
         ctx.restore();

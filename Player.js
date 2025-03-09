@@ -49,7 +49,7 @@ export default class Player {
         ctx.restore();
     }
 
-    move() {
+    move(mapData) {
         // Apply gravity with a maximum fall speed
         if (this.isJumping) {
             this.velocityY = Math.min(this.velocityY + this.gravity, 15);
@@ -60,8 +60,9 @@ export default class Player {
         let nextY = this.y + this.velocityY;
 
         // Apply movement with bounds checking
-        this.x = Math.max(0, Math.min(nextX, mapData[0].length * tileSize - this.width));
-        this.y = Math.max(0, Math.min(nextY, height - this.height));
+        // 600 is canvas height need to pass in at some point
+        this.x = Math.max(0, Math.min(nextX, mapData[0].length * this.tileSize - this.width));
+        this.y = Math.max(0, Math.min(nextY, 600 - this.height));
 
 
         // Reset jumping if we hit the ground

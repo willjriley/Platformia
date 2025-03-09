@@ -1,13 +1,34 @@
-let currentMusic = null;
+import Player from './Player.js';
+import Platform from './platform.js';
+import Coin from './collectibles/Coin.js';
+import Heart from './collectibles/Heart.js';
+import Speed from './collectibles/Speed.js';
+import SpinningRope from './entities/SpinningRope.js';
+import Portal from './entities/Portal.js';
+import Beholder from './entities/Beholder.js';
+import Bear from './entities/Bear.js';
+import Salamander from './entities/Salamander.js';
+import Spikes from './entities/Spikes.js';
+import Enemy from './entities/Enemy.js';
+import BackgroundImage from './BackgroundImage.js';
+import ParticleEmitter from './emitters/ParticleEmitter.js';
+import FireEmitter from './emitters/FireEmitter.js';
+import WaterfallEmitter from './emitters/WaterfallEmitter.js';
+import SnowfallEmitter from './emitters/SnowfallEmitter.js';
+import MagicSpellEmitter from './emitters/MagicSpellEmitter.js';
+import PortalEmitter from './emitters/PortalEmitter.js';
 
-function doPlayMusic() {
-    if (currentMusic) {
-        currentMusic.play().catch(error => console.log("Audio play error:", error));
-    }
-}
+export let currentMusic = null;
+export let mapData, player, tiles, mapBackgroundColor, gradientTop, gradientMiddle, gradientBottom, useGradient;
+export let platforms = [], collectibles = [], entitiesCollection = [], projectileCollection = [], particleEmitters = [], backgroundImages = [];
 
-function loadMapData(map) {
+
+let gameLoopId, gravity = 0.25;
+let tileSize = 32;
+
+export function loadMapData(map, updateGame) {
     // Reset map-related variables
+    console.log("loadMapData called with map:", map);
     mapData = map.mapData;
     tiles = map.tileDefinitions; // Ensure tiles are populated from tileDefinitions
 
@@ -21,14 +42,11 @@ function loadMapData(map) {
     useGradient = gradientTop && gradientMiddle && gradientBottom ? true : false;
 
     // Stop previous music if playing
-    if (currentMusic) {
-        currentMusic.pause();
-        currentMusic = null;
-    }
+    if (currentMusic) currentMusic.pause(), currentMusic = null;
 
-    // Play new level music if available
     if (map.music) {
         currentMusic = new Audio(map.music);
+        //currentMusic.play();
         currentMusic.loop = true;
         currentMusic.volume = 0.1; // Adjust volume as needed
     }
@@ -122,6 +140,7 @@ function parseMap(mapData) {
         }
     }
 }
+
 // Parse Entities from the map
 function parseEntities(entities) {
     if (!Array.isArray(entities)) return; // Ensure entities is an array
@@ -209,7 +228,7 @@ function loadTileImages() {
     }
 }
 
-async function loadMap(mapName) {
+export async function loadMap(mapName) {
     console.log(`selectMap called with mapName: ${mapName}`);
     try {
         const response = await fetch(`assets/maps/${mapName}.json`);
@@ -222,4 +241,12 @@ async function loadMap(mapName) {
     } catch (error) {
         console.error(error);
     }
+}
+
+export function setCollectibles(collection) {
+    collectibles = collection;
+}
+
+export function setProjectileCollection(collection) {
+    projectileCollection = collection;
 }
