@@ -1,19 +1,19 @@
+import FSM from '../libs/FSM.js';
 import Projectile from './Projectile.js';
 
 export default class AnimatedEnemy {
-    constructor(x, y, mode = 'patrol', onFireProjectile, animationDataUrl) {
+    constructor(x, y, onFireProjectile, animationDataUrl) {
         this.x = x;
         this.y = y;
-        this.startX = x; // Store the starting position for Hunter mode
+        this.startX = x;
         this.startY = y;
         this.width = null;
         this.height = null;
-        this.idleTime = 0; // Time the enemy will stand idle before resuming patrol
-        this.patrolDirection = 'right'; // Direction the enemy is patrolling
-        this.speed = 1; // Patrol speed
-        this.restoreSpeed = 1;
+        this.idleTime = 0;
+        this.facingDirection = 'right'; // Direction the enemy is facing
+        this.speed = 1; // speed
+        this.startSpeed = 1;
         this.aggroSpeed = 1;
-        this.mode = mode; // mode of enemy: 'patrol' or 'hunter'
         this.chaseRange = 250; // Range within which the Hunter chases the player
         this.pauseTimeout = null; // Store the timeout ID for pausing patrol
         this.justRespawned = false; // Flag to indicate if the enemy has just respawned
@@ -28,7 +28,7 @@ export default class AnimatedEnemy {
         this.seeDistance = 1; // Distance at which the enemy can see the player
         this.projectileBoundingBox = null;
         this.animationDataUrl = animationDataUrl; // URL for animation data
-        this.debugMode = false; // Debug mode flag
+        this.debugMode = false; // see visuals for sensors and seeing distance
         this.floorSensorXOffset = 0; // Offset for the bottom platform sensor's x position
         this.floorSensorYOffset = 0; // Offset for the bottom platform sensor's y position
         this.aggroSound = null; // Sound to play when the enemy is aggroed
@@ -37,22 +37,47 @@ export default class AnimatedEnemy {
         this.animations = {};
         this.loadAnimations();
 
-        // Set the initial state and frame
-        this.state = null;
+        // Set the initial animationSet and frame
+        this.animationSet = null;
         this.frameIndex = 0;
         this.tickCount = 0;
         this.ticksPerFrame = 10; // Adjust this value to control the animation speed
         this.image = null;
         this.boundingBox = null;
         this.camera = { x: 0, y: 0, width: 800, height: 400 };// need to update this to pass into the constructor
+
+        this.fsm = null;
+        this.fsmStartState = null;
+        this.fsmStartEvent = null;
+    }
+
+    setupFSM() {
+
+        this.fsm.addTransition('idle', 'idle_right', 'idle', () => this.playAnimationSet('idle_right'));
+        this.fsm.addTransition('idle', 'idle_left', 'idle', () => this.playAnimationSet('idle_left'));
+        this.fsm.addTransition('idle', 'walk_right', 'walk', () => this.playAnimationSet('walk_right'));
+        this.fsm.addTransition('idle', 'walk_left', 'walk', () => this.playAnimationSet('walk_left'));
+
+        this.fsm.addTransition('walk', 'idle_right', 'idle', () => this.playAnimationSet('idle'));
+        this.fsm.addTransition('walk', 'idle_left', 'idle', () => this.playAnimationSet('idle_left'));
+        this.fsm.addTransition('walk', 'walk_right', 'walk', () => this.playAnimationSet('walk_right'));
+        this.fsm.addTransition('walk', 'walk_left', 'walk', () => this.playAnimationSet('walk_left'));
+        this.fsm.addTransition('walk', 'attack_right', 'attack', () => this.playAnimationSet('attack_right'));
+        this.fsm.addTransition('walk', 'attack_left', 'attack', () => this.playAnimationSet('attack_left'));
+
+        this.fsm.addTransition('attack', 'attack_right', 'attack', () => this.playAnimationSet('attack_right'));
+        this.fsm.addTransition('attack', 'attack_left', 'attack', () => this.playAnimationSet('attack_left'));
+        this.fsm.addTransition('attack', 'walk_right', 'walk', () => this.playAnimationSet('walk_right'));
+        this.fsm.addTransition('attack', 'walk_left', 'walk', () => this.playAnimationSet('walk_left'));
+
     }
 
     async loadAnimations() {
         try {
             const response = await fetch(this.animationDataUrl);
             const data = await response.json();
-            data.states.forEach(state => {
-                this.animations[state.state] = state.frames.map(frame => ({
+            data.sequences.forEach(sequence => {
+                this.animations[sequence.sequence] = sequence.frames.map(frame => ({
                     image: this.loadImage(frame.src),
                     boundingBox: frame.boundingBox
                 }));
@@ -60,10 +85,13 @@ export default class AnimatedEnemy {
 
             // Load the projectile image
             this.projectileImage = this.loadImage(data.projectileImage);
+            this.name = data.name;
+            this.fsmStartState = data.fsmStartState;
+            this.fsmStartEvent = data.fsmStartEvent;
             this.width = data.width;
             this.height = data.height;
             this.speed = data.speed;
-            this.restoreSpeed = data.speed;
+            this.startSpeed = data.speed;
             this.aggroSpeed = data.aggroSpeed;
             this.idleTime = data.idleTime;
             this.projectileYOffset = data.projectileYOffset;
@@ -78,62 +106,47 @@ export default class AnimatedEnemy {
             this.wallSensorYOffset = data.wallSensorYOffset || 0;
             this.aggroSound = new Audio(data.aggroSound);
 
-            // Set the initial state and frame after loading animations
-            this.state = data.default;
-            if (this.animations[this.state] && this.animations[this.state][0]) {
-                this.image = this.animations[this.state][this.frameIndex].image;
-                this.boundingBox = this.animations[this.state][this.frameIndex].boundingBox;
-                if (this.debugMode) console.log(`Initial state set to ${this.state}`);
-            } else {
-                console.error('Failed to set initial state and frame: Invalid state or frames');
-            }
+            // Initialize the FSM
+            this.initFSM();
+
         } catch (error) {
             console.error('Failed to load animation data:', error);
         }
     }
 
+    initFSM() {
+        this.fsm = new FSM(this.fsmStartState);
+        this.setupFSM();
+        this.fsm.handleEvent(this.fsmStartEvent);
+    }
+
     loadImage(src) {
         const img = new Image();
-        img.src = src;
-
-        if (this.debugMode) {
-            img.onload = () => console.log(`Image loaded: ${src}`);
-            img.onerror = () => console.error(`Failed to load image: ${src}`);
+        if (src === "") {
+            console.log("Image source is empty");
+            return img;
         }
-
+        img.src = src;
+        img.onerror = () => {
+            throw new Error(`Failed to load image: ${src}`);
+        };
         return img;
     }
 
-    setState(state, nextState = null) {
-        if (this.debugMode) console.log("Setting state to", state);
+    playAnimationSet(newAnimationSet) {
+        if (this.debugMode) console.log("playAnimationSet", newAnimationSet);
 
-        if (this.animations[state]) {
-            this.state = state;
+        if (this.animations[newAnimationSet]) {
+            this.animationSet = newAnimationSet;
             this.frameIndex = 0;
-            if (this.animations[this.state][0]) {
-                this.image = this.animations[this.state][this.frameIndex].image;
-                this.boundingBox = this.animations[this.state][this.frameIndex].boundingBox;
-                if (this.debugMode) console.log(`State set to ${state}`);
-
-                // Play aggro sound if the state is an attack state
-                if (state.includes("attack") && this.aggroSound) {
-                    this.aggroSound.volume = 0.5;
-                    this.aggroSound.play();
-                }
-                else { this.aggroSound.pause(); };
-
-                // If nextState is provided, set a timeout to change the state after the current animation loop completes
-                if (nextState) {
-                    const animationDuration = this.animations[this.state].length * this.ticksPerFrame * (1000 / 60); // Assuming 60 FPS
-                    setTimeout(() => {
-                        this.setState(nextState);
-                    }, animationDuration);
-                }
+            if (this.animations[this.animationSet][0]) {
+                this.image = this.animations[this.animationSet][this.frameIndex].image;
+                this.boundingBox = this.animations[this.animationSet][this.frameIndex].boundingBox;
             } else {
-                console.error('Failed to set state: Invalid frames');
+                console.error('Failed to play animation sequence: Invalid frames');
             }
         } else {
-            console.error('Failed to set state: Invalid state');
+            console.error('Failed to find animation sequence: ' + newAnimationSet);
         }
     }
 
@@ -141,12 +154,12 @@ export default class AnimatedEnemy {
         if (this.debugMode) console.log("Respawning enemy");
         this.x = this.startX;
         this.y = this.startY;
-        this.patrolDirection = 'right';
-        this.setState("walk_right");
+        this.facingDirection = 'right';
+        this.fsm.handleEvent(this.fsmStartEvent);
         this.pauseTimeout = null;
         this.frameIndex = 0;
         this.tickCount = 0;
-        this.speed = this.restoreSpeed;
+        this.speed = this.startSpeed;
         this.canAttack = true;
 
         // Clear any pending pause timeout
@@ -155,8 +168,6 @@ export default class AnimatedEnemy {
             this.pauseTimeout = null;
         }
 
-        // Reset mode to patrol
-        this.mode = 'patrol';
         this.justRespawned = true; // Set the justRespawned flag
 
         // Reset the justRespawned flag after a short delay
@@ -178,7 +189,7 @@ export default class AnimatedEnemy {
 
     drawDebugBox(ctx, camera) {
         const boundingBox = this.getBoundingBox();
-        const boxX = this.patrolDirection === 'right'
+        const boxX = this.facingDirection === 'right'
             ? boundingBox.right
             : boundingBox.left - this.seeDistance;
         const boxY = boundingBox.top;
@@ -191,8 +202,8 @@ export default class AnimatedEnemy {
         ctx.strokeRect(boxX - camera.x, boxY - camera.y, boxWidth, boxHeight);
 
         // Draw the sensor for checking if there is a platform below the next position
-        const nextX = (this.patrolDirection === "right") ? this.x + this.speed : this.x - this.speed;
-        const floorSensorX = (this.patrolDirection === "right") ? nextX + this.width + this.floorSensorXOffset : nextX - this.floorSensorXOffset;
+        const nextX = (this.facingDirection === "right") ? this.x + this.speed : this.x - this.speed;
+        const floorSensorX = (this.facingDirection === "right") ? nextX + this.width + this.floorSensorXOffset : nextX - this.floorSensorXOffset;
         const floorSensorY = this.y + this.height - this.floorSensorYOffset;
 
         ctx.strokeStyle = 'red';
@@ -203,7 +214,7 @@ export default class AnimatedEnemy {
         ctx.stroke();
 
         // Draw the sensor for checking if there is a wall in front of the enemy
-        const wallSensorX = (this.patrolDirection === "right") ? this.x + this.width + this.speed + this.wallSensorXOffset : this.x - this.speed - this.wallSensorXOffset;
+        const wallSensorX = (this.facingDirection === "right") ? this.x + this.width + this.speed + this.wallSensorXOffset : this.x - this.speed - this.wallSensorXOffset;
         const wallSensorY = this.y + this.height / 2 - this.wallSensorYOffset;
 
         ctx.strokeStyle = 'blue';
@@ -250,17 +261,76 @@ export default class AnimatedEnemy {
         return null;
     }
 
+    getAboutFace() {
+        return this.facingDirection === 'right' ? 'left' : 'right';
+    }
+
+    handleState(player, platforms) {
+        switch (this.fsm.getState()) {
+            case 'idle':
+                if (!this.canSeePlayer(player, this.seeDistance)) {
+                    this.fsm.handleEvent('walk_' + this.facingDirection);
+                }
+                break;
+            case 'walk':
+                this.moveForward();
+
+                if (this.isWallAheadSensor(platforms) || this.isMissingFloorAheadSensor(platforms)) {
+                    this.fsm.handleEvent('walk_' + this.getAboutFace());
+                    this.facingDirection = this.getAboutFace();
+                }
+
+                if (this.canSeePlayer(player, this.seeDistance)) {
+                    this.fsm.handleEvent('attack_' + this.facingDirection);
+                    if (this.useProjectile) {
+                        this.fireProjectile();
+                    }
+                    if (this.aggroSound) {
+                        this.aggroSound.volume = 0.5;
+                        this.aggroSound.play();
+                    } else {
+                        this.aggroSound.pause();
+                    }
+                }
+                break;
+            case 'attack':
+                this.speed = this.aggroSpeed;
+                this.moveForward();
+
+                if (this.isWallAheadSensor(platforms) || this.isMissingFloorAheadSensor(platforms)) {
+                    this.fsm.handleEvent('walk_' + this.getAboutFace());
+                    this.facingDirection = this.getAboutFace();
+                }
+
+                if (!this.canSeePlayer(player, this.seeDistance)) {
+                    this.fsm.handleEvent('walk_' + this.facingDirection);
+                }
+
+                this.pauseTimeout = setTimeout(() => {
+                    this.speed = this.startSpeed;
+                    if (this.fsm.getState() === 'attack') {
+
+                        this.fsm.handleEvent('walk_' + this.facingDirection);
+                    }
+
+                    this.pauseTimeout = null;
+                }, this.projectileReloadTime);
+
+                break;
+            default:
+                break;
+        }
+    }
+
     update(player, platforms) {
-        if (this.mode === 'patrol') {
-            this.patrol(platforms, player);
-        } else if (this.mode === 'hunter') {
-            this.hunt(player);
-        } else if (this.mode === 'pausePatrol') {
-            // Do nothing, just wait for the timeout to end
+        if (!this.fsm || !this.seeDistance) {
+            return;
         }
 
+        this.handleState(player, platforms);
+
         // Ensure animations are loaded before updating the frame
-        if (!this.animations[this.state]) {
+        if (!this.animations[this.animationSet]) {
             return;
         }
 
@@ -268,10 +338,11 @@ export default class AnimatedEnemy {
         this.tickCount++;
         if (this.tickCount > this.ticksPerFrame) {
             this.tickCount = 0;
-            this.frameIndex = (this.frameIndex + 1) % this.animations[this.state].length;
-            if (this.animations[this.state][this.frameIndex]) {
-                this.image = this.animations[this.state][this.frameIndex].image;
-                this.boundingBox = this.animations[this.state][this.frameIndex].boundingBox;
+            this.frameIndex = (this.frameIndex + 1) % this.animations[this.animationSet].length;
+            if (this.animations[this.animationSet][this.frameIndex]) {
+                this.image = this.animations[this.animationSet][this.frameIndex].image;
+                this.boundingBox = this.animations[this.animationSet][this.frameIndex].boundingBox;
+                //console.log("this.image.src", this.image.src);
             } else {
                 console.error('Failed to update frame: Invalid frame index');
             }
@@ -301,13 +372,13 @@ export default class AnimatedEnemy {
         }
     }
 
-    scanForPlayer(player, scanDistance) {
+    canSeePlayer(player, seeDistance) {
         const boundingBox = this.getBoundingBox();
-        const boxX = this.patrolDirection === 'right'
+        const boxX = this.facingDirection === 'right'
             ? boundingBox.right
-            : boundingBox.left - scanDistance;
+            : boundingBox.left - seeDistance;
         const boxY = boundingBox.top;
-        const boxWidth = scanDistance;
+        const boxWidth = seeDistance;
         const boxHeight = boundingBox.bottom - boundingBox.top;
 
         const adjustedBoxX = boxX - this.camera.x;
@@ -319,40 +390,17 @@ export default class AnimatedEnemy {
         const playerYInRange = adjustedPlayerY > adjustedBoxY && adjustedPlayerY < adjustedBoxY + boxHeight;
         const canSeePlayer = playerInRange && playerYInRange;
 
-        if (this.debugMode) console.log("canSeePlayer", canSeePlayer, "canAttack", this.canAttack);
-        if (this.debugMode) console.log("patrolDirection", this.patrolDirection, "state", this.state);
-
-        if (this.canAttack && canSeePlayer) {
-            this.speed = this.aggroSpeed;
-
-            // This is a hack to prevent none projectile from walking backwards when respawning
-            if (this.useProjectile) {
-                this.setState(this.patrolDirection === 'right' ? 'attack_right' : 'attack_left', this.state);
-            }
-            else {
-                this.setState(this.patrolDirection === 'right' ? 'attack_right' : 'attack_left');
-            }
-
-            if (this.useProjectile) {
-                this.fireProjectile();
-            }
-            this.canAttack = false; // Set useProjectile to false to start cooldown
-            setTimeout(() => {
-                this.speed = this.restoreSpeed;
-                this.canAttack = true; // Reset useProjectile after cooldown
-                if (this.debugMode) console.log("canAttack", canAttack);
-            }, this.projectileReloadTime); // Use projectileReloadTime for cooldown
-        }
+        return canSeePlayer;
     }
 
     fireProjectile() {
         // Calculate the projectile's starting x position based on the patrol direction and bounding box
         const boundingBox = this.getBoundingBox();
-        const projectileXOffset = (this.patrolDirection === "right") ? boundingBox.right : boundingBox.left - this.projectileImage.width;
+        const projectileXOffset = (this.facingDirection === "right") ? boundingBox.right : boundingBox.left - this.projectileImage.width;
         const projectileYPosition = boundingBox.top + (boundingBox.bottom - boundingBox.top) / 2 - this.projectileYOffset;
 
         // Create a new projectile and add it to the projectiles array
-        const projectile = new Projectile(projectileXOffset - this.camera.x, projectileYPosition - this.camera.y, this.patrolDirection, this.projectileSpeed, 500, this.projectileImage, this.projectileBoundingBox);
+        const projectile = new Projectile(projectileXOffset - this.camera.x, projectileYPosition - this.camera.y, this.facingDirection, this.projectileSpeed, 500, this.projectileImage, this.projectileBoundingBox);
         this.projectiles.push(projectile);
 
         // Notify the higher-level component or manager about the projectile firing event
@@ -361,51 +409,35 @@ export default class AnimatedEnemy {
         }
     }
 
-    patrol(platforms, player) {
-        const nextX = (this.patrolDirection === "right") ? this.x + this.speed : this.x - this.speed;
-        const floorSensorX = (this.patrolDirection === "right") ? nextX + this.width + this.floorSensorXOffset : nextX + this.floorSensorXOffset;
-        const floorSensorY = this.y + this.height - this.floorSensorYOffset;
-
-        // Check if there is a platform below the next position
-        if (!this.getPlatformAt(floorSensorX, floorSensorY, platforms)) {
-            if (this.mode !== 'pausePatrol' && !this.justRespawned) {
-                this.patrolDirection = (this.patrolDirection === "right") ? "left" : "right";
-                this.setState((this.patrolDirection === "right") ? "idle_right" : "idle_left");
-                this.mode = 'pausePatrol';
-
-                this.pauseTimeout = setTimeout(() => {
-                    this.mode = 'patrol';
-                    this.setState((this.patrolDirection === "right") ? "walk_right" : "walk_left");
-                    this.pauseTimeout = null;
-                }, this.idleTime); // Enemy will pause for idleTime milliseconds
-            }
-            return;
-        }
-
-        // Check if there is a wall in front of the enemy
-        const wallSensorX = (this.patrolDirection === "right") ? this.x + this.width + this.speed : this.x - this.speed;
-        const wallSensorY = this.y + this.height / 2;
-
-        if (this.getPlatformAt(wallSensorX, wallSensorY, platforms)) {
-            if (this.debugMode) console.log("Wall detected, mode:", this.mode);
-
-            if (this.mode !== 'pausePatrol') {
-                this.patrolDirection = (this.patrolDirection === "right") ? "left" : "right";
-                this.setState((this.patrolDirection === "right") ? "idle_right" : "idle_left");
-                this.mode = 'pausePatrol';
-
-                this.pauseTimeout = setTimeout(() => {
-                    this.mode = 'patrol';
-                    this.setState((this.patrolDirection === "right") ? "walk_right" : "walk_left");
-                    this.pauseTimeout = null;
-                }, this.idleTime); // Enemy will pause for idleTime milliseconds
-            }
-            return;
-        }
-
-        // Scan for player
-        this.scanForPlayer(player, this.seeDistance);
-
-        this.x = nextX;
+    moveForward() {
+        this.x += (this.facingDirection === "right") ? this.speed : -this.speed;
     }
+
+    isWallAheadSensor(platforms) {
+        const wallSensorX = (this.facingDirection === "right") ? this.x + this.width + this.speed : this.x - this.speed;
+        const wallSensorY = this.y + this.height / 2;
+        let result = this.getPlatformAt(wallSensorX, wallSensorY, platforms);
+
+        if (this.debugMode && result !== null) {
+            console.log("isWallAheadSensor - detected wall ahead.");
+        }
+
+        return result;
+    }
+
+    isMissingFloorAheadSensor(platforms) {
+
+        const nextX = (this.facingDirection === "right") ? this.x + this.speed : this.x - this.speed;
+        const floorSensorX = (this.facingDirection === "right") ? nextX + this.width + this.floorSensorXOffset : nextX - this.floorSensorXOffset;
+        const floorSensorY = this.y + this.height - this.floorSensorYOffset;
+        let result = this.getPlatformAt(floorSensorX, floorSensorY, platforms);
+
+        if (this.debugMode && result === null) {
+            console.log("isMissingFloorAheadSensor - detected missing floor ahead.");
+        }
+
+
+        return (result === null);
+    }
+
 }

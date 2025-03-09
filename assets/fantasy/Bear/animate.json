@@ -1,6 +1,7 @@
 {
     "name": "Bear",
-    "default": "walk_right",
+    "fsmStartState": "walk",
+    "fsmStartEvent": "walk_right",
     "width": 128,
     "height": 128,
     "speed": 1,
@@ -11,12 +12,13 @@
     "wallSensorXOffset": 0,
     "wallSensorYOffset": 0,
     "idleTime": 50,
+    "attackTime": 1000,
     "useProjectile": false,
-    "seeDistance": 30,
+    "seeDistance": 150,
     "projectileImage": "",
     "projectileYOffset": 0,
     "projectileSpeed": 0,
-    "projectileReloadTime": 1,
+    "projectileReloadTime": 3000,
     "projectileDamage": 0,
     "projectileBoundingBox": {
         "left": 0,
@@ -24,9 +26,9 @@
         "top": 0,
         "bottom": 0
     },
-    "states": [
+    "sequences": [
         {
-            "state": "idle_right",
+            "sequence": "idle_right",
             "frames": [
                 {
                     "src": "./assets/fantasy/Bear/Idle1.png",
@@ -58,7 +60,7 @@
             ]
         },
         {
-            "state": "idle_left",
+            "sequence": "idle_left",
             "frames": [
                 {
                     "src": "./assets/fantasy/Bear/Idle1_left.png",
@@ -90,7 +92,7 @@
             ]
         },
         {
-            "state": "walk_right",
+            "sequence": "walk_right",
             "frames": [
                 {
                     "src": "./assets/fantasy/Bear/Walk1.png",
@@ -140,7 +142,7 @@
             ]
         },
         {
-            "state": "walk_left",
+            "sequence": "walk_left",
             "frames": [
                 {
                     "src": "./assets/fantasy/Bear/Walk1_left.png",
@@ -190,7 +192,7 @@
             ]
         },
         {
-            "state": "attack_right",
+            "sequence": "attack_right",
             "frames": [
                 {
                     "src": "./assets/fantasy/Bear/Attack1.png",
@@ -240,7 +242,7 @@
             ]
         },
         {
-            "state": "attack_left",
+            "sequence": "attack_left",
             "frames": [
                 {
                     "src": "./assets/fantasy/Bear/Attack1_left.png",

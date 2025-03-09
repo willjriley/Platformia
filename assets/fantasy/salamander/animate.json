@@ -1,6 +1,7 @@
 {
     "name": "salamander",
-    "default": "walk_right",
+    "fsmStartState": "walk",
+    "fsmStartEvent": "walk_right",
     "width": 128,
     "height": 128,
     "speed": 0.8,
@@ -24,9 +25,9 @@
         "top": 68,
         "bottom": 80
     },
-    "states": [
+    "sequences": [
         {
-            "state": "idle_right",
+            "sequence": "idle_right",
             "frames": [
                 {
                     "src": "./assets/fantasy/salamander/Salamander_idle1.png",
@@ -58,7 +59,7 @@
             ]
         },
         {
-            "state": "idle_left",
+            "sequence": "idle_left",
             "frames": [
                 {
                     "src": "./assets/fantasy/salamander/Salamander_idle1_left.png",
@@ -90,7 +91,7 @@
             ]
         },
         {
-            "state": "walk_right",
+            "sequence": "walk_right",
             "frames": [
                 {
                     "src": "./assets/fantasy/salamander/Salamander_walk1.png",
@@ -122,7 +123,7 @@
             ]
         },
         {
-            "state": "walk_left",
+            "sequence": "walk_left",
             "frames": [
                 {
                     "src": "./assets/fantasy/salamander/Salamander_walk1_left.png",
@@ -154,7 +155,7 @@
             ]
         },
         {
-            "state": "attack_right",
+            "sequence": "attack_right",
             "frames": [
                 {
                     "src": "./assets/fantasy/salamander/Salamander_attack1.png",
@@ -177,7 +178,7 @@
             ]
         },
         {
-            "state": "attack_left",
+            "sequence": "attack_left",
             "frames": [
                 {
                     "src": "./assets/fantasy/salamander/Salamander_attack1_left.png",
