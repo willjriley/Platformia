@@ -257,7 +257,7 @@ export default class AnimatedEnemy {
         ctx.fillText('isWallInFrontSensor', wallSensorX - camera.x, wallSensorY - camera.y + 20);
 
         // Draw isOnSolidGroundSensor
-        const groundSensorX = (this.facingDirection === "right") ? boundingBox.right + 10 : boundingBox.left - 10;
+        const groundSensorX = (this.facingDirection === "right") ? boundingBox.right - boundingBox.width / 2 : boundingBox.left + boundingBox.width / 2;
         const groundSensorY = boundingBox.bottom;
 
         ctx.strokeStyle = 'green';
@@ -514,7 +514,7 @@ export default class AnimatedEnemy {
         const boxWidth = this.seeDistance;
         const boxHeight = boundingBox.bottom - boundingBox.top;
 
-        const groundSensorX = (this.facingDirection === "right") ? boundingBox.right + 10 : boundingBox.left - 10;
+        const groundSensorX = (this.facingDirection === "right") ? boundingBox.right - boundingBox.width / 2 : boundingBox.left + boundingBox.width / 2;
         const groundSensorY = boundingBox.bottom;
 
         let result = this.getPlatformAt(groundSensorX, groundSensorY, platforms);
