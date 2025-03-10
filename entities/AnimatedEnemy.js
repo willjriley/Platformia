@@ -1,6 +1,7 @@
 import FSM from '../libs/FSM.js';
 import Projectile from './Projectile.js';
 import drawDebugBox from '../utils/debugUtils.js';
+import { isWallInFrontSensor, isFloorMissingAheadSensor, isOnSolidGroundSensor, canSeePlayerSensor } from '../utils/sensors.js';
 
 export default class AnimatedEnemy {
     constructor(x, y, onFireProjectile, animationDataUrl) {
@@ -274,11 +275,11 @@ export default class AnimatedEnemy {
 
                 this.moveForward();
 
-                if (this.isWallInFrontSensor(platforms) || this.isFloorMissingAheadSensor(platforms)) {
+                if (isWallInFrontSensor(this, platforms) || isFloorMissingAheadSensor(this, platforms)) {
                     this.fsm.handleEvent('walk_' + this.doAboutFace());
                 }
 
-                if (this.canSeePlayerSensor(player, this.seeDistance)) {
+                if (canSeePlayerSensor(this, player, this.seeDistance)) {
                     this.fsm.handleEvent('attack_' + this.facingDirection);
                     if (this.useProjectile) {
                         this.fireProjectile();
@@ -296,16 +297,16 @@ export default class AnimatedEnemy {
                 this.speed = this.aggroSpeed;
                 this.moveForward();
 
-                if (this.canSeePlayerSensor(player, this.seeDistance) && this.isWallInFrontSensor(platforms)) {
+                if (canSeePlayerSensor(this, player, this.seeDistance) && isWallInFrontSensor(this, platforms)) {
                     this.fsm.handleEvent('idle_' + this.facingDirection);
                     break;
                 }
 
-                if (this.isWallInFrontSensor(platforms) || this.isFloorMissingAheadSensor(platforms)) {
+                if (isWallInFrontSensor(this, platforms) || isFloorMissingAheadSensor(this, platforms)) {
                     this.fsm.handleEvent('walk_' + this.doAboutFace());
                 }
 
-                if (!this.canSeePlayerSensor(player, this.seeDistance)) {
+                if (!canSeePlayerSensor(this, player, this.seeDistance)) {
                     this.fsm.handleEvent('walk_' + this.facingDirection);
                 }
 
@@ -320,7 +321,7 @@ export default class AnimatedEnemy {
             return;
         }
 
-        if (!this.isOnSolidGroundSensor(platforms)) {
+        if (!isOnSolidGroundSensor(this, platforms)) {
             this.y += 1;
             return;
         }
@@ -348,33 +349,6 @@ export default class AnimatedEnemy {
 
     }
 
-    /**
-     * Checks if the player is within the enemy's line of sight.
-     * @param {*} player
-     * @param {*} seeDistance
-     * @returns
-     */
-    canSeePlayerSensor(player, seeDistance) {
-        const boundingBox = this.getBoundingBox();
-        const boxX = this.facingDirection === 'right'
-            ? boundingBox.right
-            : boundingBox.left - seeDistance;
-        const boxY = boundingBox.top;
-        const boxWidth = seeDistance;
-        const boxHeight = boundingBox.bottom - boundingBox.top;
-
-        const adjustedBoxX = boxX - this.camera.x;
-        const adjustedBoxY = boxY - this.camera.y;
-        const adjustedPlayerX = player.x - this.camera.x;
-        const adjustedPlayerY = player.y - this.camera.y;
-
-        const playerInRange = adjustedPlayerX + player.width > adjustedBoxX && adjustedPlayerX < adjustedBoxX + boxWidth;
-        const playerYInRange = adjustedPlayerY > adjustedBoxY && adjustedPlayerY < adjustedBoxY + boxHeight;
-        const canSeePlayerSensor = playerInRange && playerYInRange;
-
-        return canSeePlayerSensor;
-    }
-
     fireProjectile() {
         // Calculate the projectile's starting x position based on the patrol direction and bounding box
         const boundingBox = this.getBoundingBox();
@@ -393,58 +367,6 @@ export default class AnimatedEnemy {
 
     moveForward() {
         this.x += (this.facingDirection === "right") ? this.speed : -this.speed;
-    }
-
-    isWallInFrontSensor(platforms) {
-        const boundingBox = this.getBoundingBox();
-        const wallSensorX = (this.facingDirection === "right") ? boundingBox.right + 10 : boundingBox.left - 10;
-        const wallSensorY = boundingBox.top + boundingBox.height / 2;
-
-        let result = this.getPlatformAt(wallSensorX, wallSensorY, platforms);
-
-        if (this.debugMode && result !== null) {
-            console.log("isWallInFrontSensor - detected wall ahead.");
-        }
-
-        return result;
-    }
-
-    isFloorMissingAheadSensor(platforms) {
-
-        const boundingBox = this.getBoundingBox();
-        const floorSensorX = (this.facingDirection === "right") ? boundingBox.right + 30 : boundingBox.left - 30;
-        const floorSensorY = boundingBox.top + boundingBox.height + 1;
-
-        let result = this.getPlatformAt(floorSensorX, floorSensorY, platforms);
-
-        if (this.debugMode && result === null) {
-            console.log("isFloorMissingAheadSensor - detected missing floor ahead.");
-        }
-
-
-        return (result === null);
-    }
-
-    isOnSolidGroundSensor(platforms) {
-
-        const boundingBox = this.getBoundingBox();
-        const boxX = this.facingDirection === 'right'
-            ? boundingBox.right
-            : boundingBox.left - this.seeDistance;
-        const boxY = boundingBox.top;
-        const boxWidth = this.seeDistance;
-        const boxHeight = boundingBox.bottom - boundingBox.top;
-
-        const groundSensorX = (this.facingDirection === "right") ? boundingBox.right - boundingBox.width / 2 : boundingBox.left + boundingBox.width / 2;
-        const groundSensorY = boundingBox.bottom;
-
-        let result = this.getPlatformAt(groundSensorX, groundSensorY, platforms);
-
-        if (this.debugMode && result === null) {
-            console.log("isOnSolidGroundSensor - detected no ground below.");
-        }
-
-        return result !== null;
     }
 
 }

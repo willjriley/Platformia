@@ -80,7 +80,7 @@ export default function drawDebugBox(ctx, camera, boundingBox, facingDirection, 
     ctx.strokeRect(boundingBox.left - camera.x, boundingBox.top - camera.y, boundingBox.right - boundingBox.left, boundingBox.bottom - boundingBox.top);
 
     // Draw the FSM state label above the bounding box
-    ctx.fillStyle = 'purple';
+    ctx.fillStyle = 'black';
     ctx.fillRect(boundingBox.left - camera.x, boundingBox.top - camera.y - 30, boundingBox.width + 2, 15); // Adjusted width to fit the text
     ctx.fillStyle = 'white';
     ctx.fillText(`Name: ${name}`, boundingBox.left - camera.x + 5, boundingBox.top - camera.y - 20);
