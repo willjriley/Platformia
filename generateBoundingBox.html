@@ -28,8 +28,8 @@
 <body>
     <div class="container">
         <h1>Bounding Box Calculator</h1>
-        <label for="stateName">State Name:</label>
-        <input type="text" id="stateName" placeholder="Enter state name">
+        <label for="sequence">Sequence Name:</label>
+        <input type="text" id="sequence" placeholder="Enter sequence name">
         <br><br>
         <label for="fileInput">Select PNG Files:</label>
         <input type="file" id="fileInput" accept="image/png" multiple>
@@ -73,12 +73,12 @@
         }
 
         function generateOutput() {
-            const stateName = document.getElementById('stateName').value;
+            const sequence = document.getElementById('sequence').value;
             const files = document.getElementById('fileInput').files;
             const output = document.getElementById('output');
             const frames = [];
 
-            if (!stateName) {
+            if (!sequence) {
                 alert('Please enter a state name.');
                 return;
             }
@@ -101,7 +101,7 @@
                     img.onload = function() {
                         const boundingBox = calculateBoundingBox(img);
                         frames.push({
-                            src: `./assets/fantasy/salamander/${file.name}`,
+                            src: `./assets/fantasy/BigKnight/${file.name}`,
                             boundingBox
                         });
 
@@ -111,7 +111,7 @@
                             frames.sort((a, b) => a.src.localeCompare(b.src));
 
                             const stateOutput = {
-                                state: stateName,
+                                sequence: sequence,
                                 frames
                             };
                             output.textContent = JSON.stringify(stateOutput, null, 4);

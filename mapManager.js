@@ -7,6 +7,7 @@ import SpinningRope from './entities/SpinningRope.js';
 import Portal from './entities/Portal.js';
 import Beholder from './entities/Beholder.js';
 import Bear from './entities/Bear.js';
+import BigKnight from './entities/BigKnight.js';
 import Salamander from './entities/Salamander.js';
 import Spikes from './entities/Spikes.js';
 import Enemy from './entities/Enemy.js';
@@ -154,6 +155,8 @@ function parseEntities(entities) {
             entitiesCollection.push(new Beholder(entity.x, entity.y, onFireProjectile));
         } else if (entity.type === "bear") {
             entitiesCollection.push(new Bear(entity.x, entity.y, onFireProjectile));
+        } else if (entity.type === "bigknight") {
+            entitiesCollection.push(new BigKnight(entity.x, entity.y, onFireProjectile));
         } else if (entity.type === "salamander") {
             entitiesCollection.push(new Salamander(entity.x, entity.y, onFireProjectile));
         } else if (entity.type === "spikes") {

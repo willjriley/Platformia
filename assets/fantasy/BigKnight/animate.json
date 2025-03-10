@@ -1,0 +1,331 @@
+{
+    "name": "BigKnight",
+    "fsmStartState": "walk",
+    "fsmStartEvent": "walk_right",
+    "width": 256,
+    "height": 256,
+    "speed": 0.8,
+    "aggroSpeed": 1.2,
+    "aggroSound": "./assets/fantasy/Bear/aggro.mp3",
+    "floorSensorXOffset": -110,
+    "floorSensorYOffset": 75,
+    "wallSensorXOffset": -80,
+    "wallSensorYOffset": 0,
+    "idleTime": 50,
+    "attackTime": 1000,
+    "useProjectile": false,
+    "seeDistance": 150,
+    "projectileImage": "",
+    "projectileYOffset": 0,
+    "projectileSpeed": 0,
+    "projectileReloadTime": 30000,
+    "projectileDamage": 0,
+    "projectileBoundingBox": {
+        "left": 0,
+        "right": 0,
+        "top": 0,
+        "bottom": 0
+    },
+    "sequences": [
+        {
+            "sequence": "idle_right",
+            "frames": [
+                {
+                    "src": "./assets/fantasy/BigKnight/Knight_idle1.png",
+                    "boundingBox": {
+                        "left": 61,
+                        "right": 154,
+                        "top": 82,
+                        "bottom": 179
+                    }
+                },
+                {
+                    "src": "./assets/fantasy/BigKnight/Knight_idle2.png",
+                    "boundingBox": {
+                        "left": 60,
+                        "right": 152,
+                        "top": 78,
+                        "bottom": 179
+                    }
+                },
+                {
+                    "src": "./assets/fantasy/BigKnight/Knight_idle3.png",
+                    "boundingBox": {
+                        "left": 60,
+                        "right": 153,
+                        "top": 81,
+                        "bottom": 179
+                    }
+                }
+            ]
+        },
+        {
+            "sequence": "idle_left",
+            "frames": [
+                {
+                    "src": "./assets/fantasy/BigKnight/Knight_idle1_left.png",
+                    "boundingBox": {
+                        "left": 101,
+                        "right": 194,
+                        "top": 82,
+                        "bottom": 179
+                    }
+                },
+                {
+                    "src": "./assets/fantasy/BigKnight/Knight_idle2_left.png",
+                    "boundingBox": {
+                        "left": 103,
+                        "right": 195,
+                        "top": 78,
+                        "bottom": 179
+                    }
+                },
+                {
+                    "src": "./assets/fantasy/BigKnight/Knight_idle3_left.png",
+                    "boundingBox": {
+                        "left": 102,
+                        "right": 195,
+                        "top": 81,
+                        "bottom": 179
+                    }
+                }
+            ]
+        },
+        {
+            "sequence": "walk_right",
+            "frames": [
+                {
+                    "src": "./assets/fantasy/BigKnight/Knight_walk1.png",
+                    "boundingBox": {
+                        "left": 57,
+                        "right": 151,
+                        "top": 94,
+                        "bottom": 179
+                    }
+                },
+                {
+                    "src": "./assets/fantasy/BigKnight/Knight_walk2.png",
+                    "boundingBox": {
+                        "left": 60,
+                        "right": 152,
+                        "top": 91,
+                        "bottom": 180
+                    }
+                },
+                {
+                    "src": "./assets/fantasy/BigKnight/Knight_walk3.png",
+                    "boundingBox": {
+                        "left": 60,
+                        "right": 148,
+                        "top": 88,
+                        "bottom": 179
+                    }
+                },
+                {
+                    "src": "./assets/fantasy/BigKnight/Knight_walk4.png",
+                    "boundingBox": {
+                        "left": 61,
+                        "right": 146,
+                        "top": 89,
+                        "bottom": 179
+                    }
+                },
+                {
+                    "src": "./assets/fantasy/BigKnight/Knight_walk5.png",
+                    "boundingBox": {
+                        "left": 61,
+                        "right": 148,
+                        "top": 89,
+                        "bottom": 179
+                    }
+                },
+                {
+                    "src": "./assets/fantasy/BigKnight/Knight_walk6.png",
+                    "boundingBox": {
+                        "left": 60,
+                        "right": 152,
+                        "top": 86,
+                        "bottom": 179
+                    }
+                }
+            ]
+        },
+        {
+            "sequence": "walk_left",
+            "frames": [
+                {
+                    "src": "./assets/fantasy/BigKnight/Knight_walk1_left.png",
+                    "boundingBox": {
+                        "left": 104,
+                        "right": 198,
+                        "top": 94,
+                        "bottom": 179
+                    }
+                },
+                {
+                    "src": "./assets/fantasy/BigKnight/Knight_walk2_left.png",
+                    "boundingBox": {
+                        "left": 103,
+                        "right": 195,
+                        "top": 91,
+                        "bottom": 180
+                    }
+                },
+                {
+                    "src": "./assets/fantasy/BigKnight/Knight_walk3_left.png",
+                    "boundingBox": {
+                        "left": 107,
+                        "right": 195,
+                        "top": 88,
+                        "bottom": 179
+                    }
+                },
+                {
+                    "src": "./assets/fantasy/BigKnight/Knight_walk4_left.png",
+                    "boundingBox": {
+                        "left": 109,
+                        "right": 194,
+                        "top": 89,
+                        "bottom": 179
+                    }
+                },
+                {
+                    "src": "./assets/fantasy/BigKnight/Knight_walk5_left.png",
+                    "boundingBox": {
+                        "left": 107,
+                        "right": 194,
+                        "top": 89,
+                        "bottom": 179
+                    }
+                },
+                {
+                    "src": "./assets/fantasy/BigKnight/Knight_walk6_left.png",
+                    "boundingBox": {
+                        "left": 103,
+                        "right": 195,
+                        "top": 86,
+                        "bottom": 179
+                    }
+                }
+            ]
+        },
+        {
+            "sequence": "attack_right",
+            "frames": [
+                {
+                    "src": "./assets/fantasy/BigKnight/Knight_attack1.png",
+                    "boundingBox": {
+                        "left": 61,
+                        "right": 151,
+                        "top": 82,
+                        "bottom": 179
+                    }
+                },
+                {
+                    "src": "./assets/fantasy/BigKnight/Knight_attack2.png",
+                    "boundingBox": {
+                        "left": 46,
+                        "right": 145,
+                        "top": 69,
+                        "bottom": 179
+                    }
+                },
+                {
+                    "src": "./assets/fantasy/BigKnight/Knight_attack3.png",
+                    "boundingBox": {
+                        "left": 43,
+                        "right": 146,
+                        "top": 67,
+                        "bottom": 179
+                    }
+                },
+                {
+                    "src": "./assets/fantasy/BigKnight/Knight_attack4.png",
+                    "boundingBox": {
+                        "left": 62,
+                        "right": 178,
+                        "top": 76,
+                        "bottom": 179
+                    }
+                },
+                {
+                    "src": "./assets/fantasy/BigKnight/Knight_attack5.png",
+                    "boundingBox": {
+                        "left": 62,
+                        "right": 176,
+                        "top": 77,
+                        "bottom": 185
+                    }
+                },
+                {
+                    "src": "./assets/fantasy/BigKnight/Knight_attack6.png",
+                    "boundingBox": {
+                        "left": 67,
+                        "right": 168,
+                        "top": 80,
+                        "bottom": 179
+                    }
+                }
+            ]
+        },
+        {
+            "sequence": "attack_left",
+            "frames": [
+                {
+                    "src": "./assets/fantasy/BigKnight/Knight_attack1_left.png",
+                    "boundingBox": {
+                        "left": 104,
+                        "right": 194,
+                        "top": 82,
+                        "bottom": 179
+                    }
+                },
+                {
+                    "src": "./assets/fantasy/BigKnight/Knight_attack2_left.png",
+                    "boundingBox": {
+                        "left": 110,
+                        "right": 209,
+                        "top": 69,
+                        "bottom": 179
+                    }
+                },
+                {
+                    "src": "./assets/fantasy/BigKnight/Knight_attack3_left.png",
+                    "boundingBox": {
+                        "left": 109,
+                        "right": 212,
+                        "top": 67,
+                        "bottom": 179
+                    }
+                },
+                {
+                    "src": "./assets/fantasy/BigKnight/Knight_attack4_left.png",
+                    "boundingBox": {
+                        "left": 77,
+                        "right": 193,
+                        "top": 76,
+                        "bottom": 179
+                    }
+                },
+                {
+                    "src": "./assets/fantasy/BigKnight/Knight_attack5_left.png",
+                    "boundingBox": {
+                        "left": 79,
+                        "right": 193,
+                        "top": 77,
+                        "bottom": 185
+                    }
+                },
+                {
+                    "src": "./assets/fantasy/BigKnight/Knight_attack6_left.png",
+                    "boundingBox": {
+                        "left": 87,
+                        "right": 188,
+                        "top": 80,
+                        "bottom": 179
+                    }
+                }
+            ]
+        }
+    ]
+}

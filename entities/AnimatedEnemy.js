@@ -58,7 +58,7 @@ export default class AnimatedEnemy {
         this.fsm.addTransition('idle', 'walk_right', 'walk', () => this.playAnimationSet('walk_right'));
         this.fsm.addTransition('idle', 'walk_left', 'walk', () => this.playAnimationSet('walk_left'));
 
-        this.fsm.addTransition('walk', 'idle_right', 'idle', () => this.playAnimationSet('idle'));
+        this.fsm.addTransition('walk', 'idle_right', 'idle', () => this.playAnimationSet('idle_right'));
         this.fsm.addTransition('walk', 'idle_left', 'idle', () => this.playAnimationSet('idle_left'));
         this.fsm.addTransition('walk', 'walk_right', 'walk', () => this.playAnimationSet('walk_right'));
         this.fsm.addTransition('walk', 'walk_left', 'walk', () => this.playAnimationSet('walk_left'));
@@ -69,6 +69,9 @@ export default class AnimatedEnemy {
         this.fsm.addTransition('attack', 'attack_left', 'attack', () => this.playAnimationSet('attack_left'));
         this.fsm.addTransition('attack', 'walk_right', 'walk', () => this.playAnimationSet('walk_right'));
         this.fsm.addTransition('attack', 'walk_left', 'walk', () => this.playAnimationSet('walk_left'));
+        this.fsm.addTransition('attack', 'idle_right', 'idle', () => this.playAnimationSet('idle_right'));
+        this.fsm.addTransition('attack', 'idle_left', 'idle', () => this.playAnimationSet('idle_left'));
+
 
     }
 
@@ -272,11 +275,22 @@ export default class AnimatedEnemy {
     handleState(player, platforms) {
         switch (this.fsm.getState()) {
             case 'idle':
-                if (!this.canSeePlayer(player, this.seeDistance)) {
-                    this.fsm.handleEvent('walk_' + this.facingDirection);
+                if (!this.idleStartTime) {
+                    this.idleStartTime = Date.now(); // Record the start time of the idle state
+                }
+
+                const idleDuration = (Date.now() - this.idleStartTime) / 1000; // Calculate the idle duration in seconds
+
+                if (idleDuration > 10) {
+                    // Perform a action if idle for more than 10 seconds
+                    if (this.debugMode) console.log('Idle duration exceeded 10 seconds');
+                    this.fsm.handleEvent('walk_' + this.getAboutFace());
                 }
                 break;
             case 'walk':
+                this.speed = this.startSpeed;
+                this.idleStartTime = null; // Reset the idle start time
+
                 this.moveForward();
 
                 if (this.isWallAheadSensor(platforms) || this.isMissingFloorAheadSensor(platforms)) {
@@ -298,8 +312,14 @@ export default class AnimatedEnemy {
                 }
                 break;
             case 'attack':
+                this.idleStartTime = null;
                 this.speed = this.aggroSpeed;
                 this.moveForward();
+
+                if (this.canSeePlayer(player, this.seeDistance) && this.isWallAheadSensor(platforms)) {
+                    this.fsm.handleEvent('idle_' + this.facingDirection);
+                    break;
+                }
 
                 if (this.isWallAheadSensor(platforms) || this.isMissingFloorAheadSensor(platforms)) {
                     this.fsm.handleEvent('walk_' + this.getAboutFace());
@@ -309,16 +329,6 @@ export default class AnimatedEnemy {
                 if (!this.canSeePlayer(player, this.seeDistance)) {
                     this.fsm.handleEvent('walk_' + this.facingDirection);
                 }
-
-                this.pauseTimeout = setTimeout(() => {
-                    this.speed = this.startSpeed;
-                    if (this.fsm.getState() === 'attack') {
-
-                        this.fsm.handleEvent('walk_' + this.facingDirection);
-                    }
-
-                    this.pauseTimeout = null;
-                }, this.projectileReloadTime);
 
                 break;
             default:
@@ -402,8 +412,8 @@ export default class AnimatedEnemy {
     }
 
     isWallAheadSensor(platforms) {
-        const wallSensorX = (this.facingDirection === "right") ? this.x + this.width + this.speed : this.x - this.speed;
-        const wallSensorY = this.y + this.height / 2;
+        const wallSensorX = (this.facingDirection === "right") ? this.x + this.width + this.speed + this.wallSensorXOffset : this.x - this.speed - this.wallSensorXOffset;
+        const wallSensorY = this.y + this.height / 2 - this.wallSensorYOffset;
         let result = this.getPlatformAt(wallSensorX, wallSensorY, platforms);
 
         if (this.debugMode && result !== null) {

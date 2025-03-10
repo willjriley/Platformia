@@ -1,0 +1,96 @@
+{
+    "name": "the Lab",
+    "playerStartingPosition": {
+        "x": 51,
+        "y": 350
+    },
+    "mapData": [
+        "####################################TTTTTTTTTTTTTTTTTTTTTTTTTT",
+        "T                       T###########TT                       T",
+        "T                       T###########TT                       T",
+        "T                       T###########TT                       T",
+        "T                       T###########TT                       T",
+        "T                       T###########TT                       T",
+        "T                       T###########TT                       T",
+        "T                       T###########TT                       T",
+        "T             ###       T###########TT                       T",
+        "T                       T###########TT                       T",
+        "T                 ##    T###########TT                       T",
+        "T                       T###########TT                       T",
+        "T####                   T###########TT                       T",
+        "T                     CCT###########aaaaaaaaaaaaaaaaaaaaaaaaaa",
+        "T    #                CCT#############hh##hh##hh##hh##hh##hh##",
+        "T    #                CCT#####################################",
+        "TTTTTTTTTTTTTTTTTTTTTTTTT#####################################",
+        "                         #####################################",
+        "##############################################################"
+    ],
+    "backgroundImages": [
+        {
+            "type": "backgroundImage 2",
+            "x": 0,
+            "y": 0,
+            "width": 845,
+            "height": 518,
+            "imageSrc": "./assets/winter/backgrounds/background3.png"
+        },
+        {
+            "type": "background down 1",
+            "x": 0,
+            "y": 45,
+            "width": 960,
+            "height": 541,
+            "imageSrc": "./assets/castle/background/Bright/down.png"
+        }
+    ],
+    "tileDefinitions": {
+        "#": {
+            "type": "solid",
+            "color": "#4B0082",
+            "image": "./assets/metalBox.png"
+        },
+        "C": {
+            "type": "solid",
+            "image": "./assets/desert/crate.png"
+        },
+        "T": {
+            "type": "solid",
+            "color": "transparent"
+        },
+        "a": {
+            "type": "solid",
+            "color": "#4B0082",
+            "image": "./assets/winter/tiles/Tile_02.png"
+        },
+        "b": {
+            "type": "solid",
+            "color": "#4B0082",
+            "image": "./assets/winter/tiles/Tile_03.png"
+        },
+        "d": {
+            "type": "solid",
+            "color": "#4B0082",
+            "image": "./assets/winter/tiles/Tile_01.png"
+        },
+        "h": {
+            "type": "solid",
+            "color": "#4B0082",
+            "image": "./assets/winter/tiles/Tile_12.png"
+        }
+    },
+    "particles": [],
+    "entities": [
+        {
+            "name": "bigknight",
+            "type": "bigknight",
+            "x": 220,
+            "y": 3400
+        },
+        {
+            "name": "bear",
+            "type": "bear",
+            "x": 220,
+            "y": 400
+        }
+    ]
+}
