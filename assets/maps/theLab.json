@@ -5,22 +5,22 @@
         "y": 350
     },
     "mapData": [
-        "####################################TTTTTTTTTTTTTTTTTTTTTTTTTT",
+        "                                                              ",
         "T                       T###########TT                       T",
         "T                       T###########TT                       T",
         "T                       T###########TT                       T",
         "T                       T###########TT                       T",
         "T                       T###########TT                       T",
+        "T                       T###      ###T                       T",
+        "T                       T##        ##T                       T",
+        "T                       T##        ##T                       T",
         "T                       T###########TT                       T",
-        "T                       T###########TT                       T",
-        "T             ###       T###########TT                       T",
-        "T                       T###########TT                       T",
-        "T                 ##    T###########TT                       T",
-        "T                       T###########TT                       T",
-        "T####                   T###########TT                       T",
-        "T                     CCT###########aaaaaaaaaaaaaaaaaaaaaaaaaa",
-        "T    #                CCT#############hh##hh##hh##hh##hh##hh##",
-        "T    #                CCT#####################################",
+        "T                       ####     ####                        T",
+        "T                       ###       ####                       T",
+        "T        ##################                                  T",
+        "T                                                            #",
+        "T    #                                                       #",
+        "T    #                                                       #",
         "TTTTTTTTTTTTTTTTTTTTTTTTT#####################################",
         "                         #####################################",
         "##############################################################"
@@ -32,7 +32,7 @@
             "y": 0,
             "width": 845,
             "height": 518,
-            "imageSrc": "./assets/winter/backgrounds/background3.png"
+            "imageSrc": "./assets/castle/background/Bright/sky.png"
         },
         {
             "type": "background down 1",
@@ -81,16 +81,19 @@
     "particles": [],
     "entities": [
         {
-            "name": "bigknight",
-            "type": "bigknight",
-            "x": 220,
-            "y": 3400
+            "name": "enemy 1",
+            "type": "enemy",
+            "x": 1000,
+            "y": 255,
+            "color": "red",
+            "image": "./assets/enemy1.png",
+            "enemyType": "patrol"
         },
         {
-            "name": "bear",
-            "type": "bear",
-            "x": 220,
-            "y": 400
+            "name": "bigknight",
+            "type": "bigknight",
+            "x": 360,
+            "y": 100
         }
     ]
 }
