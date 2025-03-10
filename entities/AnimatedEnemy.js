@@ -261,6 +261,10 @@ export default class AnimatedEnemy {
         return null;
     }
 
+    /**
+     * Returns the opposite direction of the current facing direction.
+     * @returns {string} The opposite direction ('left' or 'right').
+     */
     getAboutFace() {
         return this.facingDirection === 'right' ? 'left' : 'right';
     }
@@ -350,28 +354,12 @@ export default class AnimatedEnemy {
 
     }
 
-    hunt(player) {
-        const distanceToPlayer = Math.hypot(player.x - this.x, player.y - this.y);
-
-        if (distanceToPlayer < this.chaseRange) {
-            const angle = Math.atan2(player.y - this.y, player.x - this.x);
-            this.x += Math.cos(angle) * this.speed;
-            this.y += Math.sin(angle) * this.speed;
-        } else {
-            const tolerance = 1;
-            const distanceToStart = Math.hypot(this.startX - this.x, this.startY - this.y);
-
-            if (distanceToStart > tolerance) {
-                const angle = Math.atan2(this.startY - this.y, this.startX - this.x);
-                this.x += Math.cos(angle) * this.speed;
-                this.y += Math.sin(angle) * this.speed;
-            } else {
-                this.x = this.startX;
-                this.y = this.startY;
-            }
-        }
-    }
-
+    /**
+     * Checks if the player is within the enemy's line of sight.
+     * @param {*} player
+     * @param {*} seeDistance
+     * @returns
+     */
     canSeePlayer(player, seeDistance) {
         const boundingBox = this.getBoundingBox();
         const boxX = this.facingDirection === 'right'
