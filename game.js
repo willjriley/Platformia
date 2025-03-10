@@ -343,12 +343,12 @@ function updateGame() {
         ctx.fillRect(0, 0, canvas.width, canvas.height); // Fill the whole canvas with the background color
 
         ctx.font = "bold 30px 'Courier New', monospace";
-        ctx.fillStyle = "BLACK";
+        ctx.fillStyle = "#FFD700";
         const text1 = "* PLATFORMIA  *";
         const text1Width = ctx.measureText(text1).width;
         ctx.fillText(text1, (canvas.width - text1Width) / 2, canvas.height / 2 - 128);
 
-        ctx.fillStyle = "RED";
+        ctx.fillStyle = "red";
         const text2 = "GAME OVER";
         const text2Width = ctx.measureText(text2).width;
         ctx.fillText(text2, (canvas.width - text2Width) / 2, canvas.height / 2 - 64);
