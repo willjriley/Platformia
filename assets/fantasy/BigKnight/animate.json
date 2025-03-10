@@ -1,7 +1,7 @@
 {
     "name": "BigKnight",
     "fsmStartState": "walk",
-    "fsmStartEvent": "walk_right",
+    "fsmStartEvent": "walk_left",
     "width": 256,
     "height": 256,
     "speed": 0.8,

@@ -10,7 +10,8 @@ export default class AnimatedEnemy {
         this.width = null;
         this.height = null;
         this.idleTime = 0;
-        this.facingDirection = 'right'; // Direction the enemy is facing
+        this.facingDirection = "right";
+        this.startFacingDirection = this.facingDirection;
         this.speed = 1; // speed
         this.startSpeed = 1;
         this.aggroSpeed = 1;
@@ -91,6 +92,14 @@ export default class AnimatedEnemy {
             this.name = data.name;
             this.fsmStartState = data.fsmStartState;
             this.fsmStartEvent = data.fsmStartEvent;
+            if (this.fsmStartEvent.includes("right")) {
+                this.facingDirection = 'right';
+            }
+            if (this.fsmStartEvent.includes("left")) {
+                this.facingDirection = 'left';
+            }
+            this.startFacingDirection = this.facingDirection;
+
             this.width = data.width;
             this.height = data.height;
             this.speed = data.speed;
@@ -157,7 +166,7 @@ export default class AnimatedEnemy {
         if (this.debugMode) console.log("Respawning enemy");
         this.x = this.startX;
         this.y = this.startY;
-        this.facingDirection = 'right';
+        this.facingDirection = this.startFacingDirection;
         this.fsm.handleEvent(this.fsmStartEvent);
         this.pauseTimeout = null;
         this.frameIndex = 0;
@@ -317,6 +326,12 @@ export default class AnimatedEnemy {
         return this.facingDirection === 'right' ? 'left' : 'right';
     }
 
+    doAboutFace() {
+        this.facingDirection = this.getAboutFace();
+        this.x = this.facingDirection === "right" ? this.x + 40 : this.x - 40;
+        return this.facingDirection;
+    }
+
     handleState(player, platforms) {
         switch (this.fsm.getState()) {
             case 'idle':
@@ -329,7 +344,7 @@ export default class AnimatedEnemy {
                 if (idleDuration > 10) {
                     // Perform a action if idle for more than 10 seconds
                     if (this.debugMode) console.log('Idle duration exceeded 10 seconds');
-                    this.fsm.handleEvent('walk_' + this.getAboutFace());
+                    this.fsm.handleEvent('walk_' + this.doAboutFace());
                 }
                 break;
             case 'walk':
@@ -339,8 +354,7 @@ export default class AnimatedEnemy {
                 this.moveForward();
 
                 if (this.isWallAheadSensor(platforms) || this.isMissingFloorAheadSensor(platforms)) {
-                    this.fsm.handleEvent('walk_' + this.getAboutFace());
-                    this.facingDirection = this.getAboutFace();
+                    this.fsm.handleEvent('walk_' + this.doAboutFace());
                 }
 
                 if (this.canSeePlayer(player, this.seeDistance)) {
@@ -367,8 +381,7 @@ export default class AnimatedEnemy {
                 }
 
                 if (this.isWallAheadSensor(platforms) || this.isMissingFloorAheadSensor(platforms)) {
-                    this.fsm.handleEvent('walk_' + this.getAboutFace());
-                    this.facingDirection = this.getAboutFace();
+                    this.fsm.handleEvent('walk_' + this.doAboutFace());
                 }
 
                 if (!this.canSeePlayer(player, this.seeDistance)) {
