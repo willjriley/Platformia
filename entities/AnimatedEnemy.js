@@ -218,11 +218,11 @@ export default class AnimatedEnemy {
 
         // Draw background for the text
         ctx.fillStyle = 'black';
-        ctx.fillRect(boxX - camera.x + 5, boxY - camera.y, 70, 15);
+        ctx.fillRect(boxX - camera.x + 5, boxY - camera.y, 95, 15);
 
         ctx.fillStyle = 'yellow';
         ctx.font = '10px Arial';
-        ctx.fillText('Can see player', boxX - camera.x + 5, boxY - camera.y + 10);
+        ctx.fillText('canSeePlayerSensor', boxX - camera.x + 5, boxY - camera.y + 10);
 
         const floorSensorX = (this.facingDirection === "right") ? boundingBox.right + 30 : boundingBox.left - 30;
         const floorSensorY = boundingBox.top + boundingBox.height + 1;
@@ -238,7 +238,7 @@ export default class AnimatedEnemy {
         ctx.fillStyle = 'black';
         ctx.fillRect(floorSensorX - camera.x - 15, floorSensorY - camera.y + 25, 130, 15); // Adjusted width to fit the text
         ctx.fillStyle = 'red';
-        ctx.fillText('Missing Platform Sensor', floorSensorX - camera.x - 10, floorSensorY - camera.y + 35); // Adjusted position to fit within the background
+        ctx.fillText('isFloorMissingAheadSensor', floorSensorX - camera.x - 10, floorSensorY - camera.y + 35); // Adjusted position to fit within the background
 
         // Draw the sensor for checking if there is a wall ahead
         const wallSensorX = (this.facingDirection === "right") ? boundingBox.right + 10 : boundingBox.left - 10;
@@ -252,11 +252,11 @@ export default class AnimatedEnemy {
         ctx.stroke();
 
         ctx.fillStyle = 'black';
-        ctx.fillRect(wallSensorX - camera.x - 5, wallSensorY - camera.y + 12, 70, 10); // Adjusted width to fit the text
+        ctx.fillRect(wallSensorX - camera.x - 5, wallSensorY - camera.y + 12, 100, 10); // Adjusted width to fit the text
         ctx.fillStyle = '#00BFFF';
-        ctx.fillText('Wall Sensor', wallSensorX - camera.x, wallSensorY - camera.y + 20);
+        ctx.fillText('isWallInFrontSensor', wallSensorX - camera.x, wallSensorY - camera.y + 20);
 
-        // Draw isOnGroundSensor
+        // Draw isOnSolidGroundSensor
         const groundSensorX = (this.facingDirection === "right") ? boundingBox.right + 10 : boundingBox.left - 10;
         const groundSensorY = boundingBox.bottom;
 
@@ -268,9 +268,9 @@ export default class AnimatedEnemy {
         ctx.stroke();
 
         ctx.fillStyle = 'black';
-        ctx.fillRect(groundSensorX - camera.x + 5, groundSensorY - camera.y + 12, 70, 10); // Adjusted width to fit the text
+        ctx.fillRect(groundSensorX - camera.x + 5, groundSensorY - camera.y + 12, 110, 10); // Adjusted width to fit the text
         ctx.fillStyle = 'green';
-        ctx.fillText('Ground Sensor', groundSensorX - camera.x + 5, groundSensorY - camera.y + 20);
+        ctx.fillText('isOnSolidGroundSensor', groundSensorX - camera.x + 5, groundSensorY - camera.y + 20);
 
         // Draw the bounding box outline in purple
         ctx.strokeStyle = 'purple';
@@ -353,11 +353,11 @@ export default class AnimatedEnemy {
 
                 this.moveForward();
 
-                if (this.isWallAheadSensor(platforms) || this.isMissingFloorAheadSensor(platforms)) {
+                if (this.isWallInFrontSensor(platforms) || this.isFloorMissingAheadSensor(platforms)) {
                     this.fsm.handleEvent('walk_' + this.doAboutFace());
                 }
 
-                if (this.canSeePlayer(player, this.seeDistance)) {
+                if (this.canSeePlayerSensor(player, this.seeDistance)) {
                     this.fsm.handleEvent('attack_' + this.facingDirection);
                     if (this.useProjectile) {
                         this.fireProjectile();
@@ -375,16 +375,16 @@ export default class AnimatedEnemy {
                 this.speed = this.aggroSpeed;
                 this.moveForward();
 
-                if (this.canSeePlayer(player, this.seeDistance) && this.isWallAheadSensor(platforms)) {
+                if (this.canSeePlayerSensor(player, this.seeDistance) && this.isWallInFrontSensor(platforms)) {
                     this.fsm.handleEvent('idle_' + this.facingDirection);
                     break;
                 }
 
-                if (this.isWallAheadSensor(platforms) || this.isMissingFloorAheadSensor(platforms)) {
+                if (this.isWallInFrontSensor(platforms) || this.isFloorMissingAheadSensor(platforms)) {
                     this.fsm.handleEvent('walk_' + this.doAboutFace());
                 }
 
-                if (!this.canSeePlayer(player, this.seeDistance)) {
+                if (!this.canSeePlayerSensor(player, this.seeDistance)) {
                     this.fsm.handleEvent('walk_' + this.facingDirection);
                 }
 
@@ -399,7 +399,7 @@ export default class AnimatedEnemy {
             return;
         }
 
-        if (!this.isOnGroundSensor(platforms)) {
+        if (!this.isOnSolidGroundSensor(platforms)) {
             this.y += 1;
             return;
         }
@@ -433,7 +433,7 @@ export default class AnimatedEnemy {
      * @param {*} seeDistance
      * @returns
      */
-    canSeePlayer(player, seeDistance) {
+    canSeePlayerSensor(player, seeDistance) {
         const boundingBox = this.getBoundingBox();
         const boxX = this.facingDirection === 'right'
             ? boundingBox.right
@@ -449,9 +449,9 @@ export default class AnimatedEnemy {
 
         const playerInRange = adjustedPlayerX + player.width > adjustedBoxX && adjustedPlayerX < adjustedBoxX + boxWidth;
         const playerYInRange = adjustedPlayerY > adjustedBoxY && adjustedPlayerY < adjustedBoxY + boxHeight;
-        const canSeePlayer = playerInRange && playerYInRange;
+        const canSeePlayerSensor = playerInRange && playerYInRange;
 
-        return canSeePlayer;
+        return canSeePlayerSensor;
     }
 
     fireProjectile() {
@@ -474,7 +474,7 @@ export default class AnimatedEnemy {
         this.x += (this.facingDirection === "right") ? this.speed : -this.speed;
     }
 
-    isWallAheadSensor(platforms) {
+    isWallInFrontSensor(platforms) {
         const boundingBox = this.getBoundingBox();
         const wallSensorX = (this.facingDirection === "right") ? boundingBox.right + 10 : boundingBox.left - 10;
         const wallSensorY = boundingBox.top + boundingBox.height / 2;
@@ -482,13 +482,13 @@ export default class AnimatedEnemy {
         let result = this.getPlatformAt(wallSensorX, wallSensorY, platforms);
 
         if (this.debugMode && result !== null) {
-            console.log("isWallAheadSensor - detected wall ahead.");
+            console.log("isWallInFrontSensor - detected wall ahead.");
         }
 
         return result;
     }
 
-    isMissingFloorAheadSensor(platforms) {
+    isFloorMissingAheadSensor(platforms) {
 
         const boundingBox = this.getBoundingBox();
         const floorSensorX = (this.facingDirection === "right") ? boundingBox.right + 30 : boundingBox.left - 30;
@@ -497,14 +497,14 @@ export default class AnimatedEnemy {
         let result = this.getPlatformAt(floorSensorX, floorSensorY, platforms);
 
         if (this.debugMode && result === null) {
-            console.log("isMissingFloorAheadSensor - detected missing floor ahead.");
+            console.log("isFloorMissingAheadSensor - detected missing floor ahead.");
         }
 
 
         return (result === null);
     }
 
-    isOnGroundSensor(platforms) {
+    isOnSolidGroundSensor(platforms) {
 
         const boundingBox = this.getBoundingBox();
         const boxX = this.facingDirection === 'right'
@@ -520,7 +520,7 @@ export default class AnimatedEnemy {
         let result = this.getPlatformAt(groundSensorX, groundSensorY, platforms);
 
         if (this.debugMode && result === null) {
-            console.log("isOnGroundSensor - detected no ground below.");
+            console.log("isOnSolidGroundSensor - detected no ground below.");
         }
 
         return result !== null;
