@@ -20,6 +20,8 @@ export default class Player {
         this.mapData = mapData;
         this.height = height;
         this.gravity = gravity;
+        this.shieldsOn = false; // New property to track shield status
+        this.particles = []; // Array to store particles
     }
 
     respawn() {
@@ -28,6 +30,8 @@ export default class Player {
         this.velocityX = 0;
         this.velocityY = 0;
         this.isJumping = false;
+        this.shieldsOn = false; // Reset shields on respawn
+        this.particles = []; // Clear particles on respawn
     }
 
     draw(ctx, camera) {
@@ -47,6 +51,11 @@ export default class Player {
         }
 
         ctx.restore();
+
+        // Draw particles if shields are on
+        if (this.shieldsOn) {
+            this.drawParticles(ctx, camera);
+        }
     }
 
     move(mapData) {
@@ -64,11 +73,15 @@ export default class Player {
         this.x = Math.max(0, Math.min(nextX, mapData[0].length * this.tileSize - this.width));
         this.y = Math.max(0, Math.min(nextY, 600 - this.height));
 
-
         // Reset jumping if we hit the ground
         if (this.y === this.height - this.height) {
             this.isJumping = false;
             this.velocityY = 0;
+        }
+
+        // Update particles if shields are on
+        if (this.shieldsOn) {
+            this.updateParticles();
         }
     }
 
@@ -78,5 +91,43 @@ export default class Player {
         } else if (direction === 'horizontal') {
             this.velocityX = -force;
         }
+    }
+
+    activateShields() {
+        this.shieldsOn = true;
+        this.createParticles();
+    }
+
+    createParticles() {
+        // Create particles around the player
+        for (let i = 0; i < 20; i++) {
+            this.particles.push({
+                angle: Math.random() * 2 * Math.PI,
+                radius: Math.random() * 20 + 10,
+                speed: Math.random() * 0.05 + 0.01,
+                size: Math.random() * 2 + 1,
+                color: 'rgba(0, 255, 255, 0.7)'
+            });
+        }
+    }
+
+    updateParticles() {
+        // Update particle positions
+        this.particles.forEach(particle => {
+            particle.angle += particle.speed;
+        });
+    }
+
+    drawParticles(ctx, camera) {
+        // Draw particles around the player
+        this.particles.forEach(particle => {
+            const x = this.x + Math.cos(particle.angle) * particle.radius - camera.x;
+            const y = this.y + Math.sin(particle.angle) * particle.radius;
+
+            ctx.fillStyle = particle.color;
+            ctx.beginPath();
+            ctx.arc(x + this.width / 2, y + this.height / 2, particle.size, 0, 2 * Math.PI);
+            ctx.fill();
+        });
     }
 }

@@ -3,7 +3,6 @@ import AnimatedEnemy from './AnimatedEnemy.js';
 export default class BigKnight extends AnimatedEnemy {
     constructor(x, y, onFireProjectile) {
         super(x, y, onFireProjectile, './assets/fantasy/BigKnight/animate.json');
-        this.debugMode = true;
     }
 
     setupFSM() {

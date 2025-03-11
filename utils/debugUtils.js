@@ -26,7 +26,7 @@ export default function drawDebugBox(ctx, camera, boundingBox, facingDirection, 
     ctx.font = '10px Arial';
     ctx.fillText('canSeePlayerSensor', boxX - camera.x + 5, boxY - camera.y + 10);
 
-    const floorSensorX = (facingDirection === "right") ? boundingBox.right + 30 : boundingBox.left - 30;
+    const floorSensorX = (facingDirection === "right") ? boundingBox.right + 1 : boundingBox.left - 1;
     const floorSensorY = boundingBox.top + boundingBox.height + 1;
 
     ctx.strokeStyle = 'red';

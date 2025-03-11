@@ -270,6 +270,7 @@ function displayYouDiedMessage() {
 
 function loseLife() {
     if (respawning) return; // Prevent multiple calls during respawn
+    if (player.shieldsOn) return;
 
     entitiesCollection
         .filter(entity => typeof entity.respawn === "function")

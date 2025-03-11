@@ -70,6 +70,9 @@ export function loadMapData(map) {
     // Set player starting position and reset velocity
     player = new Player(map.playerStartingPosition.x, map.playerStartingPosition.y, mapData, 32, gravity);
 
+
+    window.admin = { player, platforms, collectibles, entitiesCollection, projectileCollection, particleEmitters, backgroundImages };
+
     // Reset velocity and speed
     player.velocityX = 0;
     player.velocityY = 0;

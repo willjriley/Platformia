@@ -49,7 +49,7 @@ export default class FSM {
         const stateTransitions = this.transitions[this.state];
         if (stateTransitions && stateTransitions[event]) {
             const { nextState, action } = stateTransitions[event];
-            console.log(`FSM Transition: ${this.state} -> ${nextState} on event ${event}`);
+            //console.log(`FSM Transition: ${this.state} -> ${nextState} on event ${event}`);
             this.state = nextState;
             action();
         } else {

@@ -148,7 +148,7 @@ export default class AnimatedEnemy {
     }
 
     playAnimationSet(newAnimationSet) {
-        if (this.debugMode) console.log("playAnimationSet", newAnimationSet);
+        if (this.debugMode) console.log(`playAnimationSet ${newAnimationSet}`);
 
         if (this.animations[newAnimationSet]) {
             this.animationSet = newAnimationSet;

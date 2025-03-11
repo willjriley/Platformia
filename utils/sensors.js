@@ -14,7 +14,7 @@ export function isWallInFrontSensor(enemy, platforms) {
 
 export function isFloorMissingAheadSensor(enemy, platforms) {
     const boundingBox = enemy.getBoundingBox();
-    const floorSensorX = (enemy.facingDirection === "right") ? boundingBox.right + 30 : boundingBox.left - 30;
+    const floorSensorX = (enemy.facingDirection === "right") ? boundingBox.right + 1 : boundingBox.left - 1;
     const floorSensorY = boundingBox.top + boundingBox.height + 1;
 
     let result = enemy.getPlatformAt(floorSensorX, floorSensorY, platforms);
