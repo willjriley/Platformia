@@ -70,12 +70,12 @@ export function loadMapData(map) {
     // Set player starting position and reset velocity
     player = new Player(map.playerStartingPosition.x, map.playerStartingPosition.y, mapData, 32, gravity);
 
-
-    window.admin = { player, platforms, collectibles, entitiesCollection, projectileCollection, particleEmitters, backgroundImages };
-
     // Reset velocity and speed
     player.velocityX = 0;
     player.velocityY = 0;
+
+
+    window.admin = { player, platforms, collectibles, entitiesCollection, projectileCollection, particleEmitters, backgroundImages, summonEntity };
 
     // Stop previous game loop before starting a new one
     if (gameLoopId) {
@@ -257,3 +257,53 @@ export function setCollectibles(collection) {
 export function setProjectileCollection(collection) {
     projectileCollection = collection;
 }
+
+
+function summonEntity(type) {
+    const x = player.x + player.width * 2;
+    const y = player.y - player.height * 2;
+    let entity;
+    switch (type) {
+        case 'spinningRope':
+            entity = new SpinningRope(x, y, 100, 'red', null, 0.05);
+            entitiesCollection.push(entity);
+            break;
+        case 'portal':
+            entity = new Portal(x, y, 0, 0, 'blue', 'green', 0.5, 100, 0.1);
+            entitiesCollection.push(entity);
+            break;
+        case 'beholder':
+            entity = new Beholder(x, y, onFireProjectile);
+            entitiesCollection.push(entity);
+            break;
+        case 'bear':
+            entity = new Bear(x, y, onFireProjectile);
+            entitiesCollection.push(entity);
+            break;
+        case 'bigknight':
+            entity = new BigKnight(x, y, onFireProjectile);
+            entitiesCollection.push(entity);
+            break;
+        case 'salamander':
+            entity = new Salamander(x, y, onFireProjectile);
+            entitiesCollection.push(entity);
+            break;
+        case 'spikes':
+            entity = new Spikes(x, y, 32, 32, 'gray', 0.1, 1000);
+            entitiesCollection.push(entity);
+            break;
+        case 'enemy':
+            const image = new Image();
+            image.src = './assets/enemy.png'; // Replace with actual image path
+            image.onload = () => {
+                entity = new Enemy(x, y, image, null, 'enemyType', 32, 32);
+                entitiesCollection.push(entity);
+            };
+            break;
+        default:
+            console.error(`Unknown entity type: ${type}`);
+            return;
+    }
+    console.log(`Summoned ${type} at (${x}, ${y})`);
+}
+
