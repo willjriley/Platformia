@@ -100,13 +100,13 @@ export default class Player {
 
     createParticles() {
         // Create particles around the player
-        for (let i = 0; i < 20; i++) {
+        for (let i = 0; i < 100; i++) {
             this.particles.push({
                 angle: Math.random() * 2 * Math.PI,
                 radius: Math.random() * 20 + 10,
                 speed: Math.random() * 0.05 + 0.01,
-                size: Math.random() * 2 + 1,
-                color: 'rgba(0, 255, 255, 0.7)'
+                color: 'rgba(241, 255, 132, 0.7)',
+                distance: 0
             });
         }
     }
@@ -114,20 +114,28 @@ export default class Player {
     updateParticles() {
         // Update particle positions
         this.particles.forEach(particle => {
-            particle.angle += particle.speed;
+            particle.distance += particle.speed;
+            if (particle.distance > particle.radius) {
+                particle.distance = 0;
+                particle.angle = Math.random() * 2 * Math.PI;
+            }
         });
     }
 
     drawParticles(ctx, camera) {
-        // Draw particles around the player
+        // Draw beams around the player
         this.particles.forEach(particle => {
-            const x = this.x + Math.cos(particle.angle) * particle.radius - camera.x;
-            const y = this.y + Math.sin(particle.angle) * particle.radius;
+            const startX = this.x + this.width / 2 + Math.cos(particle.angle) * this.width / 2 - camera.x;
+            const startY = this.y + this.height / 2 + Math.sin(particle.angle) * this.height / 2;
+            const endX = startX + Math.cos(particle.angle) * particle.distance;
+            const endY = startY + Math.sin(particle.angle) * particle.distance;
 
-            ctx.fillStyle = particle.color;
+            ctx.strokeStyle = particle.color;
+            ctx.lineWidth = particle.size;
             ctx.beginPath();
-            ctx.arc(x + this.width / 2, y + this.height / 2, particle.size, 0, 2 * Math.PI);
-            ctx.fill();
+            ctx.moveTo(startX, startY);
+            ctx.lineTo(endX, endY);
+            ctx.stroke();
         });
     }
 }
