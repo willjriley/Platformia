@@ -1,0 +1,178 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Platformia Editor</title>
+    <meta http-equiv="Cache-Control" content="no-store, no-cache, must-revalidate, max-age=0">
+    <meta http-equiv="Pragma" content="no-cache">
+    <meta http-equiv="Expires" content="0">
+    <link rel="stylesheet" href="editor.css">
+</head>
+
+<body>
+    <div class="tool-picker">
+        <label for="mapSelect">Tool Bar</label>
+        <label for="mapSelect">Select Map:</label>
+        <select id="mapSelect" onchange="selectMap(this.value)">
+            <option value="welcome">Welcome</option>
+            <option value="aWarmSummerDay">A Warm Summer Day</option>
+            <option value="lavaCaverns">Lava Caverns</option>
+            <option value="batsAndSpings">Bats And Spings Oh My!</option>
+            <option value="desertDash">Desert Dash</option>
+            <option value="hallofemitters">Hall Of Emitters</option>
+            <option value="guruMeditationChamber">Guru Meditation Chamber</option>
+            <option value="castleHall">Castle Hall</option>
+            <option value="theLab">The Lab</option>
+        </select>
+
+        <button class="blue-button" onclick="saveMap()">Save Map</button>
+        <label for="objectType">Object Type:</label>
+        <select id="objectType" onchange="changeObjectType(this.value)">
+            <option value="platform">Platform</option>
+            <option value="collectible">Collectible</option>
+            <option value="emitter">Emitter</option>
+        </select>
+        <label for="seeGrid">See Grid</label>
+        <input type="checkbox" id="seeGrid" checked onchange="setToggleGrid(this.checked)">
+    </div>
+    <canvas id="gameCanvas" width="800" height="400"></canvas>
+    <div class="context-menu" id="contextMenu">
+        <ul>
+            <li onclick="cut()">Cut</li>
+            <li onclick="copy()">Copy</li>
+            <li id="pasteOption" onclick="paste()">Paste</li>
+        </ul>
+    </div>
+    <div class="property-panel" id="propertyPanel">
+        <h3>Properties</h3>
+        <div id="properties"></div>
+    </div>
+    <script type="module">
+        import { initEditor, platforms, entitiesCollection, player, toggleGrid } from './editor.js';
+        import { saveMap } from './editMapManager.js';
+
+        let selectedPlatform = null;
+        let clipboard = null;
+        let canvas = document.getElementById('gameCanvas'); // Ensure canvas is defined
+        let currentObjectType = 'platform';
+
+        async function selectMap(mapName) {
+            console.clear();
+            console.log("Selecting map:", mapName);
+            try {
+                const response = await fetch(`assets/maps/${mapName}.json`);
+                if (!response.ok) {
+                    throw new Error(`Failed to load map: ${mapName}`);
+                }
+                const mapData = await response.json();
+                initEditor(mapData);
+                document.getElementById('gameCanvas').focus(); // Set focus to the canvas
+            }
+            catch (error) {
+                console.error(error);
+            };
+        }
+
+        function changeObjectType(objectType) {
+            currentObjectType = objectType;
+        }
+
+        function showContextMenu(event, platform) {
+            event.preventDefault();
+            selectedPlatform = platform;
+            const contextMenu = document.getElementById('contextMenu');
+            contextMenu.style.display = 'block';
+            contextMenu.style.left = `${event.pageX}px`;
+            contextMenu.style.top = `${event.pageY}px`;
+
+            // Enable or disable the paste option based on whether there is something to paste
+            const pasteOption = document.getElementById('pasteOption');
+            if (clipboard) {
+                pasteOption.classList.remove('disabled');
+            } else {
+                pasteOption.classList.add('disabled');
+            }
+
+            // Populate the property panel
+            populatePropertyPanel(platform);
+        }
+
+        function hideContextMenu() {
+            const contextMenu = document.getElementById('contextMenu');
+            contextMenu.style.display = 'none';
+        }
+
+        function cut() {
+            clipboard = selectedPlatform;
+            platforms.splice(platforms.indexOf(selectedPlatform), 1);
+            selectedPlatform = null;
+            hideContextMenu();
+        }
+
+        function copy() {
+            clipboard = { ...selectedPlatform };
+            selectedPlatform = null;
+            hideContextMenu();
+        }
+
+        function paste() {
+            if (clipboard) {
+                canvas.addEventListener('click', placeCopiedPlatform);
+            }
+            hideContextMenu();
+        }
+
+        function placeCopiedPlatform(event) {
+            const x = Math.floor((event.offsetX + scrollX) / 32) * 32;
+            const y = Math.floor((event.offsetY + scrollY) / 32) * 32;
+            const existingPlatformIndex = platforms.findIndex(p => p.x === x && p.y === y);
+            if (existingPlatformIndex !== -1) {
+                platforms.splice(existingPlatformIndex, 1);
+            }
+            const newPlatform = { ...clipboard, x, y };
+            platforms.push(newPlatform);
+            clipboard = null;
+            canvas.removeEventListener('click', placeCopiedPlatform);
+        }
+
+        function populatePropertyPanel(platform) {
+            const propertiesDiv = document.getElementById('properties');
+            propertiesDiv.innerHTML = '';
+            for (const [key, value] of Object.entries(platform)) {
+                const propertyDiv = document.createElement('div');
+                propertyDiv.innerHTML = `<strong>${key}:</strong> ${value}`;
+                propertiesDiv.appendChild(propertyDiv);
+            }
+        }
+
+        window.setToggleGrid = function setToggleGrid(checked) {
+            toggleGrid(checked);
+        }
+
+        window.selectMap = selectMap;
+        window.saveMap = saveMap;
+        window.changeObjectType = changeObjectType;
+        window.toggleGrid = toggleGrid;
+        window.showContextMenu = showContextMenu;
+        window.hideContextMenu = hideContextMenu;
+        window.cut = cut;
+        window.copy = copy;
+        window.paste = paste;
+
+        // Automatically load the welcome map on page load
+        window.onload = function() {
+            selectMap('welcome');
+        };
+
+        // Hide context menu on click outside
+        window.addEventListener('click', function(event) {
+            if (!event.target.closest('.context-menu')) {
+                hideContextMenu();
+            }
+        });
+    </script>
+</body>
+
+</html>

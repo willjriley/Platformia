@@ -1,0 +1,115 @@
+body {
+    margin: 0;
+    font-family: Arial, sans-serif;
+    background-color: #000000;
+}
+
+.tool-picker {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 200px;
+    height: 100%;
+    z-index: 10;
+    background: rgba(31, 31, 31, 0.9);
+    padding: 20px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+}
+
+.tool-picker label {
+    font-weight: bold;
+    margin-bottom: 10px;
+    color: #ffffff;
+}
+
+.tool-picker select,
+.tool-picker input[type="checkbox"] {
+    padding: 5px;
+    font-size: 16px;
+    margin-bottom: 20px;
+    border: 1px solid #433462;
+    border-radius: 5px;
+    width: 100%;
+}
+
+.tool-picker .blue-button {
+    padding: 10px 20px;
+    font-size: 16px;
+    color: #ffffff;
+    background-color: #007bff;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    width: 100%;
+    text-align: center;
+    margin-bottom: 10px;
+}
+
+.tool-picker .blue-button:hover {
+    background-color: #0056b3;
+}
+
+canvas {
+    display: block;
+    margin: 0 auto;
+    background-color: #000000;
+    border: 1px solid #8d0303;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+    margin-left: 240px; /* Add margin to the left to make space for the tool picker */
+}
+
+.context-menu {
+    position: absolute;
+    display: none;
+    background-color: #ffffff;
+    border: 1px solid #cccccc;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+    z-index: 1000;
+}
+
+.context-menu ul {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+}
+
+.context-menu li {
+    padding: 8px 12px;
+    cursor: pointer;
+}
+
+.context-menu li:hover {
+    background-color: #eeeeee;
+}
+
+.context-menu li.disabled {
+    color: #cccccc;
+    pointer-events: none;
+}
+
+.property-panel {
+    position: fixed;
+    top: 0;
+    right: 0;
+    width: 200px;
+    height: 100%;
+    z-index: 10;
+    background: rgba(31, 31, 31, 0.9);
+    padding: 20px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    color: #ffffff;
+}
+
+.property-panel h3 {
+    margin-top: 0;
+}
+
+.property-panel div {
+    margin-bottom: 10px;
+}

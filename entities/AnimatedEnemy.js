@@ -56,6 +56,7 @@ export default class AnimatedEnemy {
 
     setupFSM() {
 
+        // current state, event, next state, action
         this.fsm.addTransition('idle', 'idle_right', 'idle', () => this.playAnimationSet('idle_right'));
         this.fsm.addTransition('idle', 'idle_left', 'idle', () => this.playAnimationSet('idle_left'));
         this.fsm.addTransition('idle', 'walk_right', 'walk', () => this.playAnimationSet('walk_right'));
