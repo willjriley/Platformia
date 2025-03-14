@@ -3,7 +3,7 @@ import Projectile from './Projectile.js';
 import drawDebugBox from '../utils/debugUtils.js';
 import { isWallInFrontSensor, isFloorMissingAheadSensor, isOnSolidGroundSensor, canSeePlayerSensor } from '../utils/sensors.js';
 
-export default class AnimatedEnemy {
+export default class AnimatedEntity {
     constructor(x, y, onFireProjectile, animationDataUrl) {
         this.x = x;
         this.y = y;
@@ -32,8 +32,6 @@ export default class AnimatedEnemy {
         this.projectileBoundingBox = null;
         this.animationDataUrl = animationDataUrl; // URL for animation data
         this.debugMode = false; // see visuals for sensors and seeing distance
-        this.floorSensorXOffset = 0; // Offset for the bottom platform sensor's x position
-        this.floorSensorYOffset = 0; // Offset for the bottom platform sensor's y position
         this.aggroSound = null; // Sound to play when the enemy is aggroed
 
         // Load animation data
@@ -83,13 +81,18 @@ export default class AnimatedEnemy {
         try {
             const response = await fetch(this.animationDataUrl);
             const data = await response.json();
+
+            // Only load right-facing animations
             data.sequences.forEach(sequence => {
-                this.animations[sequence.sequence] = sequence.frames.map(frame => ({
-                    image: this.loadImage(frame.src),
-                    boundingBox: frame.boundingBox
-                }));
+                if (!sequence.sequence.includes('_left')) {
+                    this.animations[sequence.sequence] = sequence.frames.map(frame => ({
+                        image: this.loadImage(frame.src),
+                        boundingBox: frame.boundingBox
+                    }));
+                }
             });
 
+            // Rest of your loading code...
             // Load the projectile image
             this.projectileImage = this.loadImage(data.projectileImage);
             this.name = data.name;
@@ -115,10 +118,6 @@ export default class AnimatedEnemy {
             this.useProjectile = data.useProjectile;
             this.seeDistance = data.seeDistance;
             this.projectileBoundingBox = data.projectileBoundingBox;
-            this.floorSensorXOffset = data.floorSensorXOffset || 0;
-            this.floorSensorYOffset = data.floorSensorYOffset || 0;
-            this.wallSensorXOffset = data.wallSensorXOffset || 0;
-            this.wallSensorYOffset = data.wallSensorYOffset || 0;
             this.aggroSound = new Audio(data.aggroSound);
 
             // Initialize the FSM
@@ -151,17 +150,39 @@ export default class AnimatedEnemy {
     playAnimationSet(newAnimationSet) {
         if (this.debugMode) console.log(`playAnimationSet ${newAnimationSet}`);
 
-        if (this.animations[newAnimationSet]) {
-            this.animationSet = newAnimationSet;
+        // Check if this is a left-facing animation
+        const isLeftFacing = newAnimationSet.includes('_left');
+
+        // Convert left animation request to use right animation data
+        const baseAnimationSet = isLeftFacing
+            ? newAnimationSet.replace('_left', '_right')
+            : newAnimationSet;
+
+        if (this.animations[baseAnimationSet]) {
+            this.animationSet = newAnimationSet; // Keep track of the actual requested animation
             this.frameIndex = 0;
-            if (this.animations[this.animationSet][0]) {
-                this.image = this.animations[this.animationSet][this.frameIndex].image;
-                this.boundingBox = this.animations[this.animationSet][this.frameIndex].boundingBox;
+
+            if (this.animations[baseAnimationSet][0]) {
+                const frameData = this.animations[baseAnimationSet][this.frameIndex];
+                this.image = frameData.image;
+
+                // If left-facing, transform the bounding box
+                if (isLeftFacing) {
+                    const originalBox = frameData.boundingBox;
+                    this.boundingBox = {
+                        left: this.width - originalBox.right,
+                        right: this.width - originalBox.left,
+                        top: originalBox.top,
+                        bottom: originalBox.bottom
+                    };
+                } else {
+                    this.boundingBox = frameData.boundingBox;
+                }
             } else {
                 console.error('Failed to play animation sequence: Invalid frames');
             }
         } else {
-            console.error('Failed to find animation sequence: ' + newAnimationSet);
+            console.error('Failed to find animation sequence: ' + baseAnimationSet);
         }
     }
 
@@ -193,7 +214,21 @@ export default class AnimatedEnemy {
 
     draw(ctx, camera) {
         if (this.image && this.image.complete && this.image.naturalWidth !== 0) {
-            ctx.drawImage(this.image, this.x - camera.x, this.y - camera.y, this.width, this.height); // Offset by camera's x and y
+            const isLeftFacing = this.animationSet.includes('_left');
+
+            ctx.save();
+
+            if (isLeftFacing) {
+                // Flip the image horizontally
+                ctx.translate((this.x - camera.x) + this.width, this.y - camera.y);
+                ctx.scale(-1, 1);
+                ctx.drawImage(this.image, 0, 0, this.width, this.height);
+            } else {
+                // Draw normally
+                ctx.drawImage(this.image, this.x - camera.x, this.y - camera.y, this.width, this.height);
+            }
+
+            ctx.restore();
         }
 
         // Draw debug box if debug mode is enabled
@@ -329,8 +364,16 @@ export default class AnimatedEnemy {
 
         this.handleState(player, platforms);
 
+        // Check if this is a left-facing animation
+        const isLeftFacing = this.animationSet.includes('_left');
+
+        // Convert left animation name to right for lookup
+        const baseAnimationSet = isLeftFacing
+            ? this.animationSet.replace('_left', '_right')
+            : this.animationSet;
+
         // Ensure animations are loaded before updating the frame
-        if (!this.animations[this.animationSet]) {
+        if (!this.animations[baseAnimationSet]) {
             return;
         }
 
@@ -338,16 +381,27 @@ export default class AnimatedEnemy {
         this.tickCount++;
         if (this.tickCount > this.ticksPerFrame) {
             this.tickCount = 0;
-            this.frameIndex = (this.frameIndex + 1) % this.animations[this.animationSet].length;
-            if (this.animations[this.animationSet][this.frameIndex]) {
-                this.image = this.animations[this.animationSet][this.frameIndex].image;
-                this.boundingBox = this.animations[this.animationSet][this.frameIndex].boundingBox;
-                //console.log("this.image.src", this.image.src);
+            this.frameIndex = (this.frameIndex + 1) % this.animations[baseAnimationSet].length;
+
+            if (this.animations[baseAnimationSet][this.frameIndex]) {
+                this.image = this.animations[baseAnimationSet][this.frameIndex].image;
+
+                // If left-facing, transform the bounding box
+                if (isLeftFacing) {
+                    const originalBox = this.animations[baseAnimationSet][this.frameIndex].boundingBox;
+                    this.boundingBox = {
+                        left: this.width - originalBox.right,
+                        right: this.width - originalBox.left,
+                        top: originalBox.top,
+                        bottom: originalBox.bottom
+                    };
+                } else {
+                    this.boundingBox = this.animations[baseAnimationSet][this.frameIndex].boundingBox;
+                }
             } else {
                 console.error('Failed to update frame: Invalid frame index');
             }
         }
-
     }
 
     fireProjectile() {

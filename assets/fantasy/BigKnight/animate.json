@@ -7,10 +7,6 @@
     "speed": 0.8,
     "aggroSpeed": 1.2,
     "aggroSound": "./assets/fantasy/Bear/aggro.mp3",
-    "floorSensorXOffset": -110,
-    "floorSensorYOffset": 75,
-    "wallSensorXOffset": -80,
-    "wallSensorYOffset": 0,
     "idleTime": 50,
     "attackTime": 1000,
     "useProjectile": false,
@@ -53,38 +49,6 @@
                     "boundingBox": {
                         "left": 60,
                         "right": 153,
-                        "top": 81,
-                        "bottom": 179
-                    }
-                }
-            ]
-        },
-        {
-            "sequence": "idle_left",
-            "frames": [
-                {
-                    "src": "./assets/fantasy/BigKnight/Knight_idle1_left.png",
-                    "boundingBox": {
-                        "left": 101,
-                        "right": 194,
-                        "top": 82,
-                        "bottom": 179
-                    }
-                },
-                {
-                    "src": "./assets/fantasy/BigKnight/Knight_idle2_left.png",
-                    "boundingBox": {
-                        "left": 103,
-                        "right": 195,
-                        "top": 78,
-                        "bottom": 179
-                    }
-                },
-                {
-                    "src": "./assets/fantasy/BigKnight/Knight_idle3_left.png",
-                    "boundingBox": {
-                        "left": 102,
-                        "right": 195,
                         "top": 81,
                         "bottom": 179
                     }
@@ -151,65 +115,6 @@
             ]
         },
         {
-            "sequence": "walk_left",
-            "frames": [
-                {
-                    "src": "./assets/fantasy/BigKnight/Knight_walk1_left.png",
-                    "boundingBox": {
-                        "left": 104,
-                        "right": 198,
-                        "top": 94,
-                        "bottom": 179
-                    }
-                },
-                {
-                    "src": "./assets/fantasy/BigKnight/Knight_walk2_left.png",
-                    "boundingBox": {
-                        "left": 103,
-                        "right": 195,
-                        "top": 91,
-                        "bottom": 180
-                    }
-                },
-                {
-                    "src": "./assets/fantasy/BigKnight/Knight_walk3_left.png",
-                    "boundingBox": {
-                        "left": 107,
-                        "right": 195,
-                        "top": 88,
-                        "bottom": 179
-                    }
-                },
-                {
-                    "src": "./assets/fantasy/BigKnight/Knight_walk4_left.png",
-                    "boundingBox": {
-                        "left": 109,
-                        "right": 194,
-                        "top": 89,
-                        "bottom": 179
-                    }
-                },
-                {
-                    "src": "./assets/fantasy/BigKnight/Knight_walk5_left.png",
-                    "boundingBox": {
-                        "left": 107,
-                        "right": 194,
-                        "top": 89,
-                        "bottom": 179
-                    }
-                },
-                {
-                    "src": "./assets/fantasy/BigKnight/Knight_walk6_left.png",
-                    "boundingBox": {
-                        "left": 103,
-                        "right": 195,
-                        "top": 86,
-                        "bottom": 179
-                    }
-                }
-            ]
-        },
-        {
             "sequence": "attack_right",
             "frames": [
                 {
@@ -262,65 +167,6 @@
                     "boundingBox": {
                         "left": 67,
                         "right": 168,
-                        "top": 80,
-                        "bottom": 179
-                    }
-                }
-            ]
-        },
-        {
-            "sequence": "attack_left",
-            "frames": [
-                {
-                    "src": "./assets/fantasy/BigKnight/Knight_attack1_left.png",
-                    "boundingBox": {
-                        "left": 104,
-                        "right": 194,
-                        "top": 82,
-                        "bottom": 179
-                    }
-                },
-                {
-                    "src": "./assets/fantasy/BigKnight/Knight_attack2_left.png",
-                    "boundingBox": {
-                        "left": 110,
-                        "right": 209,
-                        "top": 69,
-                        "bottom": 179
-                    }
-                },
-                {
-                    "src": "./assets/fantasy/BigKnight/Knight_attack3_left.png",
-                    "boundingBox": {
-                        "left": 109,
-                        "right": 212,
-                        "top": 67,
-                        "bottom": 179
-                    }
-                },
-                {
-                    "src": "./assets/fantasy/BigKnight/Knight_attack4_left.png",
-                    "boundingBox": {
-                        "left": 77,
-                        "right": 193,
-                        "top": 76,
-                        "bottom": 179
-                    }
-                },
-                {
-                    "src": "./assets/fantasy/BigKnight/Knight_attack5_left.png",
-                    "boundingBox": {
-                        "left": 79,
-                        "right": 193,
-                        "top": 77,
-                        "bottom": 185
-                    }
-                },
-                {
-                    "src": "./assets/fantasy/BigKnight/Knight_attack6_left.png",
-                    "boundingBox": {
-                        "left": 87,
-                        "right": 188,
                         "top": 80,
                         "bottom": 179
                     }

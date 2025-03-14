@@ -7,10 +7,6 @@
     "speed": 0.8,
     "aggroSpeed": 1.2,
     "aggroSound": "./assets/fantasy/salamander/thanglang-101035.mp3",
-    "floorSensorXOffset": -25,
-    "floorSensorYOffset": 35,
-    "wallSensorXOffset": 0,
-    "wallSensorYOffset": 0,
     "idleTime": 500,
     "useProjectile": false,
     "seeDistance": 150,
@@ -59,38 +55,6 @@
             ]
         },
         {
-            "sequence": "idle_left",
-            "frames": [
-                {
-                    "src": "./assets/fantasy/salamander/Salamander_idle1_left.png",
-                    "boundingBox": {
-                        "left": 24,
-                        "right": 116,
-                        "top": 51,
-                        "bottom": 86
-                    }
-                },
-                {
-                    "src": "./assets/fantasy/salamander/Salamander_idle2_left.png",
-                    "boundingBox": {
-                        "left": 24,
-                        "right": 116,
-                        "top": 49,
-                        "bottom": 86
-                    }
-                },
-                {
-                    "src": "./assets/fantasy/salamander/Salamander_idle3_left.png",
-                    "boundingBox": {
-                        "left": 24,
-                        "right": 116,
-                        "top": 47,
-                        "bottom": 86
-                    }
-                }
-            ]
-        },
-        {
             "sequence": "walk_right",
             "frames": [
                 {
@@ -123,38 +87,6 @@
             ]
         },
         {
-            "sequence": "walk_left",
-            "frames": [
-                {
-                    "src": "./assets/fantasy/salamander/Salamander_walk1_left.png",
-                    "boundingBox": {
-                        "left": 24,
-                        "right": 116,
-                        "top": 51,
-                        "bottom": 87
-                    }
-                },
-                {
-                    "src": "./assets/fantasy/salamander/Salamander_walk2_left.png",
-                    "boundingBox": {
-                        "left": 24,
-                        "right": 116,
-                        "top": 50,
-                        "bottom": 86
-                    }
-                },
-                {
-                    "src": "./assets/fantasy/salamander/Salamander_walk3_left.png",
-                    "boundingBox": {
-                        "left": 24,
-                        "right": 116,
-                        "top": 51,
-                        "bottom": 87
-                    }
-                }
-            ]
-        },
-        {
             "sequence": "attack_right",
             "frames": [
                 {
@@ -171,29 +103,6 @@
                     "boundingBox": {
                         "left": 11,
                         "right": 103,
-                        "top": 51,
-                        "bottom": 86
-                    }
-                }
-            ]
-        },
-        {
-            "sequence": "attack_left",
-            "frames": [
-                {
-                    "src": "./assets/fantasy/salamander/Salamander_attack1_left.png",
-                    "boundingBox": {
-                        "left": 23,
-                        "right": 116,
-                        "top": 51,
-                        "bottom": 86
-                    }
-                },
-                {
-                    "src": "./assets/fantasy/salamander/Salamander_attack2_left.png",
-                    "boundingBox": {
-                        "left": 24,
-                        "right": 116,
                         "top": 51,
                         "bottom": 86
                     }

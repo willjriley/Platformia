@@ -1,4 +1,4 @@
-import AnimatedEnemy from './AnimatedEnemy.js';
+import AnimatedEnemy from './AnimatedEntity.js';
 
 export default class Bear extends AnimatedEnemy {
     constructor(x, y, onFireProjectile) {
