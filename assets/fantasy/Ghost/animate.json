@@ -1,0 +1,141 @@
+{
+    "name": "Ghost",
+    "fsmStartState": "walk",
+    "fsmStartEvent": "walk_right",
+    "width": 128,
+    "height": 128,
+    "speed": 0.8,
+    "aggroSpeed": 1.2,
+    "aggroSound": "",
+    "idleTime": 50,
+    "attackTime": 1000,
+    "useProjectile": false,
+    "seeDistance": 200,
+    "projectileImage": "",
+    "projectileYOffset": 0,
+    "projectileSpeed": 0,
+    "projectileReloadTime": 3000,
+    "projectileDamage": 0,
+    "projectileBoundingBox": {
+        "left": 0,
+        "right": 0,
+        "top": 0,
+        "bottom": 0
+    },
+    "sequences": [
+        {
+            "sequence": "idle_right",
+            "frames": [
+                {
+                    "src": "./assets/fantasy/Ghost/ghost01_idle1.png",
+                    "boundingBox": {
+                        "left": 39,
+                        "right": 91,
+                        "top": 42,
+                        "bottom": 107
+                    }
+                },
+                {
+                    "src": "./assets/fantasy/Ghost/ghost02_idle2.png",
+                    "boundingBox": {
+                        "left": 38,
+                        "right": 91,
+                        "top": 39,
+                        "bottom": 103
+                    }
+                },
+                {
+                    "src": "./assets/fantasy/Ghost/ghost03_idle3.png",
+                    "boundingBox": {
+                        "left": 37,
+                        "right": 92,
+                        "top": 37,
+                        "bottom": 96
+                    }
+                }
+            ]
+        },
+        {
+            "sequence": "walk_right",
+            "frames": [
+                {
+                    "src": "./assets/fantasy/Ghost/ghost05_walk1.png",
+                    "boundingBox": {
+                        "left": 27,
+                        "right": 87,
+                        "top": 40,
+                        "bottom": 100
+                    }
+                },
+                {
+                    "src": "./assets/fantasy/Ghost/ghost06_walk2.png",
+                    "boundingBox": {
+                        "left": 24,
+                        "right": 86,
+                        "top": 38,
+                        "bottom": 98
+                    }
+                },
+                {
+                    "src": "./assets/fantasy/Ghost/ghost07_walk3.png",
+                    "boundingBox": {
+                        "left": 24,
+                        "right": 87,
+                        "top": 35,
+                        "bottom": 97
+                    }
+                },
+                {
+                    "src": "./assets/fantasy/Ghost/ghost08_walk4.png",
+                    "boundingBox": {
+                        "left": 31,
+                        "right": 87,
+                        "top": 37,
+                        "bottom": 97
+                    }
+                }
+            ]
+        },
+        {
+            "sequence": "attack_right",
+            "frames": [
+                {
+                    "src": "./assets/fantasy/Ghost/ghost09_attack1.png",
+                    "boundingBox": {
+                        "left": 30,
+                        "right": 94,
+                        "top": 36,
+                        "bottom": 95
+                    }
+                },
+                {
+                    "src": "./assets/fantasy/Ghost/ghost10_attack2.png",
+                    "boundingBox": {
+                        "left": 28,
+                        "right": 95,
+                        "top": 37,
+                        "bottom": 94
+                    }
+                },
+                {
+                    "src": "./assets/fantasy/Ghost/ghost11_attack3.png",
+                    "boundingBox": {
+                        "left": 37,
+                        "right": 105,
+                        "top": 36,
+                        "bottom": 98
+                    }
+                },
+                {
+                    "src": "./assets/fantasy/Ghost/ghost12_attack4.png",
+                    "boundingBox": {
+                        "left": 40,
+                        "right": 84,
+                        "top": 37,
+                        "bottom": 98
+                    }
+                }
+            ]
+        }
+    ]
+}

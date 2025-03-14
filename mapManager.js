@@ -9,6 +9,7 @@ import Beholder from './entities/Beholder.js';
 import Bear from './entities/Bear.js';
 import BigKnight from './entities/BigKnight.js';
 import Salamander from './entities/Salamander.js';
+import Ghost from './entities/Ghost.js';
 import Spikes from './entities/Spikes.js';
 import Enemy from './entities/Enemy.js';
 import BackgroundImage from './BackgroundImage.js';
@@ -162,6 +163,8 @@ function parseEntities(entities) {
             entitiesCollection.push(new BigKnight(entity.x, entity.y, onFireProjectile));
         } else if (entity.type === "salamander") {
             entitiesCollection.push(new Salamander(entity.x, entity.y, onFireProjectile));
+        } else if (entity.type === "ghost") {
+            entitiesCollection.push(new Ghost(entity.x, entity.y, onFireProjectile));
         } else if (entity.type === "spikes") {
             entitiesCollection.push(new Spikes(entity.x, entity.y, entity.width, entity.height, entity.color, entity.riseRate, entity.delay));
         } else if (entity.type === "enemy") {
@@ -286,6 +289,10 @@ function summonEntity(type) {
             break;
         case 'salamander':
             entity = new Salamander(x, y, onFireProjectile);
+            entitiesCollection.push(entity);
+            break;
+        case 'ghost':
+            entity = new Ghost(x, y, onFireProjectile);
             entitiesCollection.push(entity);
             break;
         case 'spikes':

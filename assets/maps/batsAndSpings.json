@@ -101,6 +101,12 @@
             "color": "red",
             "image": "./assets/bat.png",
             "enemyType": "hunter"
+        },
+        {
+            "name": "Ghost 1",
+            "type": "ghost",
+            "x": 622,
+            "y": 250
         }
     ]
 }
