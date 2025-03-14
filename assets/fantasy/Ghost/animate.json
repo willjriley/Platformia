@@ -1,7 +1,7 @@
 {
     "name": "Ghost",
     "fsmStartState": "walk",
-    "fsmStartEvent": "walk_right",
+    "fsmStartEvent": "walk_left",
     "width": 128,
     "height": 128,
     "speed": 0.8,
