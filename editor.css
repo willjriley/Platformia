@@ -19,7 +19,7 @@ body {
     align-items: flex-start;
 }
 
-.tool-picker label {
+label {
     font-weight: bold;
     margin-bottom: 10px;
     color: #ffffff;
@@ -33,6 +33,12 @@ body {
     border: 1px solid #433462;
     border-radius: 5px;
     width: 100%;
+}
+
+.input-group {
+    display: flex;
+    align-items: center;
+    margin-bottom: 10px;
 }
 
 .tool-picker .blue-button {

@@ -6,6 +6,9 @@ let scrollX = 0, scrollY = 0;
 const scrollSpeed = 10;
 let currentMapData; // Store mapData in a variable accessible throughout the module
 let showGrid = true;
+let showGradient = true; // Add a variable to track the gradient visibility
+let clipboard = null; // Store the copied platform
+let selectedPlatform = null; // Declare selectedPlatform to track the currently selected platform
 
 export function initEditor(mapData) {
     // Game setup
@@ -73,6 +76,19 @@ function handleContextMenu(event) {
 function updateEditor() {
     // Clear the canvas
     ctx.clearRect(0, 0, width, height);
+
+    if (showGradient && currentMapData.gradientTop && currentMapData.gradientMiddle && currentMapData.gradientBottom) {
+        let gradient = ctx.createLinearGradient(0, 0, 0, canvas.height); // Vertical gradient
+        gradient.addColorStop(0, currentMapData.gradientTop);
+        gradient.addColorStop(0.5, currentMapData.gradientMiddle);
+        gradient.addColorStop(1, currentMapData.gradientBottom);
+
+        ctx.fillStyle = gradient;
+        ctx.fillRect(0, 0, canvas.width, canvas.height); // Apply the gradient to the canvas
+    } else {
+        ctx.fillStyle = currentMapData.mapBackgroundColor || '#000000'; // Fallback to the background color
+        ctx.fillRect(0, 0, canvas.width, canvas.height);
+    }
 
     // Save the current context state
     ctx.save();
@@ -165,4 +181,77 @@ export function toggleGrid(checked) {
     showGrid = checked;
 }
 
-export { updateEditor, platforms, entitiesCollection, player };
+function toggleGradient(checked) {
+    showGradient = checked;
+}
+
+function cut() {
+    clipboard = { ...selectedPlatform }; // Store a copy of the selected platform in the clipboard
+    platforms.splice(platforms.indexOf(selectedPlatform), 1); // Remove the selected platform from the platforms array
+    selectedPlatform = null;
+    hideContextMenu();
+    updateEditor(); // Redraw the canvas to reflect the changes
+}
+
+function copy() {
+    clipboard = { ...selectedPlatform }; // Store a copy of the selected platform in the clipboard
+    selectedPlatform = null;
+    hideContextMenu();
+}
+
+function paste() {
+    if (clipboard) {
+        console.log('Pasting platform:', clipboard);
+        canvas.addEventListener('click', placeCopiedPlatform, { once: true });
+    } else {
+        console.log('Clipboard is empty. Cannot paste.');
+    }
+    hideContextMenu();
+}
+
+function placeCopiedPlatform(event) {
+    // Calculate the grid position based on the click coordinates
+    const x = Math.floor((event.offsetX + scrollX) / 32) * 32;
+    const y = Math.floor((event.offsetY + scrollY) / 32) * 32;
+
+    console.log('Placing platform at:', { x, y });
+
+    // Check if a platform already exists at the target cell
+    const existingPlatformIndex = platforms.findIndex(p => p.x === x && p.y === y);
+
+    if (existingPlatformIndex !== -1) {
+        // Remove the existing platform
+        platforms.splice(existingPlatformIndex, 1);
+        console.log(`Overriding existing platform at (${x}, ${y})`);
+    }
+
+    // Create a new platform object based on the clipboard
+    const newPlatform = { ...clipboard, x, y };
+
+    // Add the new platform to the platforms array
+    platforms.push(newPlatform);
+
+    console.log('Updated platforms array:', platforms);
+
+    // Redraw the canvas to reflect the changes
+    updateEditor();
+}
+
+function showContextMenu(event, platform) {
+    event.preventDefault();
+    selectedPlatform = platform; // Assign the selected platform
+    const contextMenu = document.getElementById('contextMenu');
+    contextMenu.style.display = 'block';
+    contextMenu.style.left = `${event.pageX}px`;
+    contextMenu.style.top = `${event.pageY}px`;
+
+    // Enable or disable the "Paste" option based on clipboard content
+    const pasteOption = document.getElementById('pasteOption');
+    if (clipboard) {
+        pasteOption.classList.remove('disabled');
+    } else {
+        pasteOption.classList.add('disabled');
+    }
+}
+
+export { updateEditor, platforms, entitiesCollection, player, toggleGradient };

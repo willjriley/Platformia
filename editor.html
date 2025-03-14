@@ -34,9 +34,37 @@
             <option value="collectible">Collectible</option>
             <option value="emitter">Emitter</option>
         </select>
-        <label for="seeGrid">See Grid</label>
-        <input type="checkbox" id="seeGrid" checked onchange="setToggleGrid(this.checked)">
+        <div class="input-group">
+            <input type="checkbox" id="seeGrid" checked onchange="setToggleGrid(this.checked)">
+            <label for="seeGrid">See Grid</label>
+        </div>
+        <div class="input-group">
+            <input type="checkbox" id="seeGradient" checked onchange="setToggleGradient(this.checked)">
+            <label for="seeGradient">See Gradient</label>
+        </div>
+
+        <label for="mapName">Name:</label>
+        <input type="text" id="mapName" onchange="updateMapData('name', this.value)">
+        <label for="playerStartX">Player Start X:</label>
+        <input type="number" id="playerStartX" onchange="updateMapData('playerStartX', this.value)">
+        <label for="playerStartY">Player Start Y:</label>
+        <input type="number" id="playerStartY" onchange="updateMapData('playerStartY', this.value)">
+        <label for="mapBackgroundColor">Background Color:</label>
+        <input type="color" id="mapBackgroundColor" onchange="updateMapData('mapBackgroundColor', this.value)">
+        <label for="gradientTop">Gradient Top:</label>
+        <input type="color" id="gradientTop" onchange="updateMapData('gradientTop', this.value)">
+        <label for="gradientMiddle">Gradient Middle:</label>
+        <input type="color" id="gradientMiddle" onchange="updateMapData('gradientMiddle', this.value)">
+        <label for="gradientBottom">Gradient Bottom:</label>
+        <input type="color" id="gradientBottom" onchange="updateMapData('gradientBottom', this.value)">
+        <label for="music">Music:</label>
+        <input type="text" id="music" onchange="updateMapData('music', this.value)">
+
     </div>
+
+    <div class="map-details">
+    </div>
+
     <canvas id="gameCanvas" width="800" height="400"></canvas>
     <div class="context-menu" id="contextMenu">
         <ul>
@@ -50,13 +78,14 @@
         <div id="properties"></div>
     </div>
     <script type="module">
-        import { initEditor, platforms, entitiesCollection, player, toggleGrid } from './editor.js';
+        import { initEditor, platforms, entitiesCollection, player, toggleGrid, toggleGradient } from './editor.js';
         import { saveMap } from './editMapManager.js';
 
         let selectedPlatform = null;
         let clipboard = null;
         let canvas = document.getElementById('gameCanvas'); // Ensure canvas is defined
         let currentObjectType = 'platform';
+        let mapData = {};
 
         async function selectMap(mapName) {
             console.clear();
@@ -66,8 +95,9 @@
                 if (!response.ok) {
                     throw new Error(`Failed to load map: ${mapName}`);
                 }
-                const mapData = await response.json();
+                mapData = await response.json();
                 initEditor(mapData);
+                populateMapDetails(mapData);
                 document.getElementById('gameCanvas').focus(); // Set focus to the canvas
             }
             catch (error) {
@@ -81,22 +111,19 @@
 
         function showContextMenu(event, platform) {
             event.preventDefault();
-            selectedPlatform = platform;
+            selectedPlatform = platform; // Assign the selected platform
             const contextMenu = document.getElementById('contextMenu');
             contextMenu.style.display = 'block';
             contextMenu.style.left = `${event.pageX}px`;
             contextMenu.style.top = `${event.pageY}px`;
 
-            // Enable or disable the paste option based on whether there is something to paste
+            // Enable or disable the "Paste" option based on clipboard content
             const pasteOption = document.getElementById('pasteOption');
             if (clipboard) {
                 pasteOption.classList.remove('disabled');
             } else {
                 pasteOption.classList.add('disabled');
             }
-
-            // Populate the property panel
-            populatePropertyPanel(platform);
         }
 
         function hideContextMenu() {
@@ -119,31 +146,64 @@
 
         function paste() {
             if (clipboard) {
-                canvas.addEventListener('click', placeCopiedPlatform);
+                // Add a one-time click event listener to the canvas
+                canvas.addEventListener('click', placeCopiedPlatform, { once: true });
             }
             hideContextMenu();
         }
 
         function placeCopiedPlatform(event) {
+            // Calculate the grid position based on the click coordinates
             const x = Math.floor((event.offsetX + scrollX) / 32) * 32;
             const y = Math.floor((event.offsetY + scrollY) / 32) * 32;
-            const existingPlatformIndex = platforms.findIndex(p => p.x === x && p.y === y);
-            if (existingPlatformIndex !== -1) {
-                platforms.splice(existingPlatformIndex, 1);
-            }
+
+            // Create a new platform object based on the clipboard data
             const newPlatform = { ...clipboard, x, y };
+
+            // Add the new platform to the platforms array
             platforms.push(newPlatform);
-            clipboard = null;
-            canvas.removeEventListener('click', placeCopiedPlatform);
+
+            // Redraw the canvas to reflect the changes
+            initEditor(mapData);
         }
 
-        function populatePropertyPanel(platform) {
-            const propertiesDiv = document.getElementById('properties');
-            propertiesDiv.innerHTML = '';
-            for (const [key, value] of Object.entries(platform)) {
-                const propertyDiv = document.createElement('div');
-                propertyDiv.innerHTML = `<strong>${key}:</strong> ${value}`;
-                propertiesDiv.appendChild(propertyDiv);
+        function populateMapDetails(mapData) {
+            document.getElementById('mapName').value = mapData.name || '';
+            document.getElementById('playerStartX').value = mapData.playerStartingPosition?.x || 0;
+            document.getElementById('playerStartY').value = mapData.playerStartingPosition?.y || 0;
+            document.getElementById('mapBackgroundColor').value = mapData.mapBackgroundColor || '#000000';
+            document.getElementById('gradientTop').value = mapData.gradientTop || '#000000';
+            document.getElementById('gradientMiddle').value = mapData.gradientMiddle || '#000000';
+            document.getElementById('gradientBottom').value = mapData.gradientBottom || '#000000';
+            document.getElementById('music').value = mapData.music || '';
+        }
+
+        function updateMapData(field, value) {
+            switch (field) {
+                case 'name':
+                    mapData.name = value;
+                    break;
+                case 'playerStartX':
+                    mapData.playerStartingPosition.x = parseInt(value, 10);
+                    break;
+                case 'playerStartY':
+                    mapData.playerStartingPosition.y = parseInt(value, 10);
+                    break;
+                case 'mapBackgroundColor':
+                    mapData.mapBackgroundColor = value;
+                    break;
+                case 'gradientTop':
+                    mapData.gradientTop = value;
+                    break;
+                case 'gradientMiddle':
+                    mapData.gradientMiddle = value;
+                    break;
+                case 'gradientBottom':
+                    mapData.gradientBottom = value;
+                    break;
+                case 'music':
+                    mapData.music = value;
+                    break;
             }
         }
 
@@ -151,6 +211,13 @@
             toggleGrid(checked);
         }
 
+        function setToggleGradient(checked) {
+            const gradientTop = mapData.gradientTop || null;
+            const gradientMiddle = mapData.gradientMiddle || null;
+            const gradientBottom = mapData.gradientBottom || null;
+
+            toggleGradient(checked);
+        }
         window.selectMap = selectMap;
         window.saveMap = saveMap;
         window.changeObjectType = changeObjectType;
